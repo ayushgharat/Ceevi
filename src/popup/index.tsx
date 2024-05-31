@@ -1,17 +1,33 @@
-//import { createClient, type Provider, type User } from "@supabase/supabase-js"
 import type { User } from "@supabase/supabase-js"
-import { supabase } from "core/supabase"
 import { useEffect, useState } from "react"
 
-import { Storage } from "@plasmohq/storage"
-import { useStorage } from "@plasmohq/storage/hook"
-import { SecureStorage } from "@plasmohq/storage/secure"
+import GeneratePDF from "~components/extension/generatepdf"
 import HomePage from "~components/extension/homepage"
+import JobInfo from "~components/extension/jobinfo"
+import VerifyExperiences from "~components/extension/verifyexperiences"
+import VerifyProjects from "~components/extension/verifyprojects"
+import VerifySkills from "~components/extension/verifyskills"
+
+interface Resume {
+  contact: {},
+  education: {},
+  experiences: {},
+  projects: {},
+  skills: {}
+}
 
 function IndexOptions() {
   const [isLoading, setIsLoading] = useState(true)
-
   const [user, setUser] = useState<User>()
+  const [resume, setResume] = useState()
+  const [currentView, setCurrentView] = useState<
+    | "HomePage"
+    | "JobInfo"
+    | "VerifyProject"
+    | "VerifyExperiences"
+    | "VerifySkills"
+    | "GeneratePDF"
+  >("HomePage")
 
   const domain = "http://localhost:1947/api"
 
@@ -30,7 +46,7 @@ function IndexOptions() {
         }
 
         const data = await response.json()
-        if(data.user) {
+        if (data.user) {
           setUser(data.user) // Handle the user data here
         } else {
           setUser(null)
@@ -45,15 +61,98 @@ function IndexOptions() {
     checkUser()
   }, [])
 
-  const UserComponent = () => {
-    if(user) {
-      return <HomePage user={user}/>
+  const navigateToJobInfo = () => {
+    setCurrentView("JobInfo")
+  }
+
+  const navigateToVerifySkills = () => {
+    setCurrentView("VerifySkills")
+  }
+
+  const navigateToVerifyProject = () => {
+    setCurrentView("VerifyProject")
+  }
+
+  const generateResumePDF = () => {
+
+    setCurrentView("GeneratePDF")
+  }
+
+  const generateResumeDetails = async () => {
+    setIsLoading(true)
+
+    const fetch_experience = fetch(domain + "/generate/experience", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }).then((response) => response.json())
+
+    const fetch_project = fetch(domain + "/generate/project", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }).then((response) => response.json())
+
+    const fetch_skill = fetch(domain + "/generate/skill", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }).then((response) => response.json())
+
+    try {
+      Promise.all([fetch_experience, fetch_project, fetch_skill]).then(([response_experience, response_project, response_skill]) => {
+        const combined = {
+          ...response_experience,
+          ...response_project,
+          skill : {
+            ...response_skill
+          }
+        }
+
+        setResume(combined)
+        setCurrentView("VerifyExperiences")
+        setIsLoading(false)
+      })
+    } catch (error) {
+      console.error("Error fetching user data:", error)
     }
-    return <div>No User Logged in</div>
   }
 
   return (
-    <div>{isLoading ? <div>Logging you in</div> : <UserComponent/>}</div>
+    <div>
+      {isLoading ? (
+        <div>Loading</div>
+      ) : currentView === "HomePage" ? (
+        user ? (
+          <HomePage user={user} navigateToJobInfo={navigateToJobInfo} />
+        ) : (
+          <div>No User Logged in</div>
+        )
+      ) : currentView === "JobInfo" ? (
+        <JobInfo generateResumeDetails={generateResumeDetails} />
+      ) : currentView === "VerifyExperiences" ? (
+        <VerifyExperiences
+          onNext={navigateToVerifyProject}
+          finalData={resume}
+          setFinalData={setResume}
+        />
+      ) : currentView === "VerifyProject" ? (
+        <VerifyProjects
+          onNext={navigateToVerifySkills}
+          finalData={resume}
+          setFinalData={setResume}
+        />
+      ) : currentView === "VerifySkills" ? (
+        <VerifySkills generateResume={generateResumePDF} finalData={resume} />
+      ) : currentView === "GeneratePDF" ? (
+        <GeneratePDF />
+      ) : (
+        <div>Error, reload the extension</div>
+      )}
+    </div>
   )
 }
 
