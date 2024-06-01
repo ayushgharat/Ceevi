@@ -6,7 +6,10 @@ export function DashboardHomePage({ user, signOut }) {
   const router = useRouter();
 
   function completeProfile() {
-    router.push("/dashboard/profile/edit-profile")
+    router.push({
+      pathname: '/dashboard/profile/edit-profile',
+      query: {id: user.id}
+    }, '/dashboard/profile/edit-profile')
   }
   
 

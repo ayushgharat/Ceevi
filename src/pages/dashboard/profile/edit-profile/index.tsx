@@ -11,9 +11,12 @@ import {
   StepTitle,
   useSteps
 } from "@chakra-ui/react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import EducationInformation from "~components/website/edit-profile/educationInformation"
 import PersonalInformation from "~components/website/edit-profile/personalInformation"
-import type { FormUserInfo, PersonalData } from "~types"
+import ProfessionalInformation from "~components/website/edit-profile/professionalExperience"
+import type { EducationItem, FormUserInfo, PersonalData, ProfessionalData } from "~types"
+import { useRouter } from "next/router"
 
 const EditProfilePage = () => {
   const steps = [
@@ -22,10 +25,18 @@ const EditProfilePage = () => {
     { title: "Third", description: "Professional Experience" }
   ]
 
+  const router = useRouter()
+
   const { activeStep, setActiveStep } = useSteps({
     index: 0,
     count: steps.length
   })
+
+  const [id, setId] = useState(null)
+
+  useEffect(() => {
+    setId(router.query.id)
+  }, [])
 
   const [profileInfo, setProfileInfo] = useState<FormUserInfo>();
 
@@ -35,6 +46,61 @@ const EditProfilePage = () => {
       personal: personalInfo,
     }));
   };
+
+  const handleEducationalInfo = (educationInfo: EducationItem) => {
+    setProfileInfo((prev) => ({
+      ...prev!,
+      education: educationInfo,
+    }));
+  };
+
+  const handleProfessionalInfo = (professionalInfo: ProfessionalData) => {
+    setProfileInfo((prev) => ({
+      ...prev!,
+      professional: professionalInfo,
+    }));
+  };
+
+  const handleFormSubmit = (professionalInfo: ProfessionalData) => {
+    setProfileInfo((prev) => {
+      const updatedUserInfo = {
+        ...prev!,
+        professional: professionalInfo,
+      };
+      //console.log("Final User Info", updatedUserInfo);
+
+      const postObject = {
+        profile: updatedUserInfo,
+        id: id
+      };
+
+      console.log(postObject)
+
+      //Perform fetch POST request after updating userInfo
+      fetch("/api/db/update-profile", {
+        method: "POST",
+        body: JSON.stringify(postObject),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          // Handle response data if needed
+          console.log("Response from POST request:", data);
+          if(data.message) {
+            router.back()
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+
+      return updatedUserInfo;
+    });
+  };
+
+
 
   return (
     <div className="m-10">
@@ -66,18 +132,19 @@ const EditProfilePage = () => {
             handlePersonalInfo={handlePersonalInfo}
           />
         )}
-        {/* {activeStep === 1 && (
+        {activeStep === 1 && (
           <EducationInformation
             setActiveStep={setActiveStep}
             handleEducationalInfo={handleEducationalInfo}
           />
         )}
         {activeStep === 2 && (
-          <ProfessionalExperience
+          <ProfessionalInformation
             handleFormSubmit={handleFormSubmit}
             handleProfessionalInfo={handleProfessionalInfo}
+            existingInfo={null}
           />
-        )} */}
+        )}
       </div>
     </div>
   )

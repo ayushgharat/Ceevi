@@ -2,6 +2,7 @@ import type { User } from "@supabase/supabase-js"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import { DashboardHomePage } from "~components/website/dashboard-homepage"
+import Header from "~components/website/header"
 import { Main } from "~components/website/main"
 
 import { createClient } from "~utils/supabase/component"
@@ -21,7 +22,7 @@ const Dashboard = () => {
       console.error(error)
     }
     console.log("User has signed out")
-    router.push("/login")
+    router.push("/authenticate/login")
   }
 
   useEffect(() => {
@@ -30,7 +31,7 @@ const Dashboard = () => {
         data: { user }
       } = await supabase.auth.getUser()
       if (!user) {
-        router.push("/login")
+        router.push("/authenticate/login")
       }
 
       getUserProfile(user)
@@ -64,6 +65,7 @@ const Dashboard = () => {
 
   return (
     <div className="flex flex-col items-center">
+      <Header/>
       <DashboardHomePage user={user} signOut={signOut}/>
     </div>
   )
