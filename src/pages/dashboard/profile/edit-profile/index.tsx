@@ -142,6 +142,7 @@ const EditProfilePage = () => {
           <ProfessionalInformation
             handleFormSubmit={handleFormSubmit}
             handleProfessionalInfo={handleProfessionalInfo}
+            existingInfo={null}
           />
         )}
       </div>

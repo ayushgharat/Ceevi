@@ -7,6 +7,7 @@ import type { EducationItem, PersonalData, ProfessionalData } from "~types"
 import { createClient } from "~utils/supabase/component"
 
 import EditProfilePage from "./edit-profile"
+import ProfessionalInformation from "~components/website/edit-profile/professionalExperience"
 
 interface Profile {
   personal: PersonalData
@@ -66,14 +67,56 @@ const Profile = () => {
       <Header />
 
       <div className="p-10 flex flex-col">
-        <span className="text-3xl font-semibold">Contact Information</span>
         {profile && (
           <>
-            <input value={profile.personal.name} className="mt-4"></input>
-            <input value={profile.personal.email} className="mt-2"></input>
-            <input
-              value={profile.personal.phoneNumber}
-              className="mt-2"></input>
+            <div className="flex flex-col">
+              <span className="text-3xl font-semibold">
+                Contact Information
+              </span>
+              <span className="mt-4">Name</span>
+              <input value={profile.personal.name} className="mt-2"></input>
+              <span className="mt-2">Email</span>
+              <input value={profile.personal.email} className="mt-2"></input>
+              <span className="mt-2">Phone Number</span>
+              <input
+                value={profile.personal.phoneNumber}
+                className="mt-2"></input>
+              <span className="mt-2">LinkedIn Link</span>
+              <input value={profile.personal.linkedIn} className="mt-2"></input>
+              <span className="mt-2">Github Link</span>
+              <input value={profile.personal.github} className="mt-2"></input>
+            </div>
+
+            <div className="flex flex-col">
+              <span className="text-3xl font-semibold mt-4">
+                Educational
+              </span>
+              {profile.education.map((item) => {
+                return <div>
+                  <span>Name</span>
+                  <input value={item.name} className="mt-2"></input>
+                  <span>Location</span>
+                  <input value={item.location} className="mt-2"></input>
+                  <span>Degree Level</span>
+                  <input value={item.degreeLevel} className="mt-2"></input>
+                  <span>Major</span>
+                  <input value={item.major} className="mt-2"></input>
+                  <span>GPA</span>
+                  <input value={item.gpa} className="mt-2"></input>
+                  <span>Start Date</span>
+                  <input value={item.startDate} className="mt-2"></input>
+                  <span>End Date</span>
+                  <input value={item.endDate} className="mt-2"></input>
+                </div>
+              })}
+            </div>
+
+            <div className="flex flex-col">
+              <span className="text-3xl font-semibold mt-4">
+                Professional
+              </span>
+              <ProfessionalInformation/>
+            </div>
           </>
         )}
 

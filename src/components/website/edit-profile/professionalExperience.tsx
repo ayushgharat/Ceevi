@@ -5,12 +5,17 @@ import type { ExperienceItem, ProfessionalData, ProjectItem } from "~types";
 const ProfessionalInformation = ({
   handleFormSubmit,
   handleProfessionalInfo,
+  existingInfo
 }: any) => {
   const [professionalData, setProfessionalData] = useState<ProfessionalData>({
     experience: [],
     project: [],
     skill: "",
   });
+
+  if(existingInfo) {
+    setProfessionalData(existingInfo)
+  }
 
   const handleChange = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
