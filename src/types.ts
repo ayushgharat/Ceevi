@@ -1,8 +1,9 @@
 export interface PersonalData {
-    name: string;
+    first_name: string;
+    last_name: string
     email: string;
-    phoneNumber: string;
-    linkedIn: string;
+    phone_number: string;
+    linkedin: string;
     github: string;
   }
 
@@ -33,25 +34,25 @@ export interface PersonalData {
     company?: string;
     role?: string;
     location?: string;
-    startDate?: string;
-    endDate?: string;
+    start_date?: string;
+    end_date?: string;
     description?: string;
   }
   
   export interface ProjectItem {
     name?: string;
     skills?: string;
-    startDate?: string;
-    endDate?: string;
+    start_date?: string;
+    end_date?: string;
     description?: string;
   }
 
   export interface EducationItem {
     name?: string;
-    degreeLevel?: string;
+    degree_level?: string;
     major?: string;
     location?: string;
     gpa?: string;
-    startDate?: string;
-    endDate?: string;
+    start_date?: string;
+    end_date?: string;
   }

@@ -96,7 +96,7 @@ const ProfessionalInformation = ({
             />
             <Input
               placeholder="Role"
-              name="Role"
+              name="role"
               value={experience.role}
               onChange={(e) => handleChange(e, index, 'experience')}
             ></Input>
@@ -108,16 +108,16 @@ const ProfessionalInformation = ({
             />
             <Input
               placeholder="Start Date"
-              name="startDate"
+              name="start_date"
               type="month"
-              value={experience.startDate}
+              value={experience.start_date}
               onChange={(e) => handleChange(e, index, 'experience')}
             />
             <Input
               placeholder="End Date"
-              name="endDate"
+              name="end_date"
               type="month"
-              value={experience.endDate}
+              value={experience.end_date}
               onChange={(e) => handleChange(e, index, 'experience')}
             />
             <Textarea
@@ -152,16 +152,16 @@ const ProfessionalInformation = ({
             ></Input>
             <Input
               placeholder="Start Date"
-              name="startDate"
+              name="start_date"
               type="month"
-              value={project.startDate}
+              value={project.start_date}
               onChange={(e) => handleChange(e, index, 'project')}
             />
             <Input
               placeholder="End Date"
-              name="endDate"
+              name="end_date"
               type="month"
-              value={project.endDate}
+              value={project.end_date}
               onChange={(e) => handleChange(e, index, 'project')}
             />
             <Textarea

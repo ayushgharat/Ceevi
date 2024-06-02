@@ -1,13 +1,12 @@
-import type { User } from "@supabase/supabase-js"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 
 import Header from "~components/website/header"
+import ProfileCardEducation from "~components/website/ui/profile-card-education"
+import ProfileCardPersonal from "~components/website/ui/profile-card-personal"
+import ProfileCardProfessional from "~components/website/ui/profile-card-professional"
 import type { EducationItem, PersonalData, ProfessionalData } from "~types"
 import { createClient } from "~utils/supabase/component"
-
-import EditProfilePage from "./edit-profile"
-import ProfessionalInformation from "~components/website/edit-profile/professionalExperience"
 
 interface Profile {
   personal: PersonalData
@@ -19,14 +18,14 @@ const Profile = () => {
   const supabase = createClient()
   const router = useRouter()
   const [profile, setProfile] = useState<Profile>()
-  //const [userdata, setUserdata] = useState<any>()
+  const [userdata, setUserdata] = useState<any>()
 
   useEffect(() => {
     async function loadProfile() {
       const {
         data: { user }
       } = await supabase.auth.getUser()
-      //setUserdata(user.user_metadata)
+      setUserdata(user)
 
       try {
         const response = await fetch("/api/db/get-user-profile", {
@@ -62,62 +61,77 @@ const Profile = () => {
     router.replace("/authenticate/login")
   }
 
+  const updateProfile = async (newProfile) => {
+    try {
+      const response = await fetch("/api/db/update-profile", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ id: userdata.id, profile: newProfile })
+      })
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      } else {
+        const data = await response.json()
+        console.log(data)
+        console.log("Name updated successfully")
+
+        setProfile(newProfile)
+      }
+    } catch (error) {
+      console.error("Error creating user:", error)
+    }
+  }
+
+  const updateEducation = async (newEducation) => {
+    try {
+      const response = await fetch("/api/db/update-personal", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ id: userdata.id, education: newEducation })
+      })
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      } else {
+        const data = await response.json()
+        console.log(data)
+        console.log("Name updated successfully")
+
+        setProfile((prevProfile) => ({
+          ...prevProfile,
+          education: newEducation
+        }))
+      }
+    } catch (error) {
+      console.error("Error creating user:", error)
+    }
+  }
+
   return (
     <div>
       <Header />
 
       <div className="p-10 flex flex-col">
         {profile && (
-          <>
-            <div className="flex flex-col">
-              <span className="text-3xl font-semibold">
-                Contact Information
-              </span>
-              <span className="mt-4">Name</span>
-              <input value={profile.personal.name} className="mt-2"></input>
-              <span className="mt-2">Email</span>
-              <input value={profile.personal.email} className="mt-2"></input>
-              <span className="mt-2">Phone Number</span>
-              <input
-                value={profile.personal.phoneNumber}
-                className="mt-2"></input>
-              <span className="mt-2">LinkedIn Link</span>
-              <input value={profile.personal.linkedIn} className="mt-2"></input>
-              <span className="mt-2">Github Link</span>
-              <input value={profile.personal.github} className="mt-2"></input>
-            </div>
-
-            <div className="flex flex-col">
-              <span className="text-3xl font-semibold mt-4">
-                Educational
-              </span>
-              {profile.education.map((item) => {
-                return <div>
-                  <span>Name</span>
-                  <input value={item.name} className="mt-2"></input>
-                  <span>Location</span>
-                  <input value={item.location} className="mt-2"></input>
-                  <span>Degree Level</span>
-                  <input value={item.degreeLevel} className="mt-2"></input>
-                  <span>Major</span>
-                  <input value={item.major} className="mt-2"></input>
-                  <span>GPA</span>
-                  <input value={item.gpa} className="mt-2"></input>
-                  <span>Start Date</span>
-                  <input value={item.startDate} className="mt-2"></input>
-                  <span>End Date</span>
-                  <input value={item.endDate} className="mt-2"></input>
-                </div>
-              })}
-            </div>
-
-            <div className="flex flex-col">
-              <span className="text-3xl font-semibold mt-4">
-                Professional
-              </span>
-              <ProfessionalInformation/>
-            </div>
-          </>
+          <div className="flex flex-col space-y-4">
+            <ProfileCardPersonal
+              profile={profile}
+              updateProfile={updateProfile}
+            />
+            <ProfileCardEducation
+              profile={profile}
+              updateProfile={updateProfile}
+            />
+            <ProfileCardProfessional
+              profile={profile}
+              updateProfile={updateProfile}
+            />
+          </div>
         )}
 
         <button onClick={signOut}>Sign Out</button>

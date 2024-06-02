@@ -29,7 +29,8 @@ export default function LoginPage() {
   }, [])
 
   const [email, setEmail] = useState("")
-  const [name, setName] = useState("")
+  const [firstName, setFirstName] = useState("")
+  const [lastName, setLastName] = useState("")
   const [password, setPassword] = useState("")
 
   async function signUp() {
@@ -52,12 +53,20 @@ export default function LoginPage() {
     <main className="h-screen flex flex-col justify-center items-center">
       <form className="flex flex-col items-center justify-center w-1/2">
         <span className="text-3xl font-semibold mb-10">Welcome to Ceevi</span>
-        <label htmlFor="name" className="w-full text-left">Full Name</label>
+        <label htmlFor="name" className="w-full text-left">First Name</label>
         <input
           id="name"
           type="name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+          className="w-full p-2 border-2 border-purple-600 rounded-lg"
+        />
+        <label htmlFor="name" className="w-full text-left">Last Name</label>
+        <input
+          id="name"
+          type="name"
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
           className="w-full p-2 border-2 border-purple-600 rounded-lg"
         />
         <label htmlFor="email" className="mt-4 w-full text-left">Email</label>
