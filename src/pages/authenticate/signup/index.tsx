@@ -1,11 +1,6 @@
 import type { User } from "@supabase/supabase-js"
 import router, { useRouter } from "next/router"
 import { useEffect, useState } from "react"
-
-import { Storage } from "@plasmohq/storage"
-import { useStorage } from "@plasmohq/storage/hook"
-import { SecureStorage } from "@plasmohq/storage/secure"
-
 import { createClient } from "~/utils/supabase/component"
 import Link from "next/link"
 
