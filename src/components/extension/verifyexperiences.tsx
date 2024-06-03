@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 const VerifyExperiences = ({ onNext, finalData, setFinalData }) => {
   console.log(finalData)
-    const [userData, setUserData] = useState(finalData["WORK_EXPERIENCE"]);
+    const [userData, setUserData] = useState(finalData.experience);
     const [isLoadingProject, setIsLoadingProject] = useState(true);
 
     const handleInputChange = (index, fieldName, value) => {

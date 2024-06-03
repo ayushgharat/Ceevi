@@ -1,4 +1,4 @@
-import { useRouter } from "next/router"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 
 export function DashboardHomePage({ user, signOut }) {
@@ -6,10 +6,7 @@ export function DashboardHomePage({ user, signOut }) {
   const router = useRouter();
 
   function completeProfile() {
-    router.push({
-      pathname: '/dashboard/profile/edit-profile',
-      query: {id: user.id}
-    }, '/dashboard/profile/edit-profile')
+    router.push('/dashboard/profile/edit-profile?id=' + user.id)
   }
   
 

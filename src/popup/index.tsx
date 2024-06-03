@@ -9,10 +9,10 @@ import VerifyProjects from "~components/extension/verifyprojects"
 import VerifySkills from "~components/extension/verifyskills"
 
 interface Resume {
-  contact: {},
-  education: {},
-  experiences: {},
-  projects: {},
+  contact: {}
+  education: {}
+  experiences: {}
+  projects: {}
   skills: {}
 }
 
@@ -74,7 +74,7 @@ function IndexOptions() {
   }
 
   const generateResumePDF = () => {
-
+    //console.log(resume)
     setCurrentView("GeneratePDF")
   }
 
@@ -103,19 +103,21 @@ function IndexOptions() {
     }).then((response) => response.json())
 
     try {
-      Promise.all([fetch_experience, fetch_project, fetch_skill]).then(([response_experience, response_project, response_skill]) => {
-        const combined = {
-          ...response_experience,
-          ...response_project,
-          skill : {
-            ...response_skill
+      Promise.all([fetch_experience, fetch_project, fetch_skill]).then(
+        ([response_experience, response_project, response_skill]) => {
+          const combined = {
+            ...response_experience,
+            ...response_project,
+            skill: {
+              ...response_skill
+            }
           }
-        }
 
-        setResume(combined)
-        setCurrentView("VerifyExperiences")
-        setIsLoading(false)
-      })
+          setResume(combined)
+          setCurrentView("VerifyExperiences")
+          setIsLoading(false)
+        }
+      )
     } catch (error) {
       console.error("Error fetching user data:", error)
     }
@@ -123,13 +125,18 @@ function IndexOptions() {
 
   return (
     <div>
-      {isLoading ? (
+      {/* {isLoading ? (
         <div>Loading</div>
       ) : currentView === "HomePage" ? (
         user ? (
           <HomePage user={user} navigateToJobInfo={navigateToJobInfo} />
         ) : (
-          <div>No User Logged in</div>
+          <div className="flex flex-col w-[200px] items-center">
+            <span>No User Logged in</span>
+            <a href="http://localhost:1947/authenticate/login">
+              Log into website
+            </a>
+          </div>
         )
       ) : currentView === "JobInfo" ? (
         <JobInfo generateResumeDetails={generateResumeDetails} />
@@ -148,10 +155,13 @@ function IndexOptions() {
       ) : currentView === "VerifySkills" ? (
         <VerifySkills generateResume={generateResumePDF} finalData={resume} />
       ) : currentView === "GeneratePDF" ? (
-        <GeneratePDF />
+        <GeneratePDF finalData={resume} />
       ) : (
         <div>Error, reload the extension</div>
-      )}
+      )} */}
+
+      {/* For the purpose of designing resume  */}
+      <GeneratePDF finalData={resume} />
     </div>
   )
 }

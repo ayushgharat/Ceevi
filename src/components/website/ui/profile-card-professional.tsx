@@ -1,13 +1,6 @@
 import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle
-} from "@/components/ui/card"
-import { Pencil1Icon, TrashIcon } from "@radix-ui/react-icons"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { TrashIcon } from "@radix-ui/react-icons"
 
 import { ProfileDialogExperience } from "./profile-dialog-experience"
 import { ProfileDialogNewExperience } from "./profile-dialog-new-experience"
@@ -25,7 +18,6 @@ const ProfileCardProfessional = ({ profile, updateProfile }) => {
         project: profile.professional.project
       }
     }
-    //console.log(newProfile)
     updateProfile(newProfile)
   }
 
