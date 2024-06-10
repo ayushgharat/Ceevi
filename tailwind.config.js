@@ -16,6 +16,9 @@ module.exports = {
         "2xl": "1400px",
       },
     },
+    fontFamily: {
+      cmuRoman: ["CMU Roman", "sans-serif"]
+    },
     extend: {
       colors: {
         border: "hsl(var(--border))",

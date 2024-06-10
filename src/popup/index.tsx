@@ -34,7 +34,7 @@ function IndexOptions() {
   useEffect(() => {
     async function checkUser() {
       try {
-        const response = await fetch(domain + "/auth/getCurrentUser", {
+        const response = await fetch(domain + "/auth/get-current-user", {
           method: "GET",
           headers: {
             "Content-Type": "application/json"
@@ -48,9 +48,7 @@ function IndexOptions() {
         const data = await response.json()
         if (data.user) {
           setUser(data.user) // Handle the user data here
-        } else {
-          setUser(null)
-        }
+        } 
       } catch (error) {
         console.error("Error fetching user data:", error)
       }
@@ -125,7 +123,7 @@ function IndexOptions() {
 
   return (
     <div>
-      {/* {isLoading ? (
+      {isLoading ? (
         <div>Loading</div>
       ) : currentView === "HomePage" ? (
         user ? (
@@ -158,10 +156,10 @@ function IndexOptions() {
         <GeneratePDF finalData={resume} />
       ) : (
         <div>Error, reload the extension</div>
-      )} */}
+      )}
 
       {/* For the purpose of designing resume  */}
-      <GeneratePDF finalData={resume} />
+      {/* <GeneratePDF finalData={resume} /> */}
     </div>
   )
 }

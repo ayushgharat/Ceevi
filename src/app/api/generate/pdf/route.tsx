@@ -1,11 +1,69 @@
-import fs from 'fs'
+import * as fs from 'fs'
 import path from 'path'
 import ReactPDF from '@react-pdf/renderer'
-import { MyDocument } from './base-pdf'
-import { PDFDocument, PageSizes, StandardFonts, rgb } from 'pdf-lib'
-import fontkit from '@pdf-lib/fontkit'
 
-//import "src/app/register-files"
+import generateHtmlTemplate from '~utils/pdf/generateHtmlTemplate'
+import { compile } from '@fileforge/react-print'
+import { Document } from 'document/index'
+import { FileforgeClient } from '@fileforge/client'
+import { Readable } from 'stream'
+import { NextResponse } from 'next/server'
+
+export async function generatePDF(html) {
+  // const html = generateHtmlTemplate(data);
+
+  // const file = { content: html };
+  // const options = { format: 'A4' };
+
+  // const pdfBuffer = await pdf.generatePdf(file, options);
+  // return pdfBuffer;
+  const ff = new FileforgeClient({
+    apiKey: process.env.FILEFORGE_API_KEY,
+  });
+  try {
+    const pdf = await ff.pdf.generate(
+      [
+        new File(
+          [html],
+          "index.html",
+          {
+            type: "text/html",
+          },
+          
+        ),
+        new File([fs.readFileSync("public/font/cmunbx.ttf")], "cmunbx.ttf", {
+          type: "font/ttf"
+        })
+      ],
+      {
+        options: {
+
+          test: true,
+          fileName: "Ayush_Gharat_Resume"
+        },
+      },
+      {
+        timeoutInSeconds: 30,
+      },
+    );
+    
+
+    return pdf;
+  } catch (error) {
+    console.error("Error during PDF generation:", error);
+    throw error;
+  }
+}
+
+function streamToBuffer(stream: Readable): Promise<Buffer> {
+  const chunks: Buffer[] = [];
+  return new Promise((resolve, reject) => {
+    stream.on('data', (chunk) => chunks.push(chunk));
+    stream.on('end', () => resolve(Buffer.concat(chunks)));
+    stream.on('error', reject);
+  });
+}
+
 
 export async function POST(req, res) {
   //const { user } = await req.json().body
@@ -94,55 +152,87 @@ export async function POST(req, res) {
     }
   }
 
+  const html =  await compile(<Document personal={personal} professional={professional} education={education}/>)
+
+  //console.log(html)
+  
+  const pdf = await generatePDF(html)
+
+  const buffer = await streamToBuffer(pdf)
+
+  const response = new NextResponse(buffer, {
+    headers: {
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': 'attachment; filename=example.pdf',
+    },
+  });
+
+  return response
 
 
-  const pdfDoc = await PDFDocument.create()
 
-  pdfDoc.registerFontkit(fontkit)
-  const fontRomanBytes = fs.readFileSync('public/font/cmunrm.ttf');
-  const fontBoldBytes = fs.readFileSync('public/font/cmunbx.ttf');
-  const sansRoman = await pdfDoc.embedFont(fontRomanBytes);
-  const sansBold = await pdfDoc.embedFont(fontBoldBytes)
+  // const pdfDoc = await PDFDocument.create()
 
-  //const timesRomanFont = await pdfDoc.embedFont(StandardFonts.TimesRoman)
+  // pdfDoc.registerFontkit(fontkit)
+  // const fontRomanBytes = fs.readFileSync('public/font/cmunrm.ttf');
+  // const fontBoldBytes = fs.readFileSync('public/font/cmunbx.ttf');
+  // const sansRoman = await pdfDoc.embedFont(fontRomanBytes);
+  // const sansBold = await pdfDoc.embedFont(fontBoldBytes)
+
+  // //const timesRomanFont = await pdfDoc.embedFont(StandardFonts.TimesRoman)
 
   
-  const page = pdfDoc.addPage(PageSizes.A4)
-  const { width, height } = page.getSize()
+  // const page = pdfDoc.addPage(PageSizes.A4)
+  // const { width, height } = page.getSize()
 
-  let text = personal.first_name + " " + personal.last_name
-  let fontSize = 30
-  let textWidth = sansBold.widthOfTextAtSize(text, fontSize);
-  page.drawText(text, {
-    x: width / 2 - textWidth / 2,
-    y: height - 60,
-    size: fontSize,
-    font: sansBold,
-  })
+  // let text = personal.first_name + " " + personal.last_name
+  // let fontSize = 30
+  // let textWidth = sansBold.widthOfTextAtSize(text, fontSize);
+  // page.drawText(text, {
+  //   x: width / 2 - textWidth / 2,
+  //   y: height - 60,
+  //   size: fontSize,
+  //   font: sansBold,
+  // })
 
-  text = personal.phone_number + " | " + personal.email + " | " + personal.linkedin + " | " + personal.github
-  fontSize = 10
-  textWidth = sansRoman.widthOfTextAtSize(text, fontSize);
-  page.drawText(text, {
-    x: width / 2 - textWidth / 2,
-    y: height - 80,
-    size: fontSize,
-    font: sansRoman,
-    color: rgb(0.1,0.1,0.1)
-  })
+  // text = personal.phone_number + " | " + personal.email + " | " + personal.linkedin + " | " + personal.github
+  // fontSize = 10
+  // textWidth = sansRoman.widthOfTextAtSize(text, fontSize);
+  // page.drawText(text, {
+  //   x: width / 2 - textWidth / 2,
+  //   y: height - 80,
+  //   size: fontSize,
+  //   font: sansRoman,
+  //   color: rgb(0.1,0.1,0.1)
+  // })
+
+  // const browser =  await puppeteer.launch({
+  //   headless: false
+  // })
+
+  // const page =  await browser.newPage()
+  // const html = fs.readFileSync("./public/template/template.html", 'utf8')
+  // console.log(html)
+
+  // await page.setContent(html, {
+  //   waitUntil:'domcontentloaded'
+  // })
 
 
+  // const pdfBuffer = await page.pdf({
+  //   format: 'A4'
+  // })
 
-  const pdfBytes = await pdfDoc.save()
+  // const pdfBytes = await generatePDF({title: "Test Title",content: "Test Content"})
 
-  // This is the key part - set the headers to tell the browser to download the file
-  const headers = new Headers();
-  // remember to change the filename here
-  headers.append("Content-Disposition", 'attachment; filename="test.pdf"');
-  headers.append("Content-Type", "application/pdf");
-  return new Response(Buffer.from(pdfBytes), {
-    headers
-  })
+  // // This is the key part - set the headers to tell the browser to download the file
+  // const headers = new Headers();
+  // // remember to change the filename here
+  // headers.append("Content-Disposition", 'attachment; filename="test.pdf"');
+  // headers.append("Content-Type", "application/pdf");
+  // return new Response(Buffer.from(pdfBytes), {
+  //   headers
+  // })
 
   // // add stuff to PDF here using methods described below...
 

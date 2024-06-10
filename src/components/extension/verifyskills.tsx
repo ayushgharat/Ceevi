@@ -84,8 +84,8 @@ const VerifySkills = ({
       </span>
       <div className="w-8 h-1 bg-black mt-4" />
 
-      {renderTagComponent("Languages")}
-      {renderTagComponent("Technologies")}
+      {renderTagComponent("languages")}
+      {renderTagComponent("technologies")}
 
       <button className="bg-[#64E926] bottom-0 mb-5 ms-10 left-0 right-0 w-60 rounded-lg py-3">
         <span className="mx-3 text-white text-base font-kodchasan">
