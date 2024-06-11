@@ -5,9 +5,9 @@ const VerifySkills = ({
   finalData,
   generateResume,
 }) => {
+  
+  const [userData, setUserData] = useState(finalData.professional.skill);
   console.log(finalData)
-  const [userData, setUserData] = useState(finalData["skill"]);
-
   const KeyCodes = {
     comma: 188,
     enter: 13,
@@ -30,7 +30,6 @@ const VerifySkills = ({
   };
 
   const renderTagComponent = (tagName) => {
-    console.log(tagName)
     const initialTags = userData[tagName] || [];
     const delimiters = [KeyCodes.comma, KeyCodes.enter];
 

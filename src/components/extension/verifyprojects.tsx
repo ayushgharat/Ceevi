@@ -1,33 +1,51 @@
-import React, { useState, useEffect } from "react";
-import { WithContext as ReactTags } from "react-tag-input";
+"use client"
+
+import React, { useEffect, useState } from "react"
+import { WithContext as ReactTags, SEPARATORS } from "react-tag-input"
 
 const VerifyProjects = ({ onNext, finalData, setFinalData }) => {
-  const [userData, setUserData] = useState(finalData["projects"]);
+  // const skills = [{value: "Next.js"}, {value: "Website dev"}]
+
+  const [userData, setUserData] = useState(finalData.professional.project)
+  console.log(userData)
 
   const handleInputChange = (index, fieldName, value) => {
-    const updatedUserData = [...userData];
-    updatedUserData[index][fieldName] = value;
-    setUserData(updatedUserData);
-  };
+    const updatedUserData = [...userData]
+    updatedUserData[index][fieldName] = value
+    setUserData(updatedUserData)
+  }
 
   const handleTagDrag = (tag, currPos, newPos, index) => {
-    const updatedUserData = [...userData];
-    const { Technologies } = updatedUserData[index];
-    
-    updatedUserData[index].Technologies.splice(currPos, 1),
-    updatedUserData[index].Technologies.splice(newPos, 0, tag.text)
-  
-    setUserData(updatedUserData);
-  };
+    const updatedUserData = [...userData]
+    const { skills } = updatedUserData[index]
+
+    updatedUserData[index].skills.splice(currPos, 1),
+      updatedUserData[index].skills.splice(newPos, 0, { value: tag.text })
+
+    setUserData(updatedUserData)
+  }
+
+  const handleDescriptionChange = (projectIndex, descriptionIndex, value) => {
+    const updatedUserData = [...userData]
+    updatedUserData[projectIndex].description[descriptionIndex].value = value
+    setUserData(updatedUserData)
+  }
 
   const handleNext = () => {
-
     // Update finalData with the new array of strings
-    setFinalData({ ...finalData, projects: userData });
+    // setFinalData({
+    //   education: finalData.education,
+    //   personal: finalData.personal,
+    //   professional: {
+    //     experience: finalData.experience,
+    //     skill: finalData.skill,
+    //     project: userData
+    //   }
+    // })
 
     // Call onNext to proceed to the next step
-    onNext();
-  };
+    onNext()
+  }
 
   return (
     <div className="w-80 min-h-[500px] p-10 ">
@@ -39,47 +57,65 @@ const VerifyProjects = ({ onNext, finalData, setFinalData }) => {
         <div key={index}>
           <input
             type="text"
-            value={project["Name"]}
-            onChange={(e) => handleInputChange(index, "Name", e.target.value)}
+            value={project.name}
+            onChange={(e) => handleInputChange(index, "name", e.target.value)}
           />
-          <input
+          {/* <input
             type="text"
             value={project["Achievements"]}
             onChange={(e) =>
               handleInputChange(index, "Achievements", e.target.value)
             }
+          /> */}
+          <input
+            type="text"
+            value={project.start_date}
+            onChange={(e) =>
+              handleInputChange(index, "start_date", e.target.value)
+            }
           />
           <input
             type="text"
-            value={project["Project_Date"]}
+            value={project.end_date}
             onChange={(e) =>
-              handleInputChange(index, "Project_Date", e.target.value)
+              handleInputChange(index, "end_date", e.target.value)
             }
           />
-          <textarea
-            className="text-black text-sm rounded-xl bg-slate-400 mt-2 font-kodchasan mb-7 w-full resize-none p-2"
-            value={project["Description"]}
-            rows={6}
-            onChange={(e) =>
-              handleInputChange(index, "Description", e.target.value)
-            }
-          ></textarea>
+
+          {project.description.map((item, descIndex) => (
+            <textarea
+              key={item.value}
+              className="text-black text-sm rounded-xl bg-slate-400 mt-2 font-kodchasan mb-7 w-full resize-none p-2"
+              value={item.value}
+              rows={2}
+              onChange={(e) =>
+                //handleInputChange(index, "Description", e.target.value)
+                handleDescriptionChange(index, descIndex, e.target.value)
+              }></textarea>
+          ))}
+
           <ReactTags
-            tags={userData[index].Technologies.map((string) => ({
-              id: string,
-              text: string,
+            tags={userData[index].skills.map(({ value }) => ({
+              id: value,
+              text: value,
+              className: ""
             }))}
-            delimiters={[188, 13]} // Comma and Enter keycodes
+            separators={[SEPARATORS.COMMA, SEPARATORS.ENTER]} // Comma and Enter keycodes
             handleDelete={(i) => {
-              const updatedTechnologies = [...project.Technologies];
-              updatedTechnologies.splice(i, 1);
-              handleInputChange(index, "Technologies", updatedTechnologies);
+              const updatedTechnologies = [...project.skills]
+              updatedTechnologies.splice(i, 1)
+              handleInputChange(index, "skills", updatedTechnologies)
             }}
             handleAddition={(tag) => {
-              const updatedTechnologies = [...project.Technologies, tag.text];
-              handleInputChange(index, "Technologies", updatedTechnologies);
+              const updatedTechnologies = [
+                ...project.skills,
+                { value: tag.text }
+              ]
+              handleInputChange(index, "skills", updatedTechnologies)
             }}
-            handleDrag={(tag, currPos, newPos) => handleTagDrag(tag, currPos, newPos, index)}
+            handleDrag={(tag, currPos, newPos) =>
+              handleTagDrag(tag, currPos, newPos, index)
+            }
             handleTagClick={(tagIndex) =>
               console.log(`Tag clicked at index ${tagIndex}`)
             }
@@ -94,12 +130,11 @@ const VerifyProjects = ({ onNext, finalData, setFinalData }) => {
       </button>
       <button
         className="bg-[#64E926] bottom-0 mb-5 ms-10 left-0 right-0 w-60 rounded-lg py-3"
-        onClick={handleNext}
-      >
+        onClick={handleNext}>
         <span className="mx-3 text-white text-base font-kodchasan">Next</span>
       </button>
     </div>
-  );
-};
+  )
+}
 
-export default VerifyProjects;
+export default VerifyProjects

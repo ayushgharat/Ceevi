@@ -1,82 +1,93 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react"
 
-const VerifyExperiences = ({ onNext, finalData, setFinalData }) => {
-  console.log(finalData)
-    const [userData, setUserData] = useState(finalData.experience);
-    const [isLoadingProject, setIsLoadingProject] = useState(true);
+const VerifyExperiences = ({ onNext, finalData }) => {
+  const [userData, setUserData] = useState(finalData.professional.experience)
+  const [isLoadingProject, setIsLoadingProject] = useState(true)
 
-    const handleInputChange = (index, fieldName, value) => {
-      const updatedUserData = [...userData];
-      updatedUserData[index][fieldName] = value;
-      setUserData(updatedUserData);
-    };
+  //console.log(userData)
 
-    useEffect(() => {
-      
-    }, []);
+  const handleInputChange = (experienceIndex, fieldName, value) => {
+    const updatedUserData = [...userData]
+    updatedUserData[experienceIndex][fieldName] = value
+    setUserData(updatedUserData)
+  }
 
-    const experiences = userData.map((experience, index) => {
-      return (
-        <div key={index}>
-          <input
-            type="text"
-            value={experience["Company_Name"]}
-            onChange={(e) =>
-              handleInputChange(index, "Company_Name", e.target.value)
-            }
-          />
-          <input
-            type="text"
-            value={experience["Position_Title"]}
-            onChange={(e) =>
-              handleInputChange(index, "Position_Title", e.target.value)
-            }
-          />
+  const handleDescriptionChange = (experienceIndex, descriptionIndex, value) => {
+    const updatedUserData = [...userData]
+    updatedUserData[experienceIndex].description[descriptionIndex].value = value
+    setUserData(updatedUserData)
+  }
 
-          <input
-            type="text"
-            value={experience["Start_Date"]}
-            onChange={(e) =>
-              handleInputChange(index, "Start_Date", e.target.value)
-            }
-          />
+  useEffect(() => {
+    setIsLoadingProject(false)
+  }, [])
 
-          <input
-            type="text"
-            value={experience["End_Date"]}
-            onChange={(e) =>
-              handleInputChange(index, "End_Date", e.target.value)
-            }
-          />
-
-          <textarea
-            className="text-black text-sm rounded-xl bg-slate-400 mt-2 font-kodchasan mb-7 w-full resize-none p-2"
-            id="job_info"
-            value={experience["Description"]}
-            rows={6}
-            onChange={(e) =>
-              handleInputChange(index, "Description", e.target.value)
-            }
-          ></textarea>
-        </div>
-      );
-    });
+  const experiences = userData.map((experience, experienceIndex) => {
     return (
-      <div className="w-80 min-h-[500px] p-10 ">
-        <span className="text-2xl font-kodchasan">Verify information</span>
-        <div className="w-8 h-1 bg-black mt-4" />
-        {experiences}
-
-        <button className="bg-[#64E926] bottom-0 mb-5 ms-10 left-0 right-0 w-60 rounded-lg py-3">
-          <span className="mx-3 text-white text-base font-kodchasan">
-            Previous
-          </span>
-        </button>
-        <button className="bg-[#64E926] bottom-0 mb-5 ms-10 left-0 right-0 w-60 rounded-lg py-3" onClick={onNext}>
-          <span className="mx-3 text-white text-base font-kodchasan">Next</span>
-        </button>
+      <div key={experienceIndex}>
+        <input
+          type="text"
+          value={experience.company}
+          onChange={(e) =>
+            handleInputChange(experienceIndex, "company", e.target.value)
+          }
+        />
+        <input
+          type="text"
+          value={experience.role}
+          onChange={(e) =>
+            handleInputChange(experienceIndex, "role", e.target.value)
+          }
+        />
+        <input
+          type="text"
+          value={experience.start_date}
+          onChange={(e) =>
+            handleInputChange(experienceIndex, "start_date", e.target.value)
+          }
+        />
+        <input
+          type="text"
+          value={experience.end_date}
+          onChange={(e) => handleInputChange(experienceIndex, "end_date", e.target.value)}
+        />
+        {experience.description.map((item, descriptionIndex) => {
+          return (
+            <textarea
+              key={descriptionIndex}
+              className="text-black text-sm rounded-xl bg-slate-400 font-kodchasan mb-2 w-full resize-none p-2"
+              id="job_info"
+              value={item.value}
+              rows={2}
+              onChange={(e) =>
+                handleDescriptionChange(experienceIndex, descriptionIndex, e.target.value)
+              }
+            ></textarea>
+          )
+        })}
       </div>
-    );
-  };
+    )
+  })
 
-  export default VerifyExperiences;
+  return (
+    <div className="w-100 min-h-[500px] p-8 ">
+      <span className="text-2xl font-kodchasan">Verify information</span>
+      <div className="w-8 h-1 bg-black mt-4" />
+      {experiences}
+
+      <button className="bg-[#64E926] bottom-0 mb-5 ms-10 left-0 right-0 w-60 rounded-lg py-3">
+        <span className="mx-3 text-white text-base font-kodchasan">
+          Previous
+        </span>
+      </button>
+      <button
+        className="bg-[#64E926] bottom-0 mb-5 ms-10 left-0 right-0 w-60 rounded-lg py-3"
+        onClick={onNext}
+      >
+        <span className="mx-3 text-white text-base font-kodchasan">Next</span>
+      </button>
+    </div>
+  )
+}
+
+export default VerifyExperiences

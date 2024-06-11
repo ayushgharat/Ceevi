@@ -94,7 +94,9 @@ export default function LoginPage() {
           </Link>
         </span>
 
-        <button onClick={signInWithGoogle}>Sign in with Google</button>
+        <div className="h-[1px] bg-slate-500 w-full opacity-30 mt-4"></div>
+
+        <button className="mt-4 bg-white border-2 rounded-3xl border-opacity-20 px-4 py-2 w-full" onClick={signInWithGoogle}>Sign in with Google</button>
       </form>
     </main>
   )

@@ -84,7 +84,7 @@ export const Document = ({ personal, education, professional }) => {
                       {item.location}
                     </span>
                   </div>
-                  {item.description}
+                  {item.description.map((subitem) => subitem.value)}
                 </div>
               )
             })}
@@ -102,11 +102,11 @@ export const Document = ({ personal, education, professional }) => {
                   <div className="flex flex-row justify-between">
                     <div className="flex gap-x-2">
                     <span className="font-[600]">{item.name}</span>
-                    <span>{item.skills}</span>
+                    <span>{item.skills.map((skill) => skill.value)}</span>
                     </div>
                     <span className="">{item.start_date} - {item.end_date}</span>
                   </div>
-                  {item.description}
+                  {item.description.map((subitem) => subitem.value)}
                 </div>
               )
             })}

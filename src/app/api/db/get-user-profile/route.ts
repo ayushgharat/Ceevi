@@ -1,13 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 
-import createClient from "~/utils/supabase/api"
+import {createClient} from "~/utils/supabase/server"
 
 export async function POST(req, res) {
   //const { user } = await req.json().body
   const packet = await req.json()
   const user = packet.user
 
-  const supabase = createClient(req, res)
+  const supabase = createClient()
   const { data, error } = await supabase
     .from("users")
     .select('profile').eq('id', user.id)

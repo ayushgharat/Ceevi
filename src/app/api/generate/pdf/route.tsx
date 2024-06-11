@@ -1,13 +1,13 @@
-import * as fs from 'fs'
-import path from 'path'
-import ReactPDF from '@react-pdf/renderer'
+import * as fs from "fs"
+import path from "path"
+import { Readable } from "stream"
+import { FileforgeClient } from "@fileforge/client"
+import { compile } from "@fileforge/react-print"
+import ReactPDF from "@react-pdf/renderer"
+import { Document } from "document/index"
+import { NextResponse } from "next/server"
 
-import generateHtmlTemplate from '~utils/pdf/generateHtmlTemplate'
-import { compile } from '@fileforge/react-print'
-import { Document } from 'document/index'
-import { FileforgeClient } from '@fileforge/client'
-import { Readable } from 'stream'
-import { NextResponse } from 'next/server'
+import generateHtmlTemplate from "~utils/pdf/generateHtmlTemplate"
 
 export async function generatePDF(html) {
   // const html = generateHtmlTemplate(data);
@@ -18,158 +18,156 @@ export async function generatePDF(html) {
   // const pdfBuffer = await pdf.generatePdf(file, options);
   // return pdfBuffer;
   const ff = new FileforgeClient({
-    apiKey: process.env.FILEFORGE_API_KEY,
-  });
+    apiKey: process.env.FILEFORGE_API_KEY
+  })
   try {
     const pdf = await ff.pdf.generate(
       [
-        new File(
-          [html],
-          "index.html",
-          {
-            type: "text/html",
-          },
-          
-        ),
+        new File([html], "index.html", {
+          type: "text/html"
+        }),
         new File([fs.readFileSync("public/font/cmunbx.ttf")], "cmunbx.ttf", {
           type: "font/ttf"
         })
       ],
       {
         options: {
-
           test: true,
           fileName: "Ayush_Gharat_Resume"
-        },
+        }
       },
       {
-        timeoutInSeconds: 30,
-      },
-    );
-    
+        timeoutInSeconds: 30
+      }
+    )
 
-    return pdf;
+    return pdf
   } catch (error) {
-    console.error("Error during PDF generation:", error);
-    throw error;
+    console.error("Error during PDF generation:", error)
+    throw error
   }
 }
 
 function streamToBuffer(stream: Readable): Promise<Buffer> {
-  const chunks: Buffer[] = [];
+  const chunks: Buffer[] = []
   return new Promise((resolve, reject) => {
-    stream.on('data', (chunk) => chunks.push(chunk));
-    stream.on('end', () => resolve(Buffer.concat(chunks)));
-    stream.on('error', reject);
-  });
+    stream.on("data", (chunk) => chunks.push(chunk))
+    stream.on("end", () => resolve(Buffer.concat(chunks)))
+    stream.on("error", reject)
+  })
 }
 
-
 export async function POST(req, res) {
-  //const { user } = await req.json().body
-//   Response.writeHead(200, {
-//     "Content-Type": "application/pdf",
-//     "Content-Disposition": "attachment; filename=sample.pdf",
-//     "Content-Transfer-Encoding": "Binary"
-//   })
+  const { data } = await req.json()
+  const { personal, professional, education } = data
+  console.log(data)
+  // Response.writeHead(200, {
+  //   "Content-Type": "application/pdf",
+  //   "Content-Disposition": "attachment; filename=sample.pdf",
+  //   "Content-Transfer-Encoding": "Binary"
+  // })
 
   // const data = req.body;
   // console.log(data)
   // const { experience, projects, skill } = data.data;
 
-  const { personal, professional, education } = {
-    personal: {
-      first_name: "Ayush",
-      last_name: "Gharat",
-      email: "gharatayush27@gmail.com",
-      phone_number: "4709396771",
-      linkedin: "https://linkedin.com/in/ayush-gharat",
-      github: "https://github.com/ayushgharat"
-    },
-    education: [
-      {
-        name: "Georgia Tech",
-        degree_level: "Bachelors",
-        major: "Computer Science",
-        location: "Atlanta, GA",
-        gpa: "4.0",
-        start_date: "2022-08",
-        end_date: "2026-03"
-      },
-      {
-        name: "Stanford",
-        degree_level: "Masters",
-        major: "Computer Science",
-        location: "Palo Alto",
-        gpa: "3.7",
-        start_date: "2026-05",
-        end_date: "2027-05"
-      }
-    ],
-    professional: {
-      project: [
-        {
-          name: "CeeVi: Chrome Extension",
-          skills: ["Next.js", "Plasmo"],
-          start_date: "2023-05",
-          end_date: "2023-08",
-          description:
-            "Made a chrome extension that automatically builds a resume",
-          location: "Made a chatbo",
-          company: "CeeV"
-        },
-        {
-          name: "Aashwas",
-          skills: ["Entrepreneurship", "Social Advocacy"],
-          start_date: "2023-05",
-          end_date: "2023-08",
-          description: "Made a social intiative"
-        }
-      ],
-      experience: [
-        {
-          company: "CSX Tech",
-          role: "Technology Intern",
-          location: "Jacksonville, Florida",
-          start_date: "2024-05",
-          end_date: "2024-08",
-          description:
-            "Made a chatbot. Met cool people. Spent summer in Jacksonville"
-        },
-        {
-          company: "OrangeHealth Labs",
-          role: "SWE Intern",
-          location: "Bengaluru",
-          start_date: "2023-05",
-          end_date: "2023-08",
-          description: "Made a website for them. Did cool PM stuff. Had fun"
-        }
-      ],
-      skill: {
-        languages: ["Java", "Python"],
-        technologies: ["VS Code", "Website Development"]
-      }
-    }
-  }
+  // const { personal, professional, education } = {
+  //   personal: {
+  //     first_name: "Ayush",
+  //     last_name: "Gharat",
+  //     email: "gharatayush27@gmail.com",
+  //     phone_number: "4709396771",
+  //     linkedin: "https://linkedin.com/in/ayush-gharat",
+  //     github: "https://github.com/ayushgharat"
+  //   },
+  //   education: [
+  //     {
+  //       name: "Georgia Tech",
+  //       degree_level: "Bachelors",
+  //       major: "Computer Science",
+  //       location: "Atlanta, GA",
+  //       gpa: "4.0",
+  //       start_date: "2022-08",
+  //       end_date: "2026-03"
+  //     },
+  //     {
+  //       name: "Stanford",
+  //       degree_level: "Masters",
+  //       major: "Computer Science",
+  //       location: "Palo Alto",
+  //       gpa: "3.7",
+  //       start_date: "2026-05",
+  //       end_date: "2027-05"
+  //     }
+  //   ],
+  //   professional: {
+  //     project: [
+  //       {
+  //         name: "CeeVi: Chrome Extension",
+  //         skills: ["Next.js", "Plasmo"],
+  //         start_date: "2023-05",
+  //         end_date: "2023-08",
+  //         description:
+  //           "Made a chrome extension that automatically builds a resume",
+  //         location: "Made a chatbo",
+  //         company: "CeeV"
+  //       },
+  //       {
+  //         name: "Aashwas",
+  //         skills: ["Entrepreneurship", "Social Advocacy"],
+  //         start_date: "2023-05",
+  //         end_date: "2023-08",
+  //         description: "Made a social intiative"
+  //       }
+  //     ],
+  //     experience: [
+  //       {
+  //         company: "CSX Tech",
+  //         role: "Technology Intern",
+  //         location: "Jacksonville, Florida",
+  //         start_date: "2024-05",
+  //         end_date: "2024-08",
+  //         description:
+  //           "Made a chatbot. Met cool people. Spent summer in Jacksonville"
+  //       },
+  //       {
+  //         company: "OrangeHealth Labs",
+  //         role: "SWE Intern",
+  //         location: "Bengaluru",
+  //         start_date: "2023-05",
+  //         end_date: "2023-08",
+  //         description: "Made a website for them. Did cool PM stuff. Had fun"
+  //       }
+  //     ],
+  //     skill: {
+  //       languages: ["Java", "Python"],
+  //       technologies: ["VS Code", "Website Development"]
+  //     }
+  //   }
+  // }
 
-  const html =  await compile(<Document personal={personal} professional={professional} education={education}/>)
+  const html = await compile(
+    <Document
+      personal={personal}
+      professional={professional}
+      education={education}
+    />
+  )
 
   //console.log(html)
-  
+
   const pdf = await generatePDF(html)
 
   const buffer = await streamToBuffer(pdf)
 
   const response = new NextResponse(buffer, {
     headers: {
-      'Content-Type': 'application/pdf',
-      'Content-Disposition': 'attachment; filename=example.pdf',
-    },
-  });
+      "Content-Type": "application/pdf",
+      "Content-Disposition": "attachment; filename=example.pdf"
+    }
+  })
 
   return response
-
-
 
   // const pdfDoc = await PDFDocument.create()
 
@@ -181,7 +179,6 @@ export async function POST(req, res) {
 
   // //const timesRomanFont = await pdfDoc.embedFont(StandardFonts.TimesRoman)
 
-  
   // const page = pdfDoc.addPage(PageSizes.A4)
   // const { width, height } = page.getSize()
 
@@ -217,7 +214,6 @@ export async function POST(req, res) {
   // await page.setContent(html, {
   //   waitUntil:'domcontentloaded'
   // })
-
 
   // const pdfBuffer = await page.pdf({
   //   format: 'A4'

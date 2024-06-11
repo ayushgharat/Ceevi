@@ -1,9 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 
-import createClient from "~/utils/supabase/api"
+import {createClient} from "~/utils/supabase/server"
 
-export async function GET(req, res) {
-    const supabase = createClient(req, res)
+export async function GET(req: NextApiRequest, res: NextApiResponse) {
+    const supabase = createClient()
     const { data: {user}, error } = await supabase.auth.getUser()
     if (error) {
       console.error(error)
