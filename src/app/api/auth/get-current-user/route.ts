@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from "next"
 import {createClient} from "~/utils/supabase/server"
 
 export async function GET(req: NextApiRequest, res: NextApiResponse) {
-    const supabase = createClient()
+    const supabase = await createClient()
     const { data: {user}, error } = await supabase.auth.getUser()
     if (error) {
       console.error(error)

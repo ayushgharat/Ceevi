@@ -55,7 +55,7 @@ const ProfileCardEducation = ({ profile, updateProfile }) => {
       <CardContent className="">
         {profile.education.map((item, index) => {
           return (
-            <div className="flex flex-col shadow-md px-1 py-2">
+            <div key={index} className="flex flex-col shadow-md px-1 py-2">
               <div className="flex flex-row justify-between">
                 <span className="text-xl">{item.name}</span>
                 <div className="flex flex-row">

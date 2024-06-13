@@ -99,7 +99,7 @@ const ProfileCardProfessional = ({ profile, updateProfile }) => {
           </div>
           {profile.professional.experience.map((item, index) => {
             return (
-              <div className="flex flex-col shadow-md px-1 py-2">
+              <div key={index} className="flex flex-col shadow-md px-1 py-2">
                 <div className="flex flex-row justify-between">
                   <span className="text-xl">{item.company}</span>
                   <div>
@@ -126,7 +126,7 @@ const ProfileCardProfessional = ({ profile, updateProfile }) => {
           </div>
           {profile.professional.project.map((item, index) => {
             return (
-              <div className="flex flex-col shadow-md px-1 py-2">
+              <div key={index} className="flex flex-col shadow-md px-1 py-2">
                 <div className="flex flex-row justify-between">
                   <span className="text-xl">{item.name}</span>
                   <div className="flex flex-row">

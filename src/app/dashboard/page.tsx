@@ -1,46 +1,39 @@
-'use client'
+'use server'
 import type { User } from "@supabase/supabase-js"
-import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
-
+import { redirect } from "next/navigation"
 import { DashboardHomePage } from "~components/website/dashboard-homepage"
 import Header from "~components/website/header"
-import { Main } from "~components/website/main"
-import { createClient } from "~utils/supabase/component"
+import { createClient } from "~utils/supabase/server"
 
 interface users {
   profile?: JSON | undefined | null
 }
 
-const Dashboard = () => {
-  const router = useRouter()
-  const supabase = createClient()
-  const [user, setUser] = useState<User>()
-
-  async function signOut() {
-    const { error } = await supabase.auth.signOut()
-    if (error) {
-      console.error(error)
-    }
-    console.log("User has signed out")
-    router.push("/authenticate/login")
+const Dashboard = async () => {
+  
+  const supabase = await createClient()
+  const {data, error} = await supabase.auth.getUser()
+  if(error || !data?.user) {
+    redirect('/authenticate/login')
   }
 
-  useEffect(() => {
-    const checkUser = async () => {
-      const {
-        data: { user }
-      } = await supabase.auth.getUser()
-      if (!user) {
-        router.push("/authenticate/login")
-      } else {
-        getUserProfile(user)
-      }
+  
 
-      console.log(user)
-    }
-    checkUser()
-  }, [])
+  // useEffect(() => {
+  //   const checkUser = async () => {
+  //     const {
+  //       data: { user }
+  //     } = await supabase.auth.getUser()
+  //     if (!user) {
+  //       router.push("/authenticate/login")
+  //     } else {
+  //       getUserProfile(user)
+  //     }
+
+  //     console.log(user)
+  //   }
+  //   checkUser()
+  // }, [])
 
   async function getUserProfile(user: User) {
     try {
@@ -56,7 +49,7 @@ const Dashboard = () => {
         throw new Error(`HTTP error! status: ${response.status}`)
       } else {
         const data = await response.json()
-        setUser(data.data[0])
+        return data.data[0]
         //router.push('/dashboard')
       }
     } catch (error) {
@@ -67,7 +60,7 @@ const Dashboard = () => {
   return (
     <div className="flex flex-col items-center">
       <Header />
-      <DashboardHomePage user={user} signOut={signOut} />
+      <DashboardHomePage user={getUserProfile(data.user)}/>
     </div>
   )
 }

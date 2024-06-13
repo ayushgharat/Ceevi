@@ -7,7 +7,7 @@ export async function POST(req, res) {
   const packet = await req.json()
   const user = packet.user
 
-  const supabase = createClient()
+  const supabase = await createClient()
   const { data, error } = await supabase
     .from("users")
     .select('profile').eq('id', user.id)

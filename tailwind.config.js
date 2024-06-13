@@ -16,11 +16,15 @@ module.exports = {
         "2xl": "1400px",
       },
     },
-    fontFamily: {
-      cmuRoman: ["CMU Roman", "sans-serif"]
-    },
     extend: {
+      fontFamily: {
+        poppins : ['var(--font-poppins)'],
+        dmsans: ['var(--font-dm-sans)'],
+      },
       colors: {
+        electric_indigo: '#4A00E0',
+        vivid_violet: '#8E2DE2',
+        lavendar: '#EDE1F3',
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
