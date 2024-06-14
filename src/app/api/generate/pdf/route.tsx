@@ -7,7 +7,6 @@ import ReactPDF from "@react-pdf/renderer"
 import { Document } from "document/index"
 import { NextResponse } from "next/server"
 
-import generateHtmlTemplate from "~utils/pdf/generateHtmlTemplate"
 
 async function generatePDF(html) {
   // const html = generateHtmlTemplate(data);

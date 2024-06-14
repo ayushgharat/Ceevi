@@ -74,15 +74,13 @@ export const Document = ({ personal, education, professional }) => {
                 <div key={item.company}>
                   <div className="flex flex-row justify-between">
                     <span className="font-[600]">{item.company}</span>
-                    <span className="">{item.start_date} - {item.end_date}</span>
+                    <span className="">
+                      {item.start_date} - {item.end_date}
+                    </span>
                   </div>
                   <div className="flex flex-row justify-between">
-                    <span className="">
-                      {item.role}
-                    </span>
-                    <span className="italic">
-                      {item.location}
-                    </span>
+                    <span className="">{item.role}</span>
+                    <span className="italic">{item.location}</span>
                   </div>
                   {item.description.map((subitem) => subitem.value)}
                 </div>
@@ -101,10 +99,12 @@ export const Document = ({ personal, education, professional }) => {
                 <div key={item.name}>
                   <div className="flex flex-row justify-between">
                     <div className="flex gap-x-2">
-                    <span className="font-[600]">{item.name}</span>
-                    <span>{item.skills.map((skill) => skill.value)}</span>
+                      <span className="font-[600]">{item.name}</span>
+                      <span>{item.skills.map((skill) => skill.value)}</span>
                     </div>
-                    <span className="">{item.start_date} - {item.end_date}</span>
+                    <span className="">
+                      {item.start_date} - {item.end_date}
+                    </span>
                   </div>
                   {item.description.map((subitem) => subitem.value)}
                 </div>
@@ -112,8 +112,6 @@ export const Document = ({ personal, education, professional }) => {
             })}
           </div>
         </div>
-
-
       </div>
     </Tailwind>
   )

@@ -3,6 +3,7 @@
   "displayName": "Ceevi",
   "version": "0.0.1",
   "description": "Automatic Resume Builder",
+  "builds": [{ "src": "package.json", "use": "@vercel/next" }],
   "author": "Ayush Gharat <gharatayush27@gmail.com>",
   "scripts": {
     "start": "next start",
