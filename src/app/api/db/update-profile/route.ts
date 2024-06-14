@@ -1,4 +1,4 @@
-import createClient from "~/utils/supabase/api"
+import {createClient} from "~/utils/supabase/server"
 
 export async function POST(req, res) {
   //const { user } = await req.json().body
@@ -6,7 +6,7 @@ export async function POST(req, res) {
   const { profile, id } = packet
   //console.log(user)
 
-  const supabase = createClient(req, res)
+  const supabase = await createClient()
 
   const { error } = await supabase
     .from("users")
