@@ -9,7 +9,7 @@ import { NextResponse } from "next/server"
 
 import generateHtmlTemplate from "~utils/pdf/generateHtmlTemplate"
 
-export async function generatePDF(html) {
+async function generatePDF(html) {
   // const html = generateHtmlTemplate(data);
 
   // const file = { content: html };
