@@ -11,50 +11,96 @@ import VerifyProjects from "~components/extension/verifyprojects"
 import VerifySkills from "~components/extension/verifyskills"
 
 const testingResume = {
-  professional: 
+  personal: {
+    first_name: "Ayush",
+    last_name: "Gharat",
+    email: "gharatayush27@gmail.com",
+    phone_number: "4709396771",
+    linkedin: "https://linkedin.com/in/ayush-gharat",
+    github: "https://github.com/ayushgharat"
+  },
+  education: [
     {
-      project: [
-        {
-          "name": "CoFiscal",
-          "skills": [
-            {"value": "Next.js"},
-            {"value": "Website Development"}
-          ],
-          "start_date": "Oct 2023",
-          "end_date": "Oct 2023",
-          "description": [
-            {"value": "Developed CoFiscal, a cutting-edge financial platform powered by AI to empower borrowers with data-driven insights for informed loan decisions."},
-            {"value": "Implemented SMOTE to address extreme data skewness and optimized OCR feature for accurate data extraction, achieving 92.03% accuracy on unseen data with LightGBM."},
-            {"value": "Designed and developed a fullstack interface with a Next.js web app featuring React, Tailwind CSS, and Flask backend for multiple model calls. Won Capital One best Financial Tool Award at HackGT 10."}
-          ]
-        },
-        {
-          "name": "CeeVi: Chrome Extension",
-          "skills": [
-            {"value": "Next.js"}
-          ],
-          "start_date": "2023-05",
-          "end_date": "2023-08",
-          "description": [
-            {"value": "Created a Chrome extension that automates resume building."},
-            {"value": "Developed a chatbot interface within the extension for enhanced user experience."}
-          ]
-        },
-        {
-          "name": "Aashwas",
-          "skills": [
-            {"value": "Entrepreneurship"},
-            {"value": "Advocacy"}
-          ],
-          "start_date": "2023-05",
-          "end_date": "2023-08",
-          "description": [
-            {"value": "Positively impacted 5,000+ frontline health workers across 80+ cities in India during CoVID-19 lockdown."},      
-            {"value": "Organized virtual activities like comedy shows and riddle hunts for healthcare workers to de-stress."},
-            {"value": "Raised $10,200 to supply 2,400 PPE Kits and 8,000+ snacks to St. John’s Hospital, Bengaluru. Presented at the United Nations HQ at the Activate Impact Summit."}
-          ]
-        }
-      ]
+      name: "Georgia Tech",
+      degree_level: "Bachelors",
+      major: "Computer Science",
+      location: "Atlanta, GA",
+      gpa: "4.0",
+      start_date: "2022-08",
+      end_date: "2026-03"
+    },
+    {
+      name: "Stanford",
+      degree_level: "Masters",
+      major: "Computer Science",
+      location: "Palo Alto",
+      gpa: "3.7",
+      start_date: "2026-05",
+      end_date: "2027-05"
+    }
+  ],
+  professional: {
+    project: [
+      {
+        name: "CoFiscal",
+        skills: [{ value: "Next.js" }, { value: "Website Development" }],
+        start_date: "Oct 2023",
+        end_date: "Oct 2023",
+        description: [
+          {
+            value:
+              "Developed CoFiscal, a cutting-edge financial platform powered by AI to empower borrowers with data-driven insights for informed loan decisions."
+          },
+          {
+            value:
+              "Implemented SMOTE to address extreme data skewness and optimized OCR feature for accurate data extraction, achieving 92.03% accuracy on unseen data with LightGBM."
+          },
+          {
+            value:
+              "Designed and developed a fullstack interface with a Next.js web app featuring React, Tailwind CSS, and Flask backend for multiple model calls. Won Capital One best Financial Tool Award at HackGT 10."
+          }
+        ]
+      },
+      {
+        name: "CeeVi: Chrome Extension",
+        skills: [{ value: "Next.js" }],
+        start_date: "2023-05",
+        end_date: "2023-08",
+        description: [
+          {
+            value: "Created a Chrome extension that automates resume building."
+          },
+          {
+            value:
+              "Developed a chatbot interface within the extension for enhanced user experience."
+          }
+        ]
+      },
+      {
+        name: "Aashwas",
+        skills: [{ value: "Entrepreneurship" }, { value: "Advocacy" }],
+        start_date: "2023-05",
+        end_date: "2023-08",
+        description: [
+          {
+            value:
+              "Positively impacted 5,000+ frontline health workers across 80+ cities in India during CoVID-19 lockdown."
+          },
+          {
+            value:
+              "Organized virtual activities like comedy shows and riddle hunts for healthcare workers to de-stress."
+          },
+          {
+            value:
+              "Raised $10,200 to supply 2,400 PPE Kits and 8,000+ snacks to St. John’s Hospital, Bengaluru. Presented at the United Nations HQ at the Activate Impact Summit."
+          }
+        ]
+      }
+    ],
+
+    skill: {
+      languages: ["Python", "Javascript", "Java"],
+      technologies: ["Selenium", "JUnit", "Postman", "Cypress"]
     },
     experience: [
       {
@@ -101,7 +147,7 @@ const testingResume = {
       }
     ]
   }
-
+}
 
 interface Resume {
   personal: {}
@@ -160,6 +206,14 @@ function IndexOptions() {
 
   const navigateToJobInfo = () => {
     setCurrentView("JobInfo")
+  }
+
+  const navigateToHomePage = () => {
+    setCurrentView("HomePage")
+  }
+
+  const navigateToVerifyExperiences = () => {
+    setCurrentView("VerifyExperiences")
   }
 
   const navigateToVerifySkills = () => {
@@ -269,7 +323,7 @@ function IndexOptions() {
 
   return (
     <div className="bg-violet-700 p-1">
-      {isLoading ? (
+      {/* {isLoading ? (
         <Loading />
       ) : currentView === "HomePage" ? (
         user ? (
@@ -288,11 +342,15 @@ function IndexOptions() {
           </div>
         )
       ) : currentView === "JobInfo" ? (
-        <JobInfoComponent generateResumeDetails={generateResumeDetails} />
+        <JobInfoComponent
+          generateResumeDetails={generateResumeDetails}
+          navigateToHomePage={navigateToHomePage}
+        />
       ) : currentView === "VerifyExperiences" ? (
         <VerifyExperiences
           onNext={navigateToVerifyProject}
           finalData={resume}
+          navigateToJobInfo={navigateToJobInfo}
         />
       ) : currentView === "LoadingResume" ? (
         <GeneratingDetailsLoading />
@@ -301,17 +359,22 @@ function IndexOptions() {
           onNext={navigateToVerifySkills}
           finalData={resume}
           setFinalData={setResume}
+          navigateToVerifyExperiences={navigateToVerifyExperiences}
         />
       ) : currentView === "VerifySkills" ? (
-        <VerifySkills generateResume={generateResumePDF} finalData={resume} />
+        <VerifySkills
+          generateResume={generateResumePDF}
+          finalData={resume}
+          navigateToVerifyProject={navigateToVerifyProject}
+        />
       ) : currentView === "GeneratePDF" ? (
-        <GeneratePDF finalData={resume} />
+        <GeneratePDF finalData={resume} navigateToVerifyExperiences={navigateToVerifyExperiences} />
       ) : (
         <div>Error, reload the extension</div>
-      )}
+      )} */}
 
       {/* For the purpose of designing resume  */}
-      {/* <GeneratePDF finalData={resume} /> */}
+      <GeneratePDF finalData={testingResume} navigateToVerifyExperiences={navigateToVerifyExperiences} />
       {/* <VerifyProjects finalData={testingResume} onNext={null} setFinalData={null}/> */}
     </div>
   )

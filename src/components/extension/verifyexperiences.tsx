@@ -3,7 +3,7 @@ import "~style.css"
 import { ChevronLeftIcon } from "@radix-ui/react-icons"
 import React, { useEffect, useState } from "react"
 
-const VerifyExperiences = ({ onNext, finalData }) => {
+const VerifyExperiences = ({ onNext, finalData, navigateToJobInfo }) => {
   const [userData, setUserData] = useState(finalData.professional.experience)
   const [isLoadingProject, setIsLoadingProject] = useState(true)
 
@@ -90,7 +90,9 @@ const VerifyExperiences = ({ onNext, finalData }) => {
   return (
     <div className="w-[400px] rounded-3xl p-8 bg-white flex flex-col place-content-between">
       <div className="flex flex-row items-start mb-10">
-        <ChevronLeftIcon className="h-[25px] w-[30px] mt-[2px]" />
+        <button onClick={navigateToJobInfo}>
+          <ChevronLeftIcon className="h-[25px] w-[30px] mt-[2px]" />
+        </button>
         <span className="ms-2 font-extension-text text-lg">
           Enter the job Information:
         </span>

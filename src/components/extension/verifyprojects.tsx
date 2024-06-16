@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react"
 import { WithContext as ReactTags, SEPARATORS } from "react-tag-input"
 import { ChevronLeftIcon } from "@radix-ui/react-icons"
 
-const VerifyProjects = ({ onNext, finalData, setFinalData }) => {
+const VerifyProjects = ({ onNext, finalData, setFinalData, navigateToVerifyExperiences }) => {
   // const skills = [{value: "Next.js"}, {value: "Website dev"}]
 
   const [userData, setUserData] = useState(finalData.professional.project)

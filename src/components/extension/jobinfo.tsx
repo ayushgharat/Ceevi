@@ -1,13 +1,13 @@
 import { ChevronLeftIcon } from "@radix-ui/react-icons"
 import { useState } from "react"
 
-const JobInfoComponent = ({ generateResumeDetails }) => {
+const JobInfoComponent = ({ generateResumeDetails, navigateToHomePage }) => {
   const [jobInfo, setJobInfo] = useState("")
 
   return (
     <div className="w-[300px] h-[400px] rounded-3xl p-8 bg-white flex flex-col place-content-between">
       <div className="flex flex-row items-start">
-        <ChevronLeftIcon className="h-[25px] w-[30px] mt-[2px]"/>
+        <button onClick={navigateToHomePage}><ChevronLeftIcon className="h-[25px] w-[30px] mt-[2px]"/></button>
         <span className="ms-2 font-extension-text text-lg">
           Enter the job Information:
         </span>

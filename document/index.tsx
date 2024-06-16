@@ -10,6 +10,10 @@ import * as React from "react"
 import "src/style.css"
 
 export const Document = ({ personal, education, professional }) => {
+  function removeHttps(link) {
+    return link.replace(/^https:\/\//, "")
+  }
+
   return (
     <Tailwind>
       <div>
@@ -32,15 +36,16 @@ export const Document = ({ personal, education, professional }) => {
           <span className="font-[600] text-center text-3xl">
             {personal.first_name + " " + personal.last_name}
           </span>
-          <span>
-            {personal.phone_number} |<span>{personal.email}</span> |
-            <span>{personal.linkedin}</span> |<span>{personal.github}</span>
+          <span className="text-center">
+            {personal.phone_number} | <span>{personal.email}</span> |
+            <span> {removeHttps(personal.linkedin)}</span> |{" "}
+            <span>{removeHttps(personal.github)}</span>
           </span>
         </div>
 
         {/**Education Section */}
         <div className="mt-2 font-[source-serif]">
-          <span>Education</span>
+          <span className="">EDUCATION</span>
           <div className="h-[1px] w-full bg-slate-600" />
           <div className="p-2">
             {education.map((item) => {
@@ -66,12 +71,12 @@ export const Document = ({ personal, education, professional }) => {
 
         {/**Experience Section */}
         <div className="mt-2 font-[source-serif]">
-          <span>Experience</span>
+          <span>EXPERIENCES</span>
           <div className="h-[1px] w-full bg-slate-600" />
-          <div className="p-2">
+          <div className="pl-2">
             {professional.experience.map((item) => {
               return (
-                <div key={item.company}>
+                <div key={item.company} className="mt-1">
                   <div className="flex flex-row justify-between">
                     <span className="font-[600]">{item.company}</span>
                     <span className="">
@@ -79,10 +84,14 @@ export const Document = ({ personal, education, professional }) => {
                     </span>
                   </div>
                   <div className="flex flex-row justify-between">
-                    <span className="">{item.role}</span>
+                    <span className="italic">{item.role}</span>
                     <span className="italic">{item.location}</span>
                   </div>
-                  {item.description.map((subitem) => subitem.value)}
+                  <ul className="list-disc pl-4">
+                    {item.description.map((subitem) => {
+                      return <li key={subitem.value}>{subitem.value}</li>
+                    })}
+                  </ul>
                 </div>
               )
             })}
@@ -91,25 +100,56 @@ export const Document = ({ personal, education, professional }) => {
 
         {/**Project Section */}
         <div className="mt-2 font-[source-serif]">
-          <span>Project</span>
+          <span>PROJECTS</span>
           <div className="h-[1px] w-full bg-slate-600" />
-          <div className="p-2">
+          <div className="px-2">
             {professional.project.map((item) => {
               return (
-                <div key={item.name}>
+                <div key={item.name} className="mt-1">
                   <div className="flex flex-row justify-between">
-                    <div className="flex gap-x-2">
-                      <span className="font-[600]">{item.name}</span>
-                      <span>{item.skills.map((skill) => skill.value)}</span>
+                    <div className="">
+                      <span className="font-[600] me-2">
+                        {item.name}
+                        {" | "}
+                      </span>
+                      <span className="italic">
+                        {item.skills.map((skill) => skill.value).join(', ')}
+                      </span>
                     </div>
                     <span className="">
                       {item.start_date} - {item.end_date}
                     </span>
                   </div>
-                  {item.description.map((subitem) => subitem.value)}
+                  <ul className="list-disc pl-4">
+                    {item.description.map((subitem) => {
+                      return <li key={subitem.value}>{subitem.value}</li>
+                    })}
+                  </ul>
                 </div>
               )
             })}
+          </div>
+        </div>
+
+        {/* Skills Section */}
+        {/**Project Section */}
+        <div className="mt-2 font-[source-serif]">
+          <span>SKILLS</span>
+          <div className="h-[1px] w-full bg-slate-600" />
+          <div className="px-2 flex flex-col">
+            <span className="font-bold">
+              Languages:{" "}
+              <span className="font-medium">
+                {professional.skill.languages.join(', ')}
+              </span>
+            </span>
+
+            <span className="font-bold">
+              Technologies:{" "}
+              <span className="font-medium">
+                {professional.skill.technologies.join(', ')}
+              </span>
+            </span>
           </div>
         </div>
       </div>
