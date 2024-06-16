@@ -1,6 +1,37 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+::-webkit-scrollbar {
+  /* Customize the scrollbar width */
+  width: 5px;
+  scroll-margin-bottom: 20px;
+  scroll-padding-bottom: 20px;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+}
+
+::-webkit-scrollbar-track {
+  /* Customize the scrollbar track */
+  background: none;
+  scroll-margin-bottom: 20px;
+  scroll-padding-bottom: 20px;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+}
+
+::-webkit-scrollbar-thumb {
+  /* Customize the scrollbar thumb */
+  border-radius: 5px;
+  background: #000000;
+  scroll-margin-bottom: 20px;
+  scroll-padding-bottom: 20px;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+}
 
 @layer base {
   :root {
@@ -79,6 +110,18 @@
   @apply bg-black opacity-40 fixed animate-[overlayShow_150ms_cubic-bezier(0.16,1,0.3,1)] inset-0;
 }
 
+.ExtensionFormInput {
+  @apply w-full border-b-[1px] border-black p-1;
+}
+
+.ExtensionFormTextArea {
+  @apply w-full border-b-[1px] border-black p-1 ms-2 mt-2 resize-none;
+}
+
+.PrimaryButton {
+  @apply bg-gradient-to-r from-vivid_violet to-electric_indigo text-white text-[16px] font-semibold font-extension-title rounded-[29px] w-full py-2 shadow-[0_4px_0_rgba(0,0,0,0.25)];
+}
+
 @keyframes overlayShow {
   from {
     opacity: 0;
@@ -90,7 +133,56 @@
 
 @page {
   size: A4;
-  margin: 1in
+  margin: 1in;
 }
 
+/* Settings for react-tag-input */
+.ReactTags__tagInputField {
+  padding: 10px;
+  width: 100%;
+  margin-top: 8px;
+}
 
+.ReactTags__tags {
+  border: 1px;
+  border-color: blueviolet;
+}
+
+.ReactTags__selected {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  
+  span.ReactTags__tag {
+    border: 1px solid #ddd;
+    color: #000;
+    font-size: 14px;
+    padding: 5px 8px;
+    margin: 2px 5px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+  }
+}
+
+.ReactTags__remove {
+  display: flex;
+  color: #000000;
+  margin-left: 8px;
+  svg {
+    fill: #000;
+  }
+}
+
+.ReactTags__error {
+  color: #e03131;
+  font-size: 16px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    padding: 0 5px;
+  }
+}

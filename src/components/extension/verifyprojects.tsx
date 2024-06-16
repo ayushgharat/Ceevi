@@ -1,7 +1,7 @@
-"use client"
-
+import "~style.css"
 import React, { useEffect, useState } from "react"
 import { WithContext as ReactTags, SEPARATORS } from "react-tag-input"
+import { ChevronLeftIcon } from "@radix-ui/react-icons"
 
 const VerifyProjects = ({ onNext, finalData, setFinalData }) => {
   // const skills = [{value: "Next.js"}, {value: "Website dev"}]
@@ -48,15 +48,18 @@ const VerifyProjects = ({ onNext, finalData, setFinalData }) => {
   }
 
   return (
-    <div className="w-80 min-h-[500px] p-10 ">
-      <span className="text-2xl font-kodchasan">
-        Verify project information
-      </span>
-      <div className="w-8 h-1 bg-black mt-4" />
+    <div className="w-[400px] rounded-3xl p-8 bg-white flex flex-col place-content-between">
+      <div className="flex flex-row items-start mb-10">
+        <ChevronLeftIcon className="h-[25px] w-[30px] mt-[2px]" />
+        <span className="ms-2 font-extension-text text-lg">
+          Verify Project Information:
+        </span>
+      </div>
       {userData.map((project, index) => (
-        <div key={index}>
+        <div key={index} className="font-extension-text text-base mb-8">
           <input
             type="text"
+            className="ExtensionFormInput"
             value={project.name}
             onChange={(e) => handleInputChange(index, "name", e.target.value)}
           />
@@ -69,6 +72,7 @@ const VerifyProjects = ({ onNext, finalData, setFinalData }) => {
           /> */}
           <input
             type="text"
+            className="ExtensionFormInput"
             value={project.start_date}
             onChange={(e) =>
               handleInputChange(index, "start_date", e.target.value)
@@ -76,6 +80,7 @@ const VerifyProjects = ({ onNext, finalData, setFinalData }) => {
           />
           <input
             type="text"
+            className="ExtensionFormInput"
             value={project.end_date}
             onChange={(e) =>
               handleInputChange(index, "end_date", e.target.value)
@@ -85,7 +90,7 @@ const VerifyProjects = ({ onNext, finalData, setFinalData }) => {
           {project.description.map((item, descIndex) => (
             <textarea
               key={item.value}
-              className="text-black text-sm rounded-xl bg-slate-400 mt-2 font-kodchasan mb-7 w-full resize-none p-2"
+              className="ExtensionFormTextArea"
               value={item.value}
               rows={2}
               onChange={(e) =>
@@ -120,18 +125,15 @@ const VerifyProjects = ({ onNext, finalData, setFinalData }) => {
               console.log(`Tag clicked at index ${tagIndex}`)
             }
             inputFieldPosition="bottom"
+            placeholder="Add a skill for this project"
           />
         </div>
       ))}
-      <button className="bg-[#64E926] bottom-0 mb-5 ms-10 left-0 right-0 w-60 rounded-lg py-3">
-        <span className="mx-3 text-white text-base font-kodchasan">
-          Previous
-        </span>
-      </button>
+      
       <button
-        className="bg-[#64E926] bottom-0 mb-5 ms-10 left-0 right-0 w-60 rounded-lg py-3"
+        className="PrimaryButton"
         onClick={handleNext}>
-        <span className="mx-3 text-white text-base font-kodchasan">Next</span>
+        <span>Next</span>
       </button>
     </div>
   )

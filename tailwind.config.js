@@ -1,11 +1,13 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ["class"],
+  mode: "jit",
   content: [
     './pages/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
+    './popup/*.{ts,tsx}'
   ],
   prefix: "",
   theme: {
@@ -20,6 +22,8 @@ module.exports = {
       fontFamily: {
         poppins : ['var(--font-poppins)'],
         dmsans: ['var(--font-dm-sans)'],
+        "extension-title": ["Poppins", "sans-serif"],
+        "extension-text":["DM Sans","sans-serif"]
       },
       colors: {
         electric_indigo: '#4A00E0',

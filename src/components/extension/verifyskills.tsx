@@ -1,3 +1,4 @@
+import { ChevronLeftIcon } from "@radix-ui/react-icons";
 import React, { useState } from "react";
 import { WithContext as ReactTags } from "react-tag-input";
 
@@ -56,7 +57,8 @@ const VerifySkills = ({
     };
 
     return (
-      <div className="group">
+      <div className="mt-2 font-extension-text">
+        <span className="font-semibold text-xl">Languages</span>
         <ReactTags
         // classNames={{
         //   tags:"bg-green-200 rounded-xl p-3 mb-2 me-2"
@@ -71,31 +73,30 @@ const VerifySkills = ({
           handleDrag={handleDrag}
           handleTagClick={handleTagClick}
           inputFieldPosition="bottom"
+          placeholder="Add a skill for this project"
         />
       </div>
     );
   };
 
   return (
-    <div className="w-80 min-h-[500px] p-10 ">
-      <span className="text-2xl font-kodchasan">
-        Verify Skills
-      </span>
-      <div className="w-8 h-1 bg-black mt-4" />
+    <div className="w-[400px] rounded-3xl p-8 bg-white flex flex-col place-content-between ">
+      <div className="flex flex-row items-start mb-5">
+        <ChevronLeftIcon className="h-[25px] w-[30px] mt-[2px]" />
+        <span className="ms-2 font-extension-text text-lg">
+          Verify Skills:
+        </span>
+      </div>
 
       {renderTagComponent("languages")}
       {renderTagComponent("technologies")}
 
-      <button className="bg-[#64E926] bottom-0 mb-5 ms-10 left-0 right-0 w-60 rounded-lg py-3">
-        <span className="mx-3 text-white text-base font-kodchasan">
-          Previous
-        </span>
-      </button>
+    
       <button
-        className="bg-[#64E926] bottom-0 mb-5 ms-10 left-0 right-0 w-60 rounded-lg py-3"
+        className="PrimaryButton mt-4"
         onClick={handleNext}
       >
-        <span className="mx-3 text-white text-base font-kodchasan">
+        <span>
           Generate Resume
         </span>
       </button>

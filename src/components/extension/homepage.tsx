@@ -1,20 +1,28 @@
 import { PersonIcon } from "@radix-ui/react-icons"
+
 import "~style.css"
 
 const HomePage = ({ user, navigateToJobInfo }) => {
   return (
-    <div className="flex flex-col font-cmuRoman items-center justify-between w-[300px] h-[300px] p-4">
+    <div className="h-[400px] w-[300px] rounded-3xl p-8 bg-white flex flex-col place-content-between">
       <div className="flex flex-row justify-between">
-      <span className="text-2xl font-semibold">
-        Welcome, <span className="text-lg">{user.email}</span>
-      </span>
-
-      <PersonIcon className="h-10 w-10"/>
+        <span className="font-extension-title text-2xl">CeeVi</span>
+        <PersonIcon className="h-6 w-6 mt-1" />
       </div>
+      <div className="flex flex-col pb-12">
+      <span className="text-3xl font-semibold font-extension-title">
+        Hello Ayush
+        {/* <span className="text-lg">{user.email}</span> */}
+      </span>
+      <span className="mt-2 text-xl font-medium font-extension-text">
+        Ready to build a resume for Apple?
+      </span>
+      </div>
+
       <button
-        className="bg-purple-700 text-white text-xl rounded-lg p-2"
+        className=" bg-gradient-to-r from-vivid_violet to-electric_indigo text-white text-[16px] font-semibold font-extension-title rounded-[29px] w-full py-2 shadow-[0_4px_0_rgba(0,0,0,0.25)] place-self-end"
         onClick={navigateToJobInfo}>
-        Create a new resume
+        Let's get started
       </button>
     </div>
   )

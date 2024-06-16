@@ -49,7 +49,7 @@ export async function POST(req, res) {
     }
   ]
   const response = await generateText(message)
-  console.log(message)
+  console.log(response.message.content!)
   // res.status(200).json({ response })
   // res.setHeader("Content-Type", "application/json")
 
