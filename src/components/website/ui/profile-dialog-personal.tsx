@@ -33,7 +33,7 @@ export function ProfileDialogPersonal({ personal, updatePersonal }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>
+        <Button className="flex flex-col items-start justify-start">
           <Pencil1Icon />
         </Button>
       </DialogTrigger>

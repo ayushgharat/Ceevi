@@ -42,12 +42,22 @@ const EditProfilePage = () => {
 
   const [id, setId] = useState("")
 
+  const searchParams = useSearchParams()
+      
+
   useEffect(() => {
-    const searchParams = useSearchParams()
-    const userID = searchParams!.get("id")
-    if (userID) {
-      setId(userID)
+    function getID() {
+      if (searchParams) {
+        const userID = searchParams.get("id")
+        if (userID) {
+          setId(userID)
+        }
+      } else {
+        console.log("No ID detected")
+      }
     }
+
+    getID()
   }, [])
 
   const [profileInfo, setProfileInfo] = useState<FormUserInfo>()

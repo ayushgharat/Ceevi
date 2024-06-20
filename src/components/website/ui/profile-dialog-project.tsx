@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -10,20 +10,28 @@ import {
   DialogPortal,
   DialogTitle,
   DialogTrigger
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Cross2Icon, Pencil1Icon } from "@radix-ui/react-icons"
-import { useState, type ChangeEvent } from "react"
-import DegreeLevelSelect from "./degree-level-selector"
-import { Textarea } from "@/components/ui/textarea"
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Cross2Icon, DotsVerticalIcon, Pencil1Icon } from "@radix-ui/react-icons";
+import { useState } from "react";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu"
 
-export function ProfileDialogProject({ project, index, updateProject }) {
-  const [newProject, setNewProject] = useState(project)
+export function ProfileDialogProject({ project, index, updateProject, deleteProject }) {
+  const [newProject, setNewProject] = useState(project);
+  const [isPresent, setIsPresent] = useState(newProject.end_date === "Present");
 
   const handleSaveChanges = () => {
-    updateProject(newProject, index)
-  }
+    updateProject({ ...newProject, end_date: isPresent ? "Present" : newProject.end_date }, index);
+  };
 
   const handleInputChange = (event) => {
     const { id, value } = event.target;
@@ -33,25 +41,44 @@ export function ProfileDialogProject({ project, index, updateProject }) {
     }));
   };
 
+  const handlePresentChange = () => {
+    setIsPresent(!isPresent);
+    setNewProject((prevState) => ({
+      ...prevState,
+      end_date: !isPresent ? "Present" : "",
+    }));
+  };
+
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <Button>
-          <Pencil1Icon />
-        </Button>
-      </DialogTrigger>
+
+<DropdownMenu modal={false}>
+        <DropdownMenuTrigger>
+          <DotsVerticalIcon />
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="bg-white rounded-xl font-dmsans flex flex-col p-3 gap-y-3">
+          <DropdownMenuItem>
+            <DialogTrigger asChild>
+              <button>Edit</button>
+            </DialogTrigger>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <button onClick={() => deleteProject(index)}>Delete</button>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
       <DialogPortal>
         <DialogOverlay className="DialogOverlay" />
         <DialogContent className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[600px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
           <DialogHeader>
-            <DialogTitle>Edit experience</DialogTitle>
+            <DialogTitle>Edit project</DialogTitle>
             <DialogDescription>
-              Make changes to your experience here. Click save when you're done.
+              Make changes to your project here. Click save when you're done.
             </DialogDescription>
           </DialogHeader>
           <div className="grid grid-cols-2 gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="company" className="text-right">
+              <Label htmlFor="name" className="text-right">
                 Name
               </Label>
               <Input
@@ -83,22 +110,38 @@ export function ProfileDialogProject({ project, index, updateProject }) {
                 value={newProject.start_date}
                 className="col-span-3"
                 onChange={handleInputChange}
+                type="month"
               />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="end_date" className="text-right">
                 End Date
               </Label>
-              <Input
-                id="end_date"
-                value={newProject.end_date}
-                className="col-span-3"
-                onChange={handleInputChange}
-              />
+              {!isPresent ? (
+                <Input
+                  id="end_date"
+                  value={newProject.end_date}
+                  className="col-span-3"
+                  onChange={handleInputChange}
+                  type="month"
+                />
+              ) : (
+                <span className="col-span-3">Present</span>
+              )}
+              <div className="col-span-4">
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={isPresent}
+                    onChange={handlePresentChange}
+                  />
+                  Present
+                </label>
+              </div>
             </div>
 
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="location" className="text-right">
+              <Label htmlFor="description" className="text-right">
                 Description
               </Label>
               <Textarea
@@ -113,7 +156,8 @@ export function ProfileDialogProject({ project, index, updateProject }) {
           <DialogClose asChild>
             <Button
               className="text-violet11 hover:bg-violet-400 focus:shadow-violet7 absolute top-[10px] right-[10px] inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-full focus:shadow-[0_0_0_2px] focus:outline-none"
-              aria-label="Close">
+              aria-label="Close"
+            >
               <Cross2Icon />
             </Button>
           </DialogClose>
@@ -122,7 +166,8 @@ export function ProfileDialogProject({ project, index, updateProject }) {
               <Button
                 className="bg-violet-400 hover:bg-violet-700 text-white p-2 rounded-sm items-center inline-flex"
                 type="submit"
-                onClick={handleSaveChanges}>
+                onClick={handleSaveChanges}
+              >
                 Save changes
               </Button>
             </DialogClose>
@@ -130,5 +175,5 @@ export function ProfileDialogProject({ project, index, updateProject }) {
         </DialogContent>
       </DialogPortal>
     </Dialog>
-  )
+  );
 }

@@ -5,12 +5,12 @@ import {createClient} from "~/utils/supabase/server"
 export async function POST(req, res) {
   //const { user } = await req.json().body
   const packet = await req.json()
-  const user = packet.user
+  const id = packet.id
 
   const supabase = await createClient()
   const { data, error } = await supabase
     .from("users")
-    .select('profile').eq('id', user.id)
+    .select('profile').eq('id', id)
 
   if (error) {
     console.log(error)
@@ -18,8 +18,8 @@ export async function POST(req, res) {
   }
 
   if(data) {
-    const profile = data[0]
-    return Response.json({ profile })
+    const profile = data[0].profile
+    return Response.json({ profile: profile })
   }
 
   

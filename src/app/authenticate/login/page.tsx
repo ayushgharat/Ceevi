@@ -10,6 +10,7 @@ import { useStorage } from "@plasmohq/storage/hook"
 import { SecureStorage } from "@plasmohq/storage/secure"
 
 import { createClient } from "~/utils/supabase/component"
+import Image from "next/image"
 
 export default function LoginPage() {
   const router = useRouter()
@@ -57,46 +58,46 @@ export default function LoginPage() {
 
   return (
     <main className="h-screen flex flex-col justify-center items-center">
-      <form className="flex flex-col items-center justify-center w-1/2">
-        <span className="text-3xl font-semibold mb-10">Welcome to Ceevi</span>
-        <label htmlFor="email" className="w-full text-left">
+      <form className="flex flex-col items-center justify-center w-1/2 font-dmsans">
+        <span className="text-4xl mb-20 font-poppins">Welcome to Ceevi</span>
+        {/* <label htmlFor="email" className="w-full text-left">
           Email
-        </label>
+        </label> */}
         <input
           id="email"
           type="email"
           value={email}
+          placeholder="email"
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full p-2"
+          className="peer w-full py-2 px-3 rounded-[30px] border-[1px] border-electric_indigo focus:border-vivid_violet"
         />
-        <label htmlFor="password" className="mt-4 w-full text-left">
-          Password
-        </label>
         <input
           id="password"
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full p-2"
+          className="w-full py-2 px-3 mt-8 mb-16 rounded-[30px] border-[1px] border-electric_indigo"
+          placeholder="password"
         />
-        {/* <PasswordInput id="password" value={password} onChange={(e) => setPassword(e.target.value)}/> */}
-        <button
-          type="button"
-          className="mt-6 w-full rounded-lg p-2 bg-purple-600 text-white font-medium"
-          onClick={logIn}>
+        <button type="button" className="PrimaryButton" onClick={logIn}>
           Log in
         </button>
 
         <span className="mt-10">
           Don't have an account yet?{" "}
           <Link href="/authenticate/signup" className="text-purple-600">
-            sign up
+            Sign up
           </Link>
         </span>
 
         <div className="h-[1px] bg-slate-500 w-full opacity-30 mt-4"></div>
 
-        <button className="mt-4 bg-white border-2 rounded-3xl border-opacity-20 px-4 py-2 w-full" onClick={signInWithGoogle}>Sign in with Google</button>
+        <button
+          className="mt-4 bg-white border-2 rounded-3xl border-opacity-20 px-4 py-2 w-full flex flex-row items-center justify-center gap-x-4"
+          onClick={signInWithGoogle}>
+            <Image src="/image/google-logo.png" alt="Google logo" width={20} height={20}/>
+          Sign in with Google
+        </button>
       </form>
     </main>
   )

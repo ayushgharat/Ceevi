@@ -55,9 +55,7 @@ export function ProfileDialogNewEducation({ addNewEducation }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>
-          <PlusIcon />
-        </Button>
+        <button className="PrimaryButton">Add New Education</button>
       </DialogTrigger>
       <DialogPortal>
         <DialogOverlay className="DialogOverlay" />

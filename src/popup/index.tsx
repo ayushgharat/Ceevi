@@ -323,7 +323,7 @@ function IndexOptions() {
 
   return (
     <div className="bg-violet-700 p-1">
-      {/* {isLoading ? (
+      {isLoading ? (
         <Loading />
       ) : currentView === "HomePage" ? (
         user ? (
@@ -371,10 +371,10 @@ function IndexOptions() {
         <GeneratePDF finalData={resume} navigateToVerifyExperiences={navigateToVerifyExperiences} />
       ) : (
         <div>Error, reload the extension</div>
-      )} */}
+      )}
 
       {/* For the purpose of designing resume  */}
-      <GeneratePDF finalData={testingResume} navigateToVerifyExperiences={navigateToVerifyExperiences} />
+      {/* <GeneratePDF finalData={testingResume} navigateToVerifyExperiences={navigateToVerifyExperiences} /> */}
       {/* <VerifyProjects finalData={testingResume} onNext={null} setFinalData={null}/> */}
     </div>
   )

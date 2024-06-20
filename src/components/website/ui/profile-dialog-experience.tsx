@@ -11,37 +11,80 @@ import {
   DialogTitle,
   DialogTrigger
 } from "@/components/ui/dialog"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Cross2Icon, Pencil1Icon } from "@radix-ui/react-icons"
-import { useState} from "react"
 import { Textarea } from "@/components/ui/textarea"
+import {
+  Cross2Icon,
+  DotsVerticalIcon,
+  Pencil1Icon
+} from "@radix-ui/react-icons"
+import { useState } from "react"
 
-export function ProfileDialogExperience({ experience, index, updateExperience }) {
+export function ProfileDialogExperience({
+  experience,
+  index,
+  updateExperience,
+  deleteExperience
+}) {
   const [newExperience, setNewExperience] = useState(experience)
+  const [isPresent, setIsPresent] = useState(experience.end_date === "Present")
 
   const handleSaveChanges = () => {
-    updateExperience(newExperience, index)
+    updateExperience(
+      {
+        ...newExperience,
+        end_date: isPresent ? "Present" : newExperience.end_date
+      },
+      index
+    )
   }
 
   const handleInputChange = (event) => {
-    const { id, value } = event.target;
+    const { id, value, type, checked } = event.target
     setNewExperience((prevState) => ({
       ...prevState,
-      [id]: value,
-    }));
-  };
+      [id]: type === "checkbox" ? checked : value
+    }))
+  }
+
+  const handlePresentChange = () => {
+    setIsPresent(!isPresent)
+    setNewExperience((prevState) => ({
+      ...prevState,
+      end_date: !isPresent ? "Present" : ""
+    }))
+  }
 
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <Button>
-          <Pencil1Icon />
-        </Button>
-      </DialogTrigger>
+      <DropdownMenu modal={false}>
+        <DropdownMenuTrigger>
+          <DotsVerticalIcon />
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="bg-white rounded-xl font-dmsans flex flex-col p-3 gap-y-3">
+          <DropdownMenuItem>
+            <DialogTrigger asChild>
+              <button>Edit</button>
+            </DialogTrigger>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <button onClick={() => deleteExperience(index)}>Delete</button>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
       <DialogPortal>
-        <DialogOverlay className="DialogOverlay" />
-        <DialogContent className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[600px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
+        <DialogOverlay className="DialogOverlay z-10" />
+        <DialogContent className="data-[state=open]:animate-contentShow z-20 fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[600px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
           <DialogHeader>
             <DialogTitle>Edit experience</DialogTitle>
             <DialogDescription>
@@ -82,7 +125,6 @@ export function ProfileDialogExperience({ experience, index, updateExperience })
                 onChange={handleInputChange}
               />
             </div>
-           
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="start_date" className="text-right">
                 Start Date
@@ -92,20 +134,35 @@ export function ProfileDialogExperience({ experience, index, updateExperience })
                 value={newExperience.start_date}
                 className="col-span-3"
                 onChange={handleInputChange}
+                type="month"
               />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="end_date" className="text-right">
                 End Date
               </Label>
-              <Input
-                id="end_date"
-                value={newExperience.end_date}
-                className="col-span-3"
-                onChange={handleInputChange}
-              />
+              {!isPresent ? (
+                <Input
+                  id="end_date"
+                  value={newExperience.end_date}
+                  className="col-span-3"
+                  onChange={handleInputChange}
+                  type="month"
+                />
+              ) : (
+                <span className="col-span-3">Present</span>
+              )}
+              <div className="col-span-4">
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={isPresent}
+                    onChange={handlePresentChange}
+                  />
+                  Present
+                </label>
+              </div>
             </div>
-
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="description" className="text-right">
                 Description
@@ -117,7 +174,6 @@ export function ProfileDialogExperience({ experience, index, updateExperience })
                 onChange={handleInputChange}
               />
             </div>
-            
           </div>
           <DialogClose asChild>
             <Button

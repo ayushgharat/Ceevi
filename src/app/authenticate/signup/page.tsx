@@ -1,9 +1,12 @@
-'use client'
+"use client"
+
 import type { User } from "@supabase/supabase-js"
+import Image from "next/image"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
+
 import { createClient } from "~/utils/supabase/component"
-import Link from "next/link"
 
 export default function LoginPage() {
   const router = useRouter()
@@ -24,8 +27,7 @@ export default function LoginPage() {
     checkUser()
   }, [])
 
-  
-async function addUserToDatabase(user: User) {
+  async function addUserToDatabase(user: User) {
     try {
       const response = await fetch("http://localhost:1947/api/db/new-user", {
         method: "POST",
@@ -34,7 +36,7 @@ async function addUserToDatabase(user: User) {
         },
         body: JSON.stringify({ user })
       })
-  
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       } else {
@@ -61,55 +63,85 @@ async function addUserToDatabase(user: User) {
     if (error) {
       console.error(error)
     } else {
-        if(user) addUserToDatabase(user)
+      if (user) addUserToDatabase(user)
     }
   }
 
+  async function signInWithGoogle() {
+    await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `http://localhost:1947/api/auth/callback`
+      }
+    })
+  }
 
   return (
     <main className="h-screen flex flex-col justify-center items-center">
-      <form className="flex flex-col items-center justify-center w-1/2">
-        <span className="text-3xl font-semibold mb-10">Welcome to Ceevi</span>
-        <label htmlFor="name" className="w-full text-left">First Name</label>
+      <form className="flex flex-col items-center justify-center w-1/2 font-dmsans">
+        <span className="text-4xl mb-20 font-poppins">Welcome to Ceevi</span>
+
         <input
+          placeholder="First Name"
           id="name"
           type="name"
           value={firstName}
           onChange={(e) => setFirstName(e.target.value)}
-          className="w-full p-2 border-2 border-purple-600 rounded-lg"
+          className="w-full py-2 px-3 mt-8 rounded-[30px] border-[1px] border-electric_indigo"
         />
-        <label htmlFor="name" className="w-full text-left">Last Name</label>
+
         <input
+          placeholder="Last Name"
           id="name"
           type="name"
           value={lastName}
           onChange={(e) => setLastName(e.target.value)}
-          className="w-full p-2 border-2 border-purple-600 rounded-lg"
+          className="w-full py-2 px-3 mt-8  rounded-[30px] border-[1px] border-electric_indigo"
         />
-        <label htmlFor="email" className="mt-4 w-full text-left">Email</label>
+
         <input
+          placeholder="Email"
           id="email"
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full p-2 border-2 border-purple-600 rounded-lg"
+          className="w-full py-2 px-3 mt-8  rounded-[30px] border-[1px] border-electric_indigo"
         />
-        <label htmlFor="password" className="mt-4 w-full text-left">Password</label>
+
         <input
-        id="password"
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        className="w-full p-2 border-2 border-purple-600 rounded-lg"/>
+          placeholder="Password"
+          id="password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="w-full py-2 px-3 mt-8 mb-12 rounded-[30px] border-[1px] border-electric_indigo"
+        />
         {/* <PasswordInput id="password" value={password} onChange={(e) => setPassword(e.target.value)}/> */}
-        <button type="button" className="mt-6 w-full rounded-lg p-2 bg-purple-600 text-white font-medium" onClick={signUp}>
+        <button type="button" className="PrimaryButton" onClick={signUp}>
           Sign up
         </button>
 
-        <span className="mt-10">Already have an account? <Link href="/authenticate/login" className="text-purple-600">Log in</Link></span>
-        
+        <span className="mt-10">
+          Already have an account?{" "}
+          <Link href="/authenticate/login" className="text-purple-600">
+            Log in
+          </Link>
+        </span>
+
+        <div className="h-[1px] bg-slate-500 w-full opacity-30 mt-4"></div>
+
+        <button
+          className="mt-4 bg-white border-2 rounded-3xl border-opacity-20 px-4 py-2 w-full flex flex-row items-center justify-center gap-x-4"
+          onClick={signInWithGoogle}>
+          <Image
+            src="/image/google-logo.png"
+            alt="Google logo"
+            width={20}
+            height={20}
+          />
+          Sign in with Google
+        </button>
       </form>
     </main>
   )
 }
-
