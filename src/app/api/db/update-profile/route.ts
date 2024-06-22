@@ -1,7 +1,8 @@
 import {createClient} from "~/utils/supabase/server"
 
 export async function POST(req, res) {
-  //const { user } = await req.json().body
+  try {
+    //const { user } = await req.json().body
   const packet = await req.json()
   const { profile, id } = packet
   //console.log(user)
@@ -20,4 +21,7 @@ export async function POST(req, res) {
 
   return Response.json({ message: "Success" })
   //res.status(200).end("This is the user")
+  } catch (err) {
+    return;
+  }
 }

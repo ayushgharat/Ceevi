@@ -14,7 +14,7 @@ import {
   useSteps
 } from "@chakra-ui/react"
 import { useRouter, useSearchParams } from "next/navigation"
-import { useEffect, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
 
 import EducationInformation from "~components/website/edit-profile/educationInformation"
 import PersonalInformation from "~components/website/edit-profile/personalInformation"
@@ -170,4 +170,10 @@ const EditProfilePage = () => {
   )
 }
 
-export default EditProfilePage
+export default function Parent() {
+  return (
+    <Suspense>
+      <EditProfilePage />
+    </Suspense>
+  )
+}

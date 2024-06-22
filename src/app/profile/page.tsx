@@ -1,3 +1,4 @@
+'use server'
 import ProfileComponent from "~components/website/profile-page"
 import { createClient } from "~utils/supabase/server"
 
@@ -22,7 +23,7 @@ async function loadProfile() {
       } else {
         const data = await response.json()
         //console.log(data)
-          return {profile: data, id: user.id}
+         return {profile: data, id: user.id}
         
         
         
@@ -36,14 +37,13 @@ async function loadProfile() {
 const Profile = async () => {
 
   const response = await loadProfile()
-  const profile = response?.profile
+  const profile = response && response.profile ? response.profile : null
   const id = response?.id
 
-  
 
   return (
     <div className="flex flex-col items-center h-screen">
-      {<ProfileComponent profile={profile} id={id} />}
+      {null && <ProfileComponent profile={profile} id={id} />}
     </div>
   )
 }

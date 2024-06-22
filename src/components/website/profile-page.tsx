@@ -3,23 +3,23 @@
 import { useState } from "react"
 import { CircleLoader, PuffLoader } from "react-spinners"
 
+import EditProfilePage from "~app/dashboard/profile/edit-profile/page"
+
 import CustomSidebar from "./sidebar"
 import ProfileCardEducation from "./ui/profile-card-education"
 import ProfileCardExperience from "./ui/profile-card-experience"
 import ProfileCardPersonal from "./ui/profile-card-personal"
 import ProfileCardProject from "./ui/profile-card-project"
-import EditProfilePage from "~app/dashboard/profile/edit-profile/page"
 
 const ProfileComponent = (props) => {
   const [componentToRender, setComponentToRender] = useState("Personal")
-  const [profile, setProfile] = useState(props.profile.profile)
+  const [profile, setProfile] = useState(props.profile.profile ?? null)
   const [isLoading, setIsLoading] = useState(false)
 
   const id = props.id
 
   const updateProfile = async (newProfile) => {
     setIsLoading(true)
-    console.log(process.env.DOMAIN)
     try {
       const response = await fetch(`api/db/update-profile`, {
         method: "POST",
@@ -31,8 +31,7 @@ const ProfileComponent = (props) => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       } else {
-        const data = await response.json()
-        console.log(data)
+        await response.json()
         console.log("Name updated successfully")
         setProfile({ profile: newProfile })
         setIsLoading(false)
@@ -40,12 +39,12 @@ const ProfileComponent = (props) => {
     } catch (error) {
       console.error("Error creating user:", error)
     }
-    console.log(profile)
   }
 
   //console.log(profile.value)
 
   const renderComponent = () => {
+    if (!profile) return
     switch (componentToRender) {
       case "Personal":
         return (
@@ -70,10 +69,7 @@ const ProfileComponent = (props) => {
         )
       case "Projects":
         return (
-          <ProfileCardProject
-            profile={profile}
-            updateProfile={updateProfile}
-          />
+          <ProfileCardProject profile={profile} updateProfile={updateProfile} />
         )
       default:
         return (
@@ -129,8 +125,9 @@ const ProfileComponent = (props) => {
               )}
             </>
           ) : (
-            <div>First time? Why don't we set up your profile for you?
-              <EditProfilePage/>
+            <div>
+              First time? Why don't we set up your profile for you?
+              <EditProfilePage />
             </div>
           )}
         </div>
