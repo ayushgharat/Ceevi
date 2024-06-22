@@ -24,7 +24,7 @@ export default function LoginPage() {
         data: { user }
       } = await supabase.auth.getUser()
       if (user) {
-        setErrorMessage("User is already logged in.")
+        //setErrorMessage("User is already logged in.")
         router.push("/dashboard")
       }
     }

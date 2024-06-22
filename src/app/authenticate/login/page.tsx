@@ -33,6 +33,7 @@ export default function LoginPage() {
 
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [errorMessage, setErrorMessage] = useState("")
 
   async function logIn() {
     const {
@@ -40,7 +41,7 @@ export default function LoginPage() {
       error
     } = await supabase.auth.signInWithPassword({ email, password })
     if (error) {
-      console.error(error)
+      setErrorMessage(error.message)
     }
     console.log(user)
 
@@ -82,6 +83,10 @@ export default function LoginPage() {
         <button type="button" className="PrimaryButton" onClick={logIn}>
           Log in
         </button>
+
+        {errorMessage && (
+          <span className="text-red-500 mt-4">{errorMessage}</span>
+        )}
 
         <span className="mt-10">
           Don't have an account yet?{" "}
