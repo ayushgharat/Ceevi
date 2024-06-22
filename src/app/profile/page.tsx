@@ -37,7 +37,7 @@ async function loadProfile() {
 const Profile = async () => {
 
   const response = await loadProfile()
-  const profile = await response?.profile ?? null
+  const profile = response?.profile ?? null
   const id = response?.id
 
 
