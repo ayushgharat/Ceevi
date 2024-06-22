@@ -43,7 +43,7 @@ const Profile = async () => {
 
   return (
     <div className="flex flex-col items-center h-screen">
-      {null && <ProfileComponent profile={profile} id={id} />}
+      {profile ? <ProfileComponent profile={profile} id={id} /> : <span>Unable to load profile</span>}
     </div>
   )
 }
