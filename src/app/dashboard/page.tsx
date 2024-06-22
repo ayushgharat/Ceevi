@@ -17,27 +17,9 @@ const Dashboard = async () => {
     redirect('/authenticate/login')
   }
 
-  
-
-  // useEffect(() => {
-  //   const checkUser = async () => {
-  //     const {
-  //       data: { user }
-  //     } = await supabase.auth.getUser()
-  //     if (!user) {
-  //       router.push("/authenticate/login")
-  //     } else {
-  //       getUserProfile(user)
-  //     }
-
-  //     console.log(user)
-  //   }
-  //   checkUser()
-  // }, [])
-
   async function getUserProfile(user: User) {
     try {
-      const response = await fetch("http://localhost:1947/api/db/get-user", {
+      const response = await fetch(`${process.env.DOMAIN}api/db/get-user`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

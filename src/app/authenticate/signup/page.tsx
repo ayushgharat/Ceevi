@@ -12,24 +12,29 @@ export default function LoginPage() {
   const router = useRouter()
   const supabase = createClient()
 
+  const [email, setEmail] = useState("")
+  const [firstName, setFirstName] = useState("")
+  const [lastName, setLastName] = useState("")
+  const [password, setPassword] = useState("")
+  const [errorMessage, setErrorMessage] = useState("")
+
   useEffect(() => {
     const checkUser = async () => {
       const {
         data: { user }
       } = await supabase.auth.getUser()
       if (user) {
+        setErrorMessage("User is already logged in.")
         router.push("/dashboard")
-      } else {
       }
-      console.log(user)
     }
 
     checkUser()
-  }, [])
+  }, [router, supabase])
 
   async function addUserToDatabase(user: User) {
     try {
-      const response = await fetch("http://localhost:1947/api/db/new-user", {
+      const response = await fetch("/api/db/new-user", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -47,21 +52,27 @@ export default function LoginPage() {
     }
   }
 
-  const [email, setEmail] = useState("")
-  const [firstName, setFirstName] = useState("")
-  const [lastName, setLastName] = useState("")
-  const [password, setPassword] = useState("")
-
   async function signUp() {
-    // TODO: account for situation when account already exists and user tries
-    // to sign up
-
     const {
       data: { user },
       error
-    } = await supabase.auth.signUp({ email, password })
+    } = await supabase.auth.signUp({
+      email: email,
+      password: password,
+      options: {
+        data: {
+          name: `${firstName} ${lastName}`,
+        }
+      }
+    })
+
     if (error) {
-      console.error(error)
+      if (error.message === "User already registered") {
+        setErrorMessage("User already registered. Please log in.")
+      } else {
+        console.error(error)
+        setErrorMessage(error.message)
+      }
     } else {
       if (user) addUserToDatabase(user)
     }
@@ -71,7 +82,7 @@ export default function LoginPage() {
     await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `http://localhost:1947/api/auth/callback`
+        redirectTo: `${process.env.DOMAIN}api/auth/callback`
       }
     })
   }
@@ -96,7 +107,7 @@ export default function LoginPage() {
           type="name"
           value={lastName}
           onChange={(e) => setLastName(e.target.value)}
-          className="w-full py-2 px-3 mt-8  rounded-[30px] border-[1px] border-electric_indigo"
+          className="w-full py-2 px-3 mt-8 rounded-[30px] border-[1px] border-electric_indigo"
         />
 
         <input
@@ -105,7 +116,7 @@ export default function LoginPage() {
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full py-2 px-3 mt-8  rounded-[30px] border-[1px] border-electric_indigo"
+          className="w-full py-2 px-3 mt-8 rounded-[30px] border-[1px] border-electric_indigo"
         />
 
         <input
@@ -116,10 +127,14 @@ export default function LoginPage() {
           onChange={(e) => setPassword(e.target.value)}
           className="w-full py-2 px-3 mt-8 mb-12 rounded-[30px] border-[1px] border-electric_indigo"
         />
-        {/* <PasswordInput id="password" value={password} onChange={(e) => setPassword(e.target.value)}/> */}
+
         <button type="button" className="PrimaryButton" onClick={signUp}>
           Sign up
         </button>
+
+        {errorMessage && (
+          <span className="text-red-500 mt-4">{errorMessage}</span>
+        )}
 
         <span className="mt-10">
           Already have an account?{" "}

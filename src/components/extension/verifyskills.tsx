@@ -1,8 +1,13 @@
 import { ChevronLeftIcon } from "@radix-ui/react-icons"
 import React, { useState } from "react"
-import { WithContext as ReactTags } from "react-tag-input"
+import { WithContext as ReactTags, SEPARATORS } from "react-tag-input"
 
-const VerifySkills = ({ finalData, generateResume, navigateToVerifyProject }) => {
+const VerifySkills = ({
+  finalData,
+  generateResume,
+  navigateToVerifyProject,
+  setFinalData
+}) => {
   const [userData, setUserData] = useState(finalData.professional.skill)
   console.log(finalData)
   const KeyCodes = {
@@ -22,7 +27,15 @@ const VerifySkills = ({ finalData, generateResume, navigateToVerifyProject }) =>
 
   const handleNext = () => {
     // Call onNext to proceed to the next step
-    generateResume(userData)
+    const updatedData = {
+      ...finalData,
+      professional: {
+        ...finalData.professional,
+        skill: userData
+      }
+    }
+    setFinalData(updatedData)
+    generateResume()
   }
 
   const renderTagComponent = (tagName) => {
@@ -62,7 +75,7 @@ const VerifySkills = ({ finalData, generateResume, navigateToVerifyProject }) =>
             id: string,
             text: string
           }))}
-          delimiters={delimiters}
+          separators={[SEPARATORS.COMMA, SEPARATORS.ENTER]}
           handleDelete={handleDelete}
           handleAddition={handleAddition}
           handleDrag={handleDrag}
@@ -77,7 +90,9 @@ const VerifySkills = ({ finalData, generateResume, navigateToVerifyProject }) =>
   return (
     <div className="w-[400px] rounded-3xl p-8 bg-white flex flex-col place-content-between ">
       <div className="flex flex-row items-start mb-5">
-        <ChevronLeftIcon className="h-[25px] w-[30px] mt-[2px]" />
+        <button onClick={navigateToVerifyProject}>
+          <ChevronLeftIcon className="h-[25px] w-[30px] mt-[2px]" />
+        </button>
         <span className="ms-2 font-extension-text text-lg">Verify Skills:</span>
       </div>
 

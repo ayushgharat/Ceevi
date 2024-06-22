@@ -21,7 +21,7 @@ const GeneratePDF = ({ finalData, navigateToVerifyExperiences }) => {
       body: JSON.stringify(postData)
     }
 
-    fetch("http://localhost:1947/api/generate/pdf", requestOptions)
+    fetch(process.env.PLASMO_PUBLIC_DOMAIN + "api/generate/pdf", requestOptions)
       .then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`)

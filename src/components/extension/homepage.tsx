@@ -3,20 +3,26 @@ import { PersonIcon } from "@radix-ui/react-icons"
 import "~style.css"
 
 const HomePage = ({ user, navigateToJobInfo }) => {
+  const openProfile = () => {
+    chrome.tabs.create({ url: process.env.PLASMO_PUBLIC_DOMAIN + "profile" })
+  }
+
   return (
     <div className="h-[400px] w-[300px] rounded-3xl p-8 bg-white flex flex-col place-content-between">
       <div className="flex flex-row justify-between">
         <span className="font-extension-title text-2xl">CeeVi</span>
-        <PersonIcon className="h-6 w-6 mt-1" />
+        <button onClick={openProfile}>
+          <PersonIcon className="h-6 w-6 mt-1" />
+        </button>
       </div>
       <div className="flex flex-col pb-12">
-      <span className="text-3xl font-semibold font-extension-title">
-        Hello Ayush
-        {/* <span className="text-lg">{user.email}</span> */}
-      </span>
-      <span className="mt-2 text-xl font-medium font-extension-text">
-        Ready to build a resume for Apple?
-      </span>
+        <span className="text-3xl font-semibold font-extension-title">
+          Hello Ayush
+          {/* <span className="text-lg">{user.email}</span> */}
+        </span>
+        <span className="mt-2 text-xl font-medium font-extension-text">
+          Ready to build your next resume?
+        </span>
       </div>
 
       <button

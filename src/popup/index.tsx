@@ -1,6 +1,8 @@
 import type { User } from "@supabase/supabase-js"
 import { useEffect, useState } from "react"
 
+import "dotenv/config"
+
 import GeneratePDF from "~components/extension/generatepdf"
 import GeneratingDetailsLoading from "~components/extension/generating-resume-details"
 import HomePage from "~components/extension/homepage"
@@ -44,8 +46,8 @@ const testingResume = {
       {
         name: "CoFiscal",
         skills: [{ value: "Next.js" }, { value: "Website Development" }],
-        start_date: "Oct 2023",
-        end_date: "Oct 2023",
+        start_date: "2023-08",
+        end_date: "2023-08",
         description: [
           {
             value:
@@ -127,8 +129,8 @@ const testingResume = {
       {
         company: "Nutrivend",
         role: "Software Developer",
-        start_date: "Sep 2022",
-        end_date: "Dec 2022",
+        start_date: "2022-07",
+        end_date: "Present",
         location: "Atlanta, GA",
         description: [
           {
@@ -163,6 +165,7 @@ function IndexOptions() {
   const [isLoading, setIsLoading] = useState(true)
   const [user, setUser] = useState<User>()
   const [resume, setResume] = useState<Resume>()
+  const [currentWebpage, setCurrentWebpage] = useState<String>('')
   const [currentView, setCurrentView] = useState<
     | "HomePage"
     | "JobInfo"
@@ -173,13 +176,22 @@ function IndexOptions() {
     | "GeneratePDF"
   >("HomePage")
 
-  const domain = "http://localhost:1947/api"
-  //const [finalUserInfo, setFinalUserInfo] = useState()
+  const domain = process.env.PLASMO_PUBLIC_DOMAIN
+  console.log(domain)
+  const [finalUserInfo, setFinalUserInfo] = useState()
+
+  function cleanDomain(domain : String) {
+    const cleanedDomain =  domain
+      .replace(/^www\./, '') // Remove 'www.' at the start
+      .replace(/\.com$/, ''); // Remove '.com' at the end
+
+    return cleanedDomain.charAt(0).toUpperCase() + cleanedDomain.slice(1);
+  }
 
   useEffect(() => {
     async function checkUser() {
       try {
-        const response = await fetch(domain + "/auth/get-current-user", {
+        const response = await fetch(domain + "api/auth/get-current-user", {
           method: "GET",
           headers: {
             "Content-Type": "application/json"
@@ -234,13 +246,13 @@ function IndexOptions() {
     setCurrentView("GeneratePDF")
   }
 
-  const generateResumeDetails = async (jobInfo) => {
+  const generateResumeDetails = async (jobInfo, userPref) => {
     setCurrentView("LoadingResume")
     //setIsLoading(true)
     //console.log(jobInfo)
 
     try {
-      const response = await fetch("http://localhost:1947/api/db/get-user", {
+      const response = await fetch(domain + "api/db/get-user", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -253,66 +265,76 @@ function IndexOptions() {
       }
       const profile = await response.json()
 
-      //console.log(profile.data)
+      // console.log(profile.data)
       // setFinalUserInfo({
       //   ...profile.personal
       // })
-
-      const [response_experience, response_project] = await Promise.all([
-        //const [response_experience] = await Promise.all([
-        fetch(domain + "/generate/experience", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ job_info: jobInfo, profile: profile })
-        }),
-        fetch(domain + "/generate/project", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ job_info: jobInfo, profile: profile })
-        })
-      ])
-
-      if (!response_experience.ok || !response_project.ok) {
-        throw new Error("Failed to fetch data from one or both endpoints")
+      const resume_response = await fetch(domain + "api/generate/resume", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ job_info: jobInfo, profile: profile, userPref: userPref })
+          })
+      if (!resume_response.ok) {
+        throw new Error("Failed to fetch data from resume endpoints")
       }
 
-      const data_experience = await response_experience.json()
-      const data_project = await response_project.json()
-      //console.log(data_experience)
-      const response_skill = await fetch(domain + "/generate/skill", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          experience: data_experience,
-          project: data_project,
-          job_info: jobInfo
-        })
-      })
+      // const [response_experience, response_project] = await Promise.all([
+      //   //const [response_experience] = await Promise.all([
+      //   fetch(domain + "/generate/experience", {
+      //     method: "POST",
+      //     headers: {
+      //       "Content-Type": "application/json"
+      //     },
+      //     body: JSON.stringify({ job_info: jobInfo, profile: profile })
+      //   }),
+      //   fetch(domain + "/generate/project", {
+      //     method: "POST",
+      //     headers: {
+      //       "Content-Type": "application/json"
+      //     },
+      //     body: JSON.stringify({ job_info: jobInfo, profile: profile })
+      //   })
+      // ])
 
-      if (!response_skill.ok) {
-        throw new Error("Failed to fetch skill data")
-      }
+      // if (!response_experience.ok || !response_project.ok) {
+      //   throw new Error("Failed to fetch data from one or both endpoints")
+      // }
 
-      const data_skill = await response_skill.json()
-      const combined = await {
-        personal: profile.data[0].profile.personal,
-        education: profile.data[0].profile.education,
-        professional: {
-          experience: data_experience.experience,
-          project: data_project.project,
-          skill: {
-            ...data_skill
-          }
-        }
-      }
+      // const data_experience = await response_experience.json()
+      // const data_project = await response_project.json()
+      // //console.log(data_experience)
+      // const response_skill = await fetch(domain + "/generate/skill", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json"
+      //   },
+      //   body: JSON.stringify({
+      //     experience: data_experience,
+      //     project: data_project,
+      //     job_info: jobInfo
+      //   })
+      // })
 
-      setResume(combined)
+      // if (!response_skill.ok) {
+      //   throw new Error("Failed to fetch skill data")
+      // }
+
+      // const data_skill = await response_skill.json()
+      // const combined = await {
+      //   personal: profile.data[0].profile.personal,
+      //   education: profile.data[0].profile.education,
+      //   professional: {
+      //     experience: data_experience.experience,
+      //     project: data_project.project,
+      //     skill: {
+      //       ...data_skill
+      //     }
+      //   }
+      // }
+
+      setResume(testingResume)
 
       setCurrentView("VerifyExperiences")
       //setIsLoading(false)
@@ -327,7 +349,7 @@ function IndexOptions() {
         <Loading />
       ) : currentView === "HomePage" ? (
         user ? (
-          <HomePage user={user} navigateToJobInfo={navigateToJobInfo} />
+          <HomePage user={user} navigateToJobInfo={navigateToJobInfo}/>
         ) : (
           <div className="flex flex-col w-[200px] items-center">
             <span>No User Logged in</span>
@@ -350,6 +372,7 @@ function IndexOptions() {
         <VerifyExperiences
           onNext={navigateToVerifyProject}
           finalData={resume}
+          setFinalData={setResume}
           navigateToJobInfo={navigateToJobInfo}
         />
       ) : currentView === "LoadingResume" ? (
@@ -366,9 +389,13 @@ function IndexOptions() {
           generateResume={generateResumePDF}
           finalData={resume}
           navigateToVerifyProject={navigateToVerifyProject}
+          setFinalData={setResume}
         />
       ) : currentView === "GeneratePDF" ? (
-        <GeneratePDF finalData={resume} navigateToVerifyExperiences={navigateToVerifyExperiences} />
+        <GeneratePDF
+          finalData={resume}
+          navigateToVerifyExperiences={navigateToVerifyExperiences}
+        />
       ) : (
         <div>Error, reload the extension</div>
       )}

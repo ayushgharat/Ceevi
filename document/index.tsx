@@ -8,6 +8,7 @@ import {
 import * as React from "react"
 
 import "src/style.css"
+import { convertDate } from "~utils/helper/helper"
 
 export const Document = ({ personal, education, professional }) => {
   function removeHttps(link) {
@@ -60,7 +61,7 @@ export const Document = ({ personal, education, professional }) => {
                       {item.degree_level} of {item.major}
                     </span>
                     <span className="italic">
-                      {item.start_date} - {item.end_date}
+                      {convertDate(item.start_date)} - {convertDate(item.end_date)}
                     </span>
                   </div>
                 </div>
@@ -80,7 +81,7 @@ export const Document = ({ personal, education, professional }) => {
                   <div className="flex flex-row justify-between">
                     <span className="font-[600]">{item.company}</span>
                     <span className="">
-                      {item.start_date} - {item.end_date}
+                      {convertDate(item.start_date)} - {convertDate(item.end_date)}
                     </span>
                   </div>
                   <div className="flex flex-row justify-between">
@@ -117,7 +118,7 @@ export const Document = ({ personal, education, professional }) => {
                       </span>
                     </div>
                     <span className="">
-                      {item.start_date} - {item.end_date}
+                      {convertDate(item.start_date)} - {convertDate(item.end_date)}
                     </span>
                   </div>
                   <ul className="list-disc pl-4">

@@ -3,11 +3,19 @@ import "~style.css"
 import { ChevronLeftIcon } from "@radix-ui/react-icons"
 import React, { useEffect, useState } from "react"
 
-const VerifyExperiences = ({ onNext, finalData, navigateToJobInfo }) => {
+import { convertDate } from "~utils/helper/helper"
+
+const VerifyExperiences = ({
+  onNext,
+  finalData,
+  navigateToJobInfo,
+  setFinalData
+}) => {
   const [userData, setUserData] = useState(finalData.professional.experience)
   const [isLoadingProject, setIsLoadingProject] = useState(true)
-
-  //console.log(userData)
+  const [presentEndDate, setPresentEndDate] = useState(
+    userData.map((experience) => experience.end_date === "Present")
+  )
 
   const handleInputChange = (experienceIndex, fieldName, value) => {
     const updatedUserData = [...userData]
@@ -28,6 +36,31 @@ const VerifyExperiences = ({ onNext, finalData, navigateToJobInfo }) => {
   useEffect(() => {
     setIsLoadingProject(false)
   }, [])
+
+  const handleSubmit = () => {
+    const updatedData = {
+      ...finalData,
+      professional: {
+        ...finalData.professional,
+        experience: userData
+      }
+    }
+    setFinalData(updatedData)
+    onNext()
+  }
+
+  const handleCheckboxChange = (experienceIndex) => {
+    const updatedPresentEndDate = [...presentEndDate]
+    updatedPresentEndDate[experienceIndex] =
+      !updatedPresentEndDate[experienceIndex]
+    setPresentEndDate(updatedPresentEndDate)
+
+    if (updatedPresentEndDate[experienceIndex]) {
+      handleInputChange(experienceIndex, "end_date", "Present")
+    } else {
+      handleInputChange(experienceIndex, "end_date", "")
+    }
+  }
 
   const experiences = userData.map((experience, experienceIndex) => {
     return (
@@ -51,20 +84,39 @@ const VerifyExperiences = ({ onNext, finalData, navigateToJobInfo }) => {
         <div className="grid grid-cols-2 gap-x-4">
           <input
             className="ExtensionFormInput"
-            type="text"
+            type="month"
             value={experience.start_date}
             onChange={(e) =>
               handleInputChange(experienceIndex, "start_date", e.target.value)
             }
           />
-          <input
-            className="ExtensionFormInput"
-            type="text"
-            value={experience.end_date}
-            onChange={(e) =>
-              handleInputChange(experienceIndex, "end_date", e.target.value)
-            }
-          />
+            {presentEndDate[experienceIndex] ? (
+              <input
+                className="ExtensionFormInput ml-2"
+                type="text"
+                value="Present"
+                readOnly
+              />
+            ) : (
+              <input
+                className="ExtensionFormInput ml-2"
+                type="month"
+                value={experience.end_date}
+                onChange={(e) =>
+                  handleInputChange(experienceIndex, "end_date", e.target.value)
+                }
+              />
+            )}
+
+          <div className="flex col-span-2 justify-end gap-x-3">
+            <input
+              type="checkbox"
+              value="Present"
+              checked={presentEndDate[experienceIndex]}
+              onChange={() => handleCheckboxChange(experienceIndex)}
+            />
+            <label>Present</label>
+          </div>
         </div>
         {experience.description.map((item, descriptionIndex) => {
           return (
@@ -94,14 +146,14 @@ const VerifyExperiences = ({ onNext, finalData, navigateToJobInfo }) => {
           <ChevronLeftIcon className="h-[25px] w-[30px] mt-[2px]" />
         </button>
         <span className="ms-2 font-extension-text text-lg">
-          Enter the job Information:
+          Verify Experiences:
         </span>
       </div>
       {experiences}
 
       <button
         className="bg-gradient-to-r from-vivid_violet to-electric_indigo text-white text-[16px] font-semibold font-extension-title rounded-[29px] w-full py-2 shadow-[0_4px_0_rgba(0,0,0,0.25)]"
-        onClick={onNext}>
+        onClick={handleSubmit}>
         <span className="mx-3 text-white text-base font-kodchasan">Next</span>
       </button>
     </div>
