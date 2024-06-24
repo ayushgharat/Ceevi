@@ -19,7 +19,8 @@ async function loadProfile() {
         body: JSON.stringify({ id: user.id })
       })
       if (!response.ok) {
-        console.log(response.json())
+        const message = await response.json()
+        console.log(message)
         throw new Error(`HTTP error! status: ${response.status}`)
       } else {
         const data = await response.json()
