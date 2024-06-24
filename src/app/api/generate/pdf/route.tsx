@@ -25,9 +25,9 @@ async function generatePDF(html) {
         new File([html], "index.html", {
           type: "text/html"
         }),
-        new File([fs.readFileSync("public/font/cmunbx.ttf")], "cmunbx.ttf", {
-          type: "font/ttf"
-        })
+        // new File([fs.readFileSync("public/font/cmunbx.ttf")], "cmunbx.ttf", {
+        //   type: "font/ttf"
+        // })
       ],
       {
         options: {
