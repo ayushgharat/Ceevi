@@ -327,19 +327,24 @@ function IndexOptions() {
       // }
 
       // const data_skill = await response_skill.json()
-      // const combined = await {
-      //   personal: profile.data[0].profile.personal,
-      //   education: profile.data[0].profile.education,
-      //   professional: {
-      //     experience: data_experience.experience,
-      //     project: data_project.project,
-      //     skill: {
-      //       ...data_skill
-      //     }
-      //   }
-      // }
+      
 
-      setResume(testingResume)
+      const new_resume = await resume_response.json()
+
+      const combined = await {
+        personal: profile.data[0].profile.personal,
+        education: profile.data[0].profile.education,
+        professional: {
+          experience: new_resume.experience,
+          project: new_resume.project,
+          skill: {
+            ...new_resume.skill
+          }
+        }
+      }
+      console.log(resume)
+      setResume(combined)
+      //setResume(testingResume)
 
       setCurrentView("VerifyExperiences")
       //setIsLoading(false)
@@ -350,7 +355,9 @@ function IndexOptions() {
 
   const loginUser = () => {
     console.log("Opening login portal")
-    chrome.tabs.create({ url: `${process.env.PLASMO_PUBLIC_DOMAIN}authenticate/login` })
+    chrome.tabs.create({
+      url: `${process.env.PLASMO_PUBLIC_DOMAIN}authenticate/login`
+    })
   }
 
   return (

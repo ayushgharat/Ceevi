@@ -42,7 +42,7 @@ export function DashboardHomePage({ user }) {
   }
 
   const editProfile = () => {
-    router.push("dashboard/profile")
+    router.push("dashboard/profile/edit-profile")
   }
 
   
