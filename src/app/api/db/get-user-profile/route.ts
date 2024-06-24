@@ -13,6 +13,7 @@ export async function POST(req, res) {
     .select('profile').eq('id', id)
 
   if (error) {
+    console.log("Unable to get user profile")
     console.log(error)
     return Response.json({ error:error })
   }
