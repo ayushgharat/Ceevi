@@ -89,3 +89,16 @@ export async function signOut() {
   revalidatePath("/", "layout")
   redirect("/authneticate/login")
 }
+
+export async function getUserProfile(id) {
+  const supabase = await createClient()
+  const { data, error } = await supabase
+    .from("users")
+    .select('profile').eq('id', id)
+
+    if (error) {
+      redirect("/error")
+    }
+
+  return {profile: data}
+}

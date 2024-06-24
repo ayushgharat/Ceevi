@@ -13,7 +13,7 @@ import ProfileCardProject from "./ui/profile-card-project"
 
 const ProfileComponent = (props) => {
   const [componentToRender, setComponentToRender] = useState("Personal")
-  const [profile, setProfile] = useState(props.profile.profile ?? null)
+  const [profile, setProfile] = useState(props.profile[0].profile ?? null)
   const [isLoading, setIsLoading] = useState(false)
 
   const id = props.id

@@ -1,4 +1,5 @@
 'use server'
+import { getUserProfile } from "~app/action"
 import ProfileComponent from "~components/website/profile-page"
 import { createClient } from "~utils/supabase/server"
 
@@ -11,25 +12,29 @@ async function loadProfile() {
       data: { user }
     } = await supabase.auth.getUser()
     if (user) {
-      console.log(process.env.NEXT_PUBLIC_DOMAIN)
-      const response = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}api/db/get-user-profile`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ id: user.id })
-      })
-      if (!response.ok) {
-        const message = await response.json()
-        console.log(message)
-        throw new Error(`HTTP error! status: ${response.status}`)
-      } else {
-        const data = await response.json()
-        //console.log(data)
-         return {profile: data, id: user.id}
+      // console.log(process.env.NEXT_PUBLIC_DOMAIN)
+      // const response = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}api/db/get-user-profile`, {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json"
+      //   },
+      //   body: JSON.stringify({ id: user.id })
+      // })
+      // if (!response.ok) {
+      //   const message = await response.json()
+      //   console.log(message)
+      //   throw new Error(`HTTP error! status: ${response.status}`)
+      // } else {
+      //   const data = await response.json()
+      //   //console.log(data)
+      //    return {profile: data, id: user.id}
       
-      }
+      // }
+      const {profile} = await getUserProfile(user.id)
+      return {profile: profile, id: user.id}
     }
+
+    
   } catch (error) {
     console.error("Error creating user:", error)
   }
