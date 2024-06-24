@@ -1,6 +1,9 @@
-'use server'
+"use server"
+
 import type { User } from "@supabase/supabase-js"
 import { redirect } from "next/navigation"
+
+import { checkIfUserIsLoggedIn } from "~app/action"
 import { DashboardHomePage } from "~components/website/dashboard-homepage"
 import Header from "~components/website/header"
 import { createClient } from "~utils/supabase/server"
@@ -10,12 +13,9 @@ interface users {
 }
 
 const Dashboard = async () => {
-  
-  const supabase = await createClient()
-  const {data, error} = await supabase.auth.getUser()
-  if(error || !data?.user) {
-    redirect('/authenticate/login')
-  }
+  const { user, error } = await checkIfUserIsLoggedIn()
+  //console.log(isUserLoggedIn)
+  if (error) redirect("/authenticate/login")
 
   async function getUserProfile(user: User) {
     try {
@@ -41,7 +41,7 @@ const Dashboard = async () => {
 
   return (
     <div className="flex flex-col items-center h-screen">
-      <DashboardHomePage user={getUserProfile(data.user)}/>
+      {user && <DashboardHomePage user={getUserProfile(user)} />}
     </div>
   )
 }

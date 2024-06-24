@@ -8,6 +8,7 @@ import GeneratingDetailsLoading from "~components/extension/generating-resume-de
 import HomePage from "~components/extension/homepage"
 import JobInfoComponent from "~components/extension/jobinfo"
 import Loading from "~components/extension/loading"
+import NoUserComponent from "~components/extension/nousercomponent"
 import VerifyExperiences from "~components/extension/verifyexperiences"
 import VerifyProjects from "~components/extension/verifyprojects"
 import VerifySkills from "~components/extension/verifyskills"
@@ -165,7 +166,7 @@ function IndexOptions() {
   const [isLoading, setIsLoading] = useState(true)
   const [user, setUser] = useState<User>()
   const [resume, setResume] = useState<Resume>()
-  const [currentWebpage, setCurrentWebpage] = useState<String>('')
+  const [currentWebpage, setCurrentWebpage] = useState<String>("")
   const [currentView, setCurrentView] = useState<
     | "HomePage"
     | "JobInfo"
@@ -180,12 +181,12 @@ function IndexOptions() {
   console.log(domain)
   const [finalUserInfo, setFinalUserInfo] = useState()
 
-  function cleanDomain(domain : String) {
-    const cleanedDomain =  domain
-      .replace(/^www\./, '') // Remove 'www.' at the start
-      .replace(/\.com$/, ''); // Remove '.com' at the end
+  function cleanDomain(domain: String) {
+    const cleanedDomain = domain
+      .replace(/^www\./, "") // Remove 'www.' at the start
+      .replace(/\.com$/, "") // Remove '.com' at the end
 
-    return cleanedDomain.charAt(0).toUpperCase() + cleanedDomain.slice(1);
+    return cleanedDomain.charAt(0).toUpperCase() + cleanedDomain.slice(1)
   }
 
   useEffect(() => {
@@ -270,12 +271,16 @@ function IndexOptions() {
       //   ...profile.personal
       // })
       const resume_response = await fetch(domain + "api/generate/resume", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ job_info: jobInfo, profile: profile, userPref: userPref })
-          })
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          job_info: jobInfo,
+          profile: profile,
+          userPref: userPref
+        })
+      })
       if (!resume_response.ok) {
         throw new Error("Failed to fetch data from resume endpoints")
       }
@@ -343,25 +348,20 @@ function IndexOptions() {
     }
   }
 
+  const loginUser = () => {
+    console.log("Opening login portal")
+    chrome.tabs.create({ url: `${process.env.PLASMO_PUBLIC_DOMAIN}authenticate/login` })
+  }
+
   return (
     <div className="bg-violet-700 p-1">
       {isLoading ? (
         <Loading />
       ) : currentView === "HomePage" ? (
         user ? (
-          <HomePage user={user} navigateToJobInfo={navigateToJobInfo}/>
+          <HomePage user={user} navigateToJobInfo={navigateToJobInfo} />
         ) : (
-          <div className="flex flex-col w-[200px] items-center">
-            <span>No User Logged in</span>
-            <button
-              onClick={() => {
-                chrome.tabs.create({
-                  url: "./tabs/delta-flyer.html"
-                })
-              }}>
-              Log into website
-            </button>
-          </div>
+          <NoUserComponent loginUser={loginUser} />
         )
       ) : currentView === "JobInfo" ? (
         <JobInfoComponent

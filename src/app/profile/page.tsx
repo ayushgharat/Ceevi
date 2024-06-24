@@ -24,9 +24,7 @@ async function loadProfile() {
         const data = await response.json()
         //console.log(data)
          return {profile: data, id: user.id}
-        
-        
-        
+      
       }
     }
   } catch (error) {

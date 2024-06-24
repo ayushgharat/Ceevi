@@ -1,109 +1,65 @@
-"use client"
-
-import type { User } from "@supabase/supabase-js"
+import Image from "next/image"
 import Link from "next/link"
-import router, { useRouter } from "next/navigation"
+import { redirect } from "next/navigation"
 import { useEffect, useState } from "react"
 
 import { Storage } from "@plasmohq/storage"
 import { useStorage } from "@plasmohq/storage/hook"
 import { SecureStorage } from "@plasmohq/storage/secure"
 
-import { createClient } from "~/utils/supabase/component"
-import Image from "next/image"
+import { createClient } from "~/utils/supabase/server"
+import GoogleLogIn from "~components/website/googlelogin"
+import LoginComponent from "~components/website/login-component"
 
-export default function LoginPage() {
-  const router = useRouter()
-  const supabase = createClient()
+import {
+  checkIfUserIsLoggedIn,
+  login,
+  signInWithGoogle,
+  signup
+} from "../../action"
+import { LoginButton } from "~components/website/ui/loginbutton"
 
-  useEffect(() => {
-    const checkUser = async () => {
-      const {
-        data: { user }
-      } = await supabase.auth.getUser()
-      if (user) {
-        router.push("/dashboard")
-      } else {
-      }
-      console.log(user)
-    }
+export default async function LoginPage() {
+  //const supabase = await createClient()
 
-    checkUser()
-  }, [])
-
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [errorMessage, setErrorMessage] = useState("")
-
-  async function logIn() {
-    const {
-      data: { user },
-      error
-    } = await supabase.auth.signInWithPassword({ email, password })
-    if (error) {
-      setErrorMessage(error.message)
-    }
-    console.log(user)
-
-    router.push("/dashboard")
-  }
-
-  async function signInWithGoogle() {
-    await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: `${process.env.DOMAIN}/api/auth/callback`
-      }
-    })
-  }
+  const { user, error } = await checkIfUserIsLoggedIn()
+  //console.log(isUserLoggedIn)
+  if (user) redirect("/dashboard")
 
   return (
     <main className="h-screen flex flex-col justify-center items-center">
-      <form className="flex flex-col items-center justify-center w-1/2 font-dmsans">
-        <span className="text-4xl mb-20 font-poppins">Welcome to Ceevi</span>
-        {/* <label htmlFor="email" className="w-full text-left">
-          Email
-        </label> */}
+      {/* <LoginComponent /> */}
+      <form className="flex flex-col items-start justify-center w-1/2 font-dmsans">
+        <span className="text-4xl mb-16 font-poppins">Welcome to Ceevi</span>
+        <label htmlFor="email">Email</label>
         <input
           id="email"
+          name="email"
           type="email"
-          value={email}
-          placeholder="email"
-          onChange={(e) => setEmail(e.target.value)}
+          required
           className="peer w-full py-2 px-3 rounded-[30px] border-[1px] border-electric_indigo focus:border-vivid_violet"
         />
+        <label htmlFor="password" className="mt-4">
+          Password
+        </label>
         <input
           id="password"
+          name="password"
           type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full py-2 px-3 mt-8 mb-16 rounded-[30px] border-[1px] border-electric_indigo"
-          placeholder="password"
+          required
+          className="peer w-full py-2 px-3 rounded-[30px] border-[1px] border-electric_indigo focus:border-vivid_violet"
         />
-        <button type="button" className="PrimaryButton" onClick={logIn}>
-          Log in
-        </button>
-
-        {errorMessage && (
-          <span className="text-red-500 mt-4">{errorMessage}</span>
-        )}
-
-        <span className="mt-10">
+        <LoginButton/>
+      </form>
+      <div className="w-1/2 flex justify-center flex-col">
+        <span className="mt-10 text-center">
           Don't have an account yet?{" "}
           <Link href="/authenticate/signup" className="text-purple-600">
             Sign up
           </Link>
         </span>
-
-        <div className="h-[1px] bg-slate-500 w-full opacity-30 mt-4"></div>
-
-        <button
-          className="mt-4 bg-white border-2 rounded-3xl border-opacity-20 px-4 py-2 w-full flex flex-row items-center justify-center gap-x-4"
-          onClick={signInWithGoogle}>
-            <Image src="/image/google-logo.png" alt="Google logo" width={20} height={20}/>
-          Sign in with Google
-        </button>
-      </form>
+        <GoogleLogIn />
+      </div>
     </main>
   )
 }

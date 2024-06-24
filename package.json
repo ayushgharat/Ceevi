@@ -14,7 +14,7 @@
     "start": "next start",
     "dev": "run-p dev:*",
     "dev:plasmo": "plasmo dev",
-    "dev:next": "next dev --port 1947",
+    "dev:next": "next dev",
     "build": "run-p build:*",
     "build:plasmo": "plasmo build",
     "build:next": "next build"
