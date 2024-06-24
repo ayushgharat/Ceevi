@@ -19,7 +19,7 @@ const Dashboard = async () => {
 
   async function getUserProfile(user: User) {
     try {
-      const response = await fetch(`${process.env.DOMAIN}api/db/get-user`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}api/db/get-user`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

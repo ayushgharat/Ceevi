@@ -11,7 +11,7 @@ async function loadProfile() {
       data: { user }
     } = await supabase.auth.getUser()
     if (user) {
-      const response = await fetch(`${process.env.DOMAIN}api/db/get-user-profile`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}api/db/get-user-profile`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
