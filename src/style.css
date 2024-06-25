@@ -122,6 +122,18 @@
   @apply bg-gradient-to-r from-vivid_violet to-electric_indigo text-white text-[16px] font-semibold font-extension-title rounded-[29px] w-full py-2 shadow-[0_4px_0_rgba(0,0,0,0.25)];
 }
 
+.DialogInput {
+  @apply rounded-xl border-black border-2
+}
+
+.DialogLayout {
+  @apply flex flex-col items-start gap-4 font-dmsans
+}
+
+.DialogTitle {
+  @apply font-poppins text-3xl text-left
+}
+
 @keyframes overlayShow {
   from {
     opacity: 0;

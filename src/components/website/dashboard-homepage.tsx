@@ -41,9 +41,7 @@ export function DashboardHomePage({ user }) {
     //router.push("/dashboard/profile/edit-profile?id=" + user.id)
   }
 
-  const editProfile = () => {
-    router.push("dashboard/profile/edit-profile")
-  }
+  
 
   
   return (

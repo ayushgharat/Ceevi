@@ -17,6 +17,7 @@ const ProfileComponent = (props) => {
   const [isLoading, setIsLoading] = useState(false)
 
   const id = props.id
+  console.log(profile)
 
   const updateProfile = async (newProfile) => {
     setIsLoading(true)
@@ -32,8 +33,8 @@ const ProfileComponent = (props) => {
         throw new Error(`HTTP error! status: ${response.status}`)
       } else {
         await response.json()
-        console.log("Name updated successfully")
-        setProfile({ profile: newProfile })
+        console.log("Updated updated successfully")
+        setProfile(newProfile)
         setIsLoading(false)
       }
     } catch (error) {

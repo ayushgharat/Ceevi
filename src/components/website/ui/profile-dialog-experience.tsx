@@ -70,7 +70,7 @@ export function ProfileDialogExperience({
         <DropdownMenuTrigger>
           <DotsVerticalIcon />
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="bg-white rounded-xl font-dmsans flex flex-col p-3 gap-y-3">
+        <DropdownMenuContent className="bg-white rounded-xl font-dmsans flex flex-col p-3 gap-y-3 shadow-lg">
           <DropdownMenuItem>
             <DialogTrigger asChild>
               <button>Edit</button>
@@ -84,60 +84,57 @@ export function ProfileDialogExperience({
 
       <DialogPortal>
         <DialogOverlay className="DialogOverlay z-10" />
-        <DialogContent className="data-[state=open]:animate-contentShow z-20 fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[600px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
+        <DialogContent className="data-[state=open]:animate-contentShow z-20 fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[800px] translate-x-[-50%] translate-y-[-50%] rounded-[40px] bg-white p-[40px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none overflow-scroll">
           <DialogHeader>
-            <DialogTitle>Edit experience</DialogTitle>
-            <DialogDescription>
-              Make changes to your experience here. Click save when you're done.
-            </DialogDescription>
+            <DialogTitle className="DialogTitle">Edit experience</DialogTitle>
           </DialogHeader>
           <div className="grid grid-cols-2 gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
+            <div className="DialogLayout">
               <Label htmlFor="company" className="text-right">
                 Company
               </Label>
               <Input
                 id="company"
                 value={newExperience.company}
-                className="col-span-3"
+                className="DialogInput"
                 onChange={handleInputChange}
               />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
+            <div className="DialogLayout">
               <Label htmlFor="role" className="text-right">
                 Role
               </Label>
               <Input
                 id="role"
                 value={newExperience.role}
-                className="col-span-3"
+                className="DialogInput"
                 onChange={handleInputChange}
               />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
+            <div className="DialogLayout">
               <Label htmlFor="location" className="text-right">
                 Location
               </Label>
               <Input
                 id="location"
                 value={newExperience.location}
-                className="col-span-3"
+                className="DialogInput"
                 onChange={handleInputChange}
               />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
+            <div className="DialogLayout">
               <Label htmlFor="start_date" className="text-right">
                 Start Date
               </Label>
               <Input
                 id="start_date"
                 value={newExperience.start_date}
-                className="col-span-3"
+                className="DialogInput flex-col justify-between"
                 onChange={handleInputChange}
                 type="month"
               />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
+            <div className="DialogLayout">
               <Label htmlFor="end_date" className="text-right">
                 End Date
               </Label>
@@ -145,32 +142,30 @@ export function ProfileDialogExperience({
                 <Input
                   id="end_date"
                   value={newExperience.end_date}
-                  className="col-span-3"
+                  className="DialogInput flex-col justify-between"
                   onChange={handleInputChange}
                   type="month"
                 />
               ) : (
-                <span className="col-span-3">Present</span>
+                <span className="DialogInput w-full p-2">Present</span>
               )}
-              <div className="col-span-4">
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={isPresent}
-                    onChange={handlePresentChange}
-                  />
-                  Present
-                </label>
+              <div className="flex flex-row gap-x-2 items-center">
+                <input
+                  type="checkbox"
+                  checked={isPresent}
+                  onChange={handlePresentChange}
+                />
+                <label>Present</label>
               </div>
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
+            <div className="DialogLayout col-span-2">
               <Label htmlFor="description" className="text-right">
                 Description
               </Label>
               <Textarea
                 id="description"
                 value={newExperience.description}
-                className="col-span-3"
+                className="DialogInput"
                 onChange={handleInputChange}
               />
             </div>
@@ -185,7 +180,7 @@ export function ProfileDialogExperience({
           <DialogFooter>
             <DialogClose asChild>
               <Button
-                className="bg-violet-400 hover:bg-violet-700 text-white p-2 rounded-sm items-center inline-flex"
+                className="PrimaryButton"
                 type="submit"
                 onClick={handleSaveChanges}>
                 Save changes

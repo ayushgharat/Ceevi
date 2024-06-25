@@ -20,7 +20,7 @@ const CustomSidebar = () => {
   }
 
   return (
-    <div className="z-10 shadow-[4px_4px_0_rgba(0,0,0,0.25)]">
+    <div className="z-0 shadow-[4px_4px_0_rgba(0,0,0,0.25)]">
       <Sidebar collapsed={menuCollapse}>
         {!menuCollapse ? (
           <div className="flex flex-row justify-between items-center mt-5 py-2 mx-5">

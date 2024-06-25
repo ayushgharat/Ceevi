@@ -16,6 +16,7 @@ import { convertDate } from "~utils/helper/helper"
 
 const ProfileCardEducation = ({ profile, updateProfile }) => {
   const education = profile.education
+  console.log(education)
   const updateEducation = (newEducation, index) => {
     const newProfile = {
       ...profile,
@@ -23,8 +24,8 @@ const ProfileCardEducation = ({ profile, updateProfile }) => {
         i === index ? newEducation : item
       )
     }
-
     updateProfile(newProfile)
+
   }
 
   const addNewEducation = (newEducation) => {

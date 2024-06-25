@@ -14,10 +14,10 @@ const DegreeLevelSelect = ({ selectedValue, setSelectedValue }) => {
     <Select
       value={selectedValue}
       onValueChange={(value) => setSelectedValue(value)}>
-      <SelectTrigger className="w-[180px]">
+      <SelectTrigger className="DialogInput">
         <SelectValue placeholder="" />
       </SelectTrigger>
-      <SelectContent className="bg-purple-100 w-[180px]">
+      <SelectContent className="w-full bg-white font-dmsans flex flex-col gap-y-3">
         <SelectItem value="Bachelors">Bachelors</SelectItem>
         <SelectItem value="Masters">Masters</SelectItem>
         <SelectItem value="PhD">PhD</SelectItem>

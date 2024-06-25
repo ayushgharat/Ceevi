@@ -39,92 +39,89 @@ export function ProfileDialogPersonal({ personal, updatePersonal }) {
       </DialogTrigger>
       <DialogPortal>
         <DialogOverlay className="DialogOverlay" />
-        <DialogContent className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
+        <DialogContent className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[800px] translate-x-[-50%] translate-y-[-50%] rounded-[30px] bg-white p-[40px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
           <DialogHeader>
-            <DialogTitle>Edit profile</DialogTitle>
-            <DialogDescription>
-              Make changes to your profile here. Click save when you're done.
-            </DialogDescription>
+            <DialogTitle className="DialogTitle">Edit profile</DialogTitle>
           </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
+          <div className="grid grid-cols-2 gap-4 py-4">
+            <div className="DialogLayout">
               <Label htmlFor="First Name" className="text-right">
                 First Name
               </Label>
               <Input
                 id="first_name"
                 value={newPersonal.first_name}
-                className="col-span-3"
+                className="DialogInput"
                 onChange={handleInputChange}
               />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
+            <div className="DialogLayout">
               <Label htmlFor="name" className="text-right">
                 Last Name
               </Label>
               <Input
                 id="last_name"
                 value={newPersonal.last_name}
-                className="col-span-3"
+                className="DialogInput"
                 onChange={handleInputChange}
               />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
+            <div className="DialogLayout">
               <Label htmlFor="email" className="text-right">
                 Email
               </Label>
               <Input
                 id="email"
                 value={newPersonal.email}
-                className="col-span-3"
+                className="DialogInput"
                 onChange={handleInputChange}
               />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
+            <div className="DialogLayout">
               <Label htmlFor="phone number" className="text-right">
                 Phone Number
               </Label>
               <Input
                 id="phone_number"
                 value={newPersonal.phone_number}
-                className="col-span-3"
+                className="DialogInput"
                 onChange={handleInputChange}
               />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
+            <div className="DialogLayout">
               <Label htmlFor="linkedin" className="text-right">
                 LinkedIn URL
               </Label>
               <Input
                 id="linkedin"
                 value={newPersonal.linkedin}
-                className="col-span-3"
+                className="DialogInput"
                 onChange={handleInputChange}
               />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
+            <div className="DialogLayout">
               <Label htmlFor="github" className="text-right">
                 Github URL
               </Label>
               <Input
                 id="github"
                 value={newPersonal.github}
-                className="col-span-3"
+                className="DialogInput"
                 onChange={handleInputChange}
               />
             </div>
           </div>
-          <DialogClose asChild>
+          {/* <DialogClose asChild>
             <Button
-              className="text-violet11 hover:bg-violet-400 focus:shadow-violet7 absolute top-[10px] right-[10px] inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-full focus:shadow-[0_0_0_2px] focus:outline-none"
+              className=""
               aria-label="Close">
               <Cross2Icon />
             </Button>
-          </DialogClose>
+          </DialogClose> */}
           <DialogFooter>
             <DialogClose asChild>
               <Button
-                className="bg-violet-400 hover:bg-violet-700 text-white p-2 rounded-sm items-center inline-flex"
+                className="PrimaryButton mt-5"
                 type="submit"
                 onClick={handleSaveChanges}>
                 Save changes
