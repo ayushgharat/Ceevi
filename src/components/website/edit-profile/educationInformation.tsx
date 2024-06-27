@@ -49,8 +49,8 @@ const EducationInformation = ({setActiveStep, handleEducationalInfo} : any) => {
             />
             <Select
               placeholder="Degree Level"
-              name="degreeLevel"
-              value={education.degreeLevel}
+              name="degree_level"
+              value={education.degree_level}
               onChange={handleChange(index)}
             >
               <option value="Bachelors">Bachelors</option>
@@ -77,16 +77,16 @@ const EducationInformation = ({setActiveStep, handleEducationalInfo} : any) => {
             />
             <Input
               placeholder="Start Date"
-              name="startDate"
+              name="start_date"
               type="month"
-              value={education.startDate}
+              value={education.start_date}
               onChange={handleChange(index)}
             />
             <Input
               placeholder="End Date"
-              name="endDate"
+              name="end_date"
               type="month"
-              value={education.endDate}
+              value={education.end_date}
               onChange={handleChange(index)}
             />
             <Button onClick={handleRemoveEducation(index)} variant="ghost">Remove</Button>

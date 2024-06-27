@@ -1,12 +1,30 @@
 {
   "extends": "plasmo/templates/tsconfig.base",
-  "exclude": ["node_modules"],
-  "include": [".plasmo/index.d.ts", "next-env.d.ts", "./**/*.ts", "./**/*.tsx", "src/popup/background.js", "src/components/website/header"],
+  "exclude": [
+    "node_modules"
+  ],
+  "include": [
+    ".plasmo/index.d.ts",
+    "next-env.d.ts",
+    "./**/*.ts",
+    "./**/*.tsx",
+    "src/popup/background.js",
+    "src/components/website/header",
+    ".next/types/**/*.ts"
+  ],
   "compilerOptions": {
     "paths": {
-      "~*": ["./src/*"]
+      "~*": [
+        "./src/*"
+      ]
     },
     "baseUrl": ".",
-    "isolatedModules": true
+    "isolatedModules": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "strictNullChecks": true
   }
 }

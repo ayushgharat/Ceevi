@@ -5,10 +5,11 @@ import type { PersonalData } from "~types";
 
 const PersonalInformation = ({ setActiveStep, handlePersonalInfo }) => {
   const [personalData, setPersonalData] = useState<PersonalData>({
-    name: "",
+    first_name: "",
+    last_name:"",
     email: "",
-    phoneNumber: "",
-    linkedIn: "",
+    phone_number: "",
+    linkedin: "",
     github: ""
   });
 
@@ -27,9 +28,15 @@ const PersonalInformation = ({ setActiveStep, handlePersonalInfo }) => {
   return (
     <Stack spacing={4}>
       <Input
-        placeholder="Name"
-        name="name"
-        value={personalData.name}
+        placeholder="First Name"
+        name="first_name"
+        value={personalData.first_name}
+        onChange={handleChange}
+      />
+      <Input
+        placeholder="Last Name"
+        name="last_name"
+        value={personalData.last_name}
         onChange={handleChange}
       />
       <Input
@@ -40,14 +47,14 @@ const PersonalInformation = ({ setActiveStep, handlePersonalInfo }) => {
       />
       <Input
         placeholder="Phone Number"
-        name="phoneNumber"
-        value={personalData.phoneNumber}
+        name="phone_number"
+        value={personalData.phone_number}
         onChange={handleChange}
       />
       <Input
         placeholder="LinkedIn"
-        name="linkedIn"
-        value={personalData.linkedIn}
+        name="linkedin"
+        value={personalData.linkedin}
         onChange={handleChange}
       />
       <Input

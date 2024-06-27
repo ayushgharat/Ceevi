@@ -1,105 +1,169 @@
-import React, { useState, useEffect } from "react";
-import { WithContext as ReactTags } from "react-tag-input";
+import "~style.css"
 
-const VerifyProjects = ({ onNext, finalData, setFinalData }) => {
-  const [userData, setUserData] = useState(finalData["projects"]);
+import { ChevronLeftIcon } from "@radix-ui/react-icons"
+import React, { useEffect, useState } from "react"
+import { WithContext as ReactTags, SEPARATORS } from "react-tag-input"
+
+import { convertDate } from "~utils/helper/helper"
+
+const VerifyProjects = ({
+  onNext,
+  finalData,
+  setFinalData,
+  navigateToVerifyExperiences
+}) => {
+  const [userData, setUserData] = useState(finalData.professional.project)
+  const [presentEndDate, setPresentEndDate] = useState(
+    userData.map((project) => project.end_date === "Present")
+  )
 
   const handleInputChange = (index, fieldName, value) => {
-    const updatedUserData = [...userData];
-    updatedUserData[index][fieldName] = value;
-    setUserData(updatedUserData);
-  };
+    const updatedUserData = [...userData]
+    updatedUserData[index][fieldName] = value
+    setUserData(updatedUserData)
+  }
 
   const handleTagDrag = (tag, currPos, newPos, index) => {
-    const updatedUserData = [...userData];
-    const { Technologies } = updatedUserData[index];
-    
-    updatedUserData[index].Technologies.splice(currPos, 1),
-    updatedUserData[index].Technologies.splice(newPos, 0, tag.text)
-  
-    setUserData(updatedUserData);
-  };
+    const updatedUserData = [...userData]
+    const { skills } = updatedUserData[index]
+
+    updatedUserData[index].skills.splice(currPos, 1),
+      updatedUserData[index].skills.splice(newPos, 0, { value: tag.text })
+
+    setUserData(updatedUserData)
+  }
+
+  const handleDescriptionChange = (projectIndex, descriptionIndex, value) => {
+    const updatedUserData = [...userData]
+    updatedUserData[projectIndex].description[descriptionIndex].value = value
+    setUserData(updatedUserData)
+  }
+
+  const handleCheckboxChange = (index) => {
+    const updatedPresentEndDate = [...presentEndDate]
+    updatedPresentEndDate[index] = !updatedPresentEndDate[index]
+    setPresentEndDate(updatedPresentEndDate)
+
+    if (updatedPresentEndDate[index]) {
+      handleInputChange(index, "end_date", "Present")
+    } else {
+      handleInputChange(index, "end_date", "")
+    }
+  }
 
   const handleNext = () => {
-
-    // Update finalData with the new array of strings
-    setFinalData({ ...finalData, projects: userData });
-
-    // Call onNext to proceed to the next step
-    onNext();
-  };
+    const updatedData = {
+      ...finalData,
+      professional: {
+        ...finalData.professional,
+        project: userData
+      }
+    }
+    setFinalData(updatedData)
+    onNext()
+  }
 
   return (
-    <div className="w-80 min-h-[500px] p-10 ">
-      <span className="text-2xl font-kodchasan">
-        Verify project information
-      </span>
-      <div className="w-8 h-1 bg-black mt-4" />
+    <div className="w-[400px] rounded-3xl p-8 bg-white flex flex-col place-content-between">
+      <div className="flex flex-row items-start mb-10">
+        <button onClick={navigateToVerifyExperiences}>
+          <ChevronLeftIcon className="h-[25px] w-[30px] mt-[2px]" />
+        </button>
+        <span className="ms-2 font-extension-text text-lg">
+          Verify Project Information:
+        </span>
+      </div>
       {userData.map((project, index) => (
-        <div key={index}>
+        <div key={index} className="font-extension-text text-base mb-8">
           <input
             type="text"
-            value={project["Name"]}
-            onChange={(e) => handleInputChange(index, "Name", e.target.value)}
+            className="ExtensionFormInput"
+            value={project.name}
+            onChange={(e) => handleInputChange(index, "name", e.target.value)}
           />
-          <input
-            type="text"
-            value={project["Achievements"]}
-            onChange={(e) =>
-              handleInputChange(index, "Achievements", e.target.value)
-            }
-          />
-          <input
-            type="text"
-            value={project["Project_Date"]}
-            onChange={(e) =>
-              handleInputChange(index, "Project_Date", e.target.value)
-            }
-          />
-          <textarea
-            className="text-black text-sm rounded-xl bg-slate-400 mt-2 font-kodchasan mb-7 w-full resize-none p-2"
-            value={project["Description"]}
-            rows={6}
-            onChange={(e) =>
-              handleInputChange(index, "Description", e.target.value)
-            }
-          ></textarea>
+          <div className="grid grid-cols-2 gap-x-4">
+            <input
+              type="month"
+              className="ExtensionFormInput"
+              value={project.start_date}
+              onChange={(e) =>
+                handleInputChange(index, "start_date", e.target.value)
+              }
+            />
+
+            {presentEndDate[index] ? (
+              <input
+                className="ExtensionFormInput"
+                type="text"
+                value="Present"
+                readOnly
+              />
+            ) : (
+              <input
+                className="ExtensionFormInput"
+                type="month"
+                value={project.end_date}
+                onChange={(e) =>
+                  handleInputChange(index, "end_date", e.target.value)
+                }
+              />
+            )}
+          </div>
+
+          <div className="flex col-span-2 justify-end gap-x-3">
+            <input
+              type="checkbox"
+              value="Present"
+              checked={presentEndDate[index]}
+              onChange={() => handleCheckboxChange(index)}
+            />
+            <label>Present</label>
+          </div>
+          {project.description.map((item, descIndex) => (
+            <textarea
+              key={descIndex}
+              className="ExtensionFormTextArea"
+              value={item.value}
+              rows={2}
+              onChange={(e) =>
+                handleDescriptionChange(index, descIndex, e.target.value)
+              }></textarea>
+          ))}
           <ReactTags
-            tags={userData[index].Technologies.map((string) => ({
-              id: string,
-              text: string,
+            tags={userData[index].skills.map(({ value }) => ({
+              id: value,
+              text: value,
+              className: ""
             }))}
-            delimiters={[188, 13]} // Comma and Enter keycodes
+            separators={[SEPARATORS.COMMA, SEPARATORS.ENTER]} // Comma and Enter keycodes
             handleDelete={(i) => {
-              const updatedTechnologies = [...project.Technologies];
-              updatedTechnologies.splice(i, 1);
-              handleInputChange(index, "Technologies", updatedTechnologies);
+              const updatedTechnologies = [...project.skills]
+              updatedTechnologies.splice(i, 1)
+              handleInputChange(index, "skills", updatedTechnologies)
             }}
             handleAddition={(tag) => {
-              const updatedTechnologies = [...project.Technologies, tag.text];
-              handleInputChange(index, "Technologies", updatedTechnologies);
+              const updatedTechnologies = [
+                ...project.skills,
+                { value: tag.text }
+              ]
+              handleInputChange(index, "skills", updatedTechnologies)
             }}
-            handleDrag={(tag, currPos, newPos) => handleTagDrag(tag, currPos, newPos, index)}
+            handleDrag={(tag, currPos, newPos) =>
+              handleTagDrag(tag, currPos, newPos, index)
+            }
             handleTagClick={(tagIndex) =>
               console.log(`Tag clicked at index ${tagIndex}`)
             }
             inputFieldPosition="bottom"
+            placeholder="Add a skill for this project"
           />
         </div>
       ))}
-      <button className="bg-[#64E926] bottom-0 mb-5 ms-10 left-0 right-0 w-60 rounded-lg py-3">
-        <span className="mx-3 text-white text-base font-kodchasan">
-          Previous
-        </span>
-      </button>
-      <button
-        className="bg-[#64E926] bottom-0 mb-5 ms-10 left-0 right-0 w-60 rounded-lg py-3"
-        onClick={handleNext}
-      >
-        <span className="mx-3 text-white text-base font-kodchasan">Next</span>
+      <button className="PrimaryButton" onClick={handleNext}>
+        <span>Next</span>
       </button>
     </div>
-  );
-};
+  )
+}
 
-export default VerifyProjects;
+export default VerifyProjects

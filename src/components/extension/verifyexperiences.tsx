@@ -1,82 +1,163 @@
-import React, { useState, useEffect } from "react";
+import "~style.css"
 
-const VerifyExperiences = ({ onNext, finalData, setFinalData }) => {
-  console.log(finalData)
-    const [userData, setUserData] = useState(finalData["WORK_EXPERIENCE"]);
-    const [isLoadingProject, setIsLoadingProject] = useState(true);
+import { ChevronLeftIcon } from "@radix-ui/react-icons"
+import React, { useEffect, useState } from "react"
 
-    const handleInputChange = (index, fieldName, value) => {
-      const updatedUserData = [...userData];
-      updatedUserData[index][fieldName] = value;
-      setUserData(updatedUserData);
-    };
+import { convertDate } from "~utils/helper/helper"
 
-    useEffect(() => {
-      
-    }, []);
+const VerifyExperiences = ({
+  onNext,
+  finalData,
+  navigateToJobInfo,
+  setFinalData
+}) => {
+  const [userData, setUserData] = useState(finalData.professional.experience)
+  const [isLoadingProject, setIsLoadingProject] = useState(true)
+  const [presentEndDate, setPresentEndDate] = useState(
+    userData.map((experience) => experience.end_date === "Present")
+  )
 
-    const experiences = userData.map((experience, index) => {
-      return (
-        <div key={index}>
-          <input
-            type="text"
-            value={experience["Company_Name"]}
-            onChange={(e) =>
-              handleInputChange(index, "Company_Name", e.target.value)
-            }
-          />
-          <input
-            type="text"
-            value={experience["Position_Title"]}
-            onChange={(e) =>
-              handleInputChange(index, "Position_Title", e.target.value)
-            }
-          />
+  const handleInputChange = (experienceIndex, fieldName, value) => {
+    const updatedUserData = [...userData]
+    updatedUserData[experienceIndex][fieldName] = value
+    setUserData(updatedUserData)
+  }
 
-          <input
-            type="text"
-            value={experience["Start_Date"]}
-            onChange={(e) =>
-              handleInputChange(index, "Start_Date", e.target.value)
-            }
-          />
+  const handleDescriptionChange = (
+    experienceIndex,
+    descriptionIndex,
+    value
+  ) => {
+    const updatedUserData = [...userData]
+    updatedUserData[experienceIndex].description[descriptionIndex].value = value
+    setUserData(updatedUserData)
+  }
 
-          <input
-            type="text"
-            value={experience["End_Date"]}
-            onChange={(e) =>
-              handleInputChange(index, "End_Date", e.target.value)
-            }
-          />
+  useEffect(() => {
+    setIsLoadingProject(false)
+  }, [])
 
-          <textarea
-            className="text-black text-sm rounded-xl bg-slate-400 mt-2 font-kodchasan mb-7 w-full resize-none p-2"
-            id="job_info"
-            value={experience["Description"]}
-            rows={6}
-            onChange={(e) =>
-              handleInputChange(index, "Description", e.target.value)
-            }
-          ></textarea>
-        </div>
-      );
-    });
+  const handleSubmit = () => {
+    const updatedData = {
+      ...finalData,
+      professional: {
+        ...finalData.professional,
+        experience: userData
+      }
+    }
+    setFinalData(updatedData)
+    onNext()
+  }
+
+  const handleCheckboxChange = (experienceIndex) => {
+    const updatedPresentEndDate = [...presentEndDate]
+    updatedPresentEndDate[experienceIndex] =
+      !updatedPresentEndDate[experienceIndex]
+    setPresentEndDate(updatedPresentEndDate)
+
+    if (updatedPresentEndDate[experienceIndex]) {
+      handleInputChange(experienceIndex, "end_date", "Present")
+    } else {
+      handleInputChange(experienceIndex, "end_date", "")
+    }
+  }
+
+  const experiences = userData.map((experience, experienceIndex) => {
     return (
-      <div className="w-80 min-h-[500px] p-10 ">
-        <span className="text-2xl font-kodchasan">Verify information</span>
-        <div className="w-8 h-1 bg-black mt-4" />
-        {experiences}
+      <div key={experienceIndex} className="font-extension-text text-base mb-8">
+        <input
+          className="ExtensionFormInput"
+          type="text"
+          value={experience.company}
+          onChange={(e) =>
+            handleInputChange(experienceIndex, "company", e.target.value)
+          }
+        />
+        <input
+          type="text"
+          className="ExtensionFormInput"
+          value={experience.role}
+          onChange={(e) =>
+            handleInputChange(experienceIndex, "role", e.target.value)
+          }
+        />
+        <div className="grid grid-cols-2 gap-x-4">
+          <input
+            className="ExtensionFormInput"
+            type="month"
+            value={experience.start_date}
+            onChange={(e) =>
+              handleInputChange(experienceIndex, "start_date", e.target.value)
+            }
+          />
+            {presentEndDate[experienceIndex] ? (
+              <input
+                className="ExtensionFormInput ml-2"
+                type="text"
+                value="Present"
+                readOnly
+              />
+            ) : (
+              <input
+                className="ExtensionFormInput ml-2"
+                type="month"
+                value={experience.end_date}
+                onChange={(e) =>
+                  handleInputChange(experienceIndex, "end_date", e.target.value)
+                }
+              />
+            )}
 
-        <button className="bg-[#64E926] bottom-0 mb-5 ms-10 left-0 right-0 w-60 rounded-lg py-3">
-          <span className="mx-3 text-white text-base font-kodchasan">
-            Previous
-          </span>
-        </button>
-        <button className="bg-[#64E926] bottom-0 mb-5 ms-10 left-0 right-0 w-60 rounded-lg py-3" onClick={onNext}>
-          <span className="mx-3 text-white text-base font-kodchasan">Next</span>
-        </button>
+          <div className="flex col-span-2 justify-end gap-x-3">
+            <input
+              type="checkbox"
+              value="Present"
+              checked={presentEndDate[experienceIndex]}
+              onChange={() => handleCheckboxChange(experienceIndex)}
+            />
+            <label>Present</label>
+          </div>
+        </div>
+        {experience.description.map((item, descriptionIndex) => {
+          return (
+            <textarea
+              key={descriptionIndex}
+              className="ExtensionFormTextArea"
+              id="job_info"
+              value={item.value}
+              rows={2}
+              onChange={(e) =>
+                handleDescriptionChange(
+                  experienceIndex,
+                  descriptionIndex,
+                  e.target.value
+                )
+              }></textarea>
+          )
+        })}
       </div>
-    );
-  };
+    )
+  })
 
-  export default VerifyExperiences;
+  return (
+    <div className="w-[400px] rounded-3xl p-8 bg-white flex flex-col place-content-between">
+      <div className="flex flex-row items-start mb-10">
+        <button onClick={navigateToJobInfo}>
+          <ChevronLeftIcon className="h-[25px] w-[30px] mt-[2px]" />
+        </button>
+        <span className="ms-2 font-extension-text text-lg">
+          Verify Experiences:
+        </span>
+      </div>
+      {experiences}
+
+      <button
+        className="bg-gradient-to-r from-vivid_violet to-electric_indigo text-white text-[16px] font-semibold font-extension-title rounded-[29px] w-full py-2 shadow-[0_4px_0_rgba(0,0,0,0.25)]"
+        onClick={handleSubmit}>
+        <span className="mx-3 text-white text-base font-kodchasan">Next</span>
+      </button>
+    </div>
+  )
+}
+
+export default VerifyExperiences
