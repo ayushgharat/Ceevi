@@ -123,9 +123,9 @@ const EditProfilePage = () => {
   }
 
   return (
-    <div className="m-10 p-5">
+    <div className="m-10 p-5 font-dmsans">
       <span className="font-poppins text-3xl">Welcome to Ceevi. Let's start by setting up your profile</span>
-      <Stepper index={activeStep} className="mt-10">
+      <Stepper index={activeStep} colorScheme="purple" className="mt-10">
         {steps.map((step, index) => (
           <Step key={index} onClick={() => setActiveStep(index)}>
             <StepIndicator>
