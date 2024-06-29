@@ -182,6 +182,7 @@ const VerifyInformation = ({
                     <div key={descIndex} className="flex flex-row gap-x-3">
                       <input
                         value={item.value}
+                        className="min-w-[250px] w-full"
                         onChange={(e) => handleChange(e, "project", index, descIndex)}
                       />
                       <button onClick={() => handleDescriptionRemove("project", index, descIndex)}>

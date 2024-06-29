@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const Main = ({currentUser, buildResume}) => {
   return (
     <div className="bg-white h-full relative w-full rounded-3xl flex flex-col">
@@ -10,10 +12,10 @@ const Main = ({currentUser, buildResume}) => {
           className="border-l-4 border-vivid_violet shadow-lg text-xl p-3 rounded-[10px]">
           <span>⛏️ Build a resume</span>
         </button>
-        <button className="border-l-4 border-vivid_violet shadow-lg text-xl p-3 rounded-[10px]">
+        <Link href='/profile' className="border-l-4 border-vivid_violet shadow-lg text-xl p-3 rounded-[10px]">
           <span>👤 Edit Profile</span>
-        </button>
-        <button className="border-l-4 border-vivid_violet shadow-lg text-xl p-3 rounded-[10px]">
+        </Link>
+        <button disabled className="border-l-4 border-vivid_violet shadow-lg text-xl p-3 rounded-[10px] disabled:bg-slate-400">
           <span>💻 Get Chrome Extension</span>
         </button>
       </div>
