@@ -1,71 +1,96 @@
-import { Input, Stack, Button } from "@chakra-ui/react";
-import { useState, type ChangeEvent } from "react";
-import type { PersonalData } from "~types";
+import { Button, Input, Stack } from "@chakra-ui/react"
+import { useState, type ChangeEvent } from "react"
 
+import type { PersonalData } from "~types"
 
 const PersonalInformation = ({ setActiveStep, handlePersonalInfo }) => {
   const [personalData, setPersonalData] = useState<PersonalData>({
     first_name: "",
-    last_name:"",
+    last_name: "",
     email: "",
     phone_number: "",
     linkedin: "",
     github: ""
-  });
+  })
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setPersonalData({ ...personalData, [name]: value });
-  };
+    const { name, value } = event.target
+    setPersonalData({ ...personalData, [name]: value })
+  }
 
   const handleSubmit = () => {
     // Handle form submission logic here
     handlePersonalInfo(personalData)
-    console.log("Submitted data:", personalData);
-    setActiveStep(1);
-  };
+    console.log("Submitted data:", personalData)
+    setActiveStep(1)
+  }
 
   return (
-    <Stack spacing={4}>
-      <Input
-        placeholder="First Name"
-        name="first_name"
-        value={personalData.first_name}
-        onChange={handleChange}
-      />
-      <Input
-        placeholder="Last Name"
-        name="last_name"
-        value={personalData.last_name}
-        onChange={handleChange}
-      />
-      <Input
-        placeholder="Email"
-        name="email"
-        value={personalData.email}
-        onChange={handleChange}
-      />
-      <Input
-        placeholder="Phone Number"
-        name="phone_number"
-        value={personalData.phone_number}
-        onChange={handleChange}
-      />
-      <Input
-        placeholder="LinkedIn"
-        name="linkedin"
-        value={personalData.linkedin}
-        onChange={handleChange}
-      />
-      <Input
-        placeholder="Github"
-        name="github"
-        value={personalData.github}
-        onChange={handleChange}
-      />
-      <Button onClick={handleSubmit}>Next</Button>
-    </Stack>
-  );
-};
+    <form className="grid grid-cols-2 gap-x-5 gap-y-5">
+      <div className="flex flex-col gap-y-2">
+        <label>First Name</label>
+        <input
+          name="first_name"
+          value={personalData.first_name}
+          onChange={handleChange}
+          className="DialogInput p-2"
+        />
+      </div>
 
-export default PersonalInformation;
+      <div className="flex flex-col gap-y-2">
+        <label>Last Name</label>
+        <input
+          name="last_name"
+          value={personalData.last_name}
+          onChange={handleChange}
+          className="DialogInput p-2"
+        />
+      </div>
+      <div className="flex flex-col gap-y-2">
+        <label>Email</label>
+        <input
+          name="email"
+          value={personalData.email}
+          onChange={handleChange}
+          className="DialogInput p-2"
+        />
+      </div>
+
+      <div className="flex flex-col gap-y-2">
+        <label>Phone Number</label>
+        <input
+          name="phone_number"
+          value={personalData.phone_number}
+          onChange={handleChange}
+          className="DialogInput p-2"
+        />
+      </div>
+      <div className="flex flex-col gap-y-2">
+        <label>LinkedIn URL</label>
+        <input
+          name="linkedin"
+          value={personalData.linkedin}
+          onChange={handleChange}
+          className="DialogInput p-2"
+        />
+      </div>
+      <div className="flex flex-col gap-y-2">
+        <label>Github URL</label>
+        <input
+          name="github"
+          value={personalData.github}
+          onChange={handleChange}
+          className="DialogInput p-2"
+        />
+      </div>
+      <button
+        type="submit"
+        className="col-span-2 PrimaryButton mt-10"
+        onClick={handleSubmit}>
+        Next
+      </button>
+    </form>
+  )
+}
+
+export default PersonalInformation

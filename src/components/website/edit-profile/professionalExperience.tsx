@@ -2,6 +2,7 @@ import { Button, Input, Select, Stack, Text, Textarea } from "@chakra-ui/react"
 import { useState, type ChangeEvent, type FormEvent } from "react"
 
 import type { ExperienceItem, ProfessionalData, ProjectItem } from "~types"
+
 import DateInput from "../ui/dateinput"
 
 const ProfessionalInformation = ({
@@ -14,6 +15,8 @@ const ProfessionalInformation = ({
     project: [],
     skill: ""
   })
+
+  const [loading, setLoading] = useState(false)
 
   if (existingInfo) {
     setProfessionalData(existingInfo)
@@ -48,21 +51,26 @@ const ProfessionalInformation = ({
     }
   }
 
-  const handleDateChange = (formattedDate: string, index: number, type: keyof ProfessionalData, name: string) => {
-    if (type === 'experience' || type === 'project') {
+  const handleDateChange = (
+    formattedDate: string,
+    index: number,
+    type: keyof ProfessionalData,
+    name: string
+  ) => {
+    if (type === "experience" || type === "project") {
       const updatedData = [
-        ...(professionalData[type] as ExperienceItem[] | ProjectItem[]),
-      ];
+        ...(professionalData[type] as ExperienceItem[] | ProjectItem[])
+      ]
       updatedData[index] = {
         ...(updatedData[index] as ExperienceItem | ProjectItem),
-        [name]: formattedDate,
-      };
+        [name]: formattedDate
+      }
       setProfessionalData({
         ...professionalData,
-        [type]: updatedData,
-      });
+        [type]: updatedData
+      })
     }
-  };
+  }
 
   const handleAddExperience = () => {
     setProfessionalData({
@@ -97,6 +105,7 @@ const ProfessionalInformation = ({
   }
 
   const handleSubmit = () => {
+    setLoading(true)
     // Handle form submission logic here
     //console.log(professionalData);
     handleFormSubmit(professionalData)
@@ -104,98 +113,137 @@ const ProfessionalInformation = ({
 
   return (
     <>
-      <Text className="text-3xl">Experiences</Text>
+      <span className="mt-10">
+        Don't be shy, make sure you add as much information about your
+        experiences and projects as possible. The more, the better...
+      </span>
+      <Text className="text-3xl mt-5">Experiences</Text>
       <Stack className="mt-4" spacing={4}>
         {professionalData?.experience.map((experience, index) => (
-          <Stack key={index} spacing={2}>
-            <Input
-              placeholder="Company"
-              name="company"
-              value={experience.company}
-              onChange={(e) => handleChange(e, index, "experience")}
-            />
-            <Input
-              placeholder="Role"
-              name="role"
-              value={experience.role}
-              onChange={(e) => handleChange(e, index, "experience")}></Input>
-            <Input
-              placeholder="Location"
-              name="location"
-              value={experience.location}
-              onChange={(e) => handleChange(e, index, "experience")}
-            />
-            <DateInput
-              placeholder="Start Date"
-              name="start_date"
-              value={experience.start_date!}
-              onChange={(formattedDate) => handleDateChange(formattedDate, index, 'experience', 'start_date')}
-            />
-            <DateInput
-              placeholder="End Date"
-              name="end_date"
-              value={experience.end_date!}
-              onChange={(formattedDate) => handleDateChange(formattedDate, index, 'experience', 'start_date')}
-            />
-            <Textarea
-              placeholder="Description"
-              resize={"none"}
-              name="description"
-              value={experience.description}
-              onChange={(e) => handleChange(e, index, "experience")}
-            />
-            <Button onClick={handleRemoveExperience(index)} variant="ghost">
+          <div key={index} className="grid grid-cols-2 gap-5">
+            <div className="flex flex-col gap-y-2">
+              <label>Company</label>
+              <input
+                name="company"
+                value={experience.company}
+                onChange={(e) => handleChange(e, index, "experience")}
+                className="DialogInput p-2"
+              />
+            </div>
+
+            <div className="flex flex-col gap-y-2">
+              <label>Role</label>
+              <input
+                name="role"
+                value={experience.role}
+                onChange={(e) => handleChange(e, index, "experience")}
+                className="DialogInput p-2"
+              />
+            </div>
+            <div className="flex flex-col gap-y-2">
+              <label>Location</label>
+              <input
+                name="location"
+                value={experience.location}
+                onChange={(e) => handleChange(e, index, "experience")}
+                className="DialogInput p-2"
+              />
+            </div>
+            <div className="flex flex-col gap-y-2">
+              <label>Start Date</label>
+              <input
+                name="start_date"
+                value={experience.start_date}
+                onChange={(e) => handleChange(e, index, "experience")}
+                className="DialogInput p-2"
+                type="month"
+              />
+            </div>
+            <div className="flex flex-col gap-y-2">
+              <label>End Date</label>
+              <input
+                name="end_date"
+                value={experience.end_date}
+                onChange={(e) => handleChange(e, index, "experience")}
+                className="DialogInput p-2"
+                type="month"
+              />
+            </div>
+            <div className="flex flex-col gap-y-2 col-span-2">
+              <label>Description</label>
+              <textarea
+                name="description"
+                value={experience.description}
+                onChange={(e) => handleChange(e, index, "experience")}
+                className="DialogInput p-2"
+              />
+            </div>
+            <button onClick={handleRemoveExperience(index)}>
               Remove
-            </Button>
-          </Stack>
+            </button>
+          </div>
         ))}
-        <Button onClick={handleAddExperience}>Add Experience</Button>
+        <button onClick={handleAddExperience}>Add Experience</button>
       </Stack>
       <Text className="text-3xl mt-4">Projects</Text>
       <Stack className="mt-4" spacing={4}>
         {professionalData?.project.map((project, index) => (
-          <Stack key={index} spacing={2}>
-            <Input
-              placeholder="Name"
-              name="name"
-              value={project.name}
-              onChange={(e) => handleChange(e, index, "project")}
-            />
-            <Input
-              placeholder="Role"
-              name="role"
-              value={project.skills}
-              onChange={(e) => handleChange(e, index, "project")}></Input>
-            <Input
-              placeholder="Start Date"
-              name="start_date"
-              type="month"
-              value={project.start_date}
-              onChange={(e) => handleChange(e, index, "project")}
-            />
-            <Input
-              placeholder="End Date"
-              name="end_date"
-              type="month"
-              value={project.end_date}
-              onChange={(e) => handleChange(e, index, "project")}
-            />
-            <Textarea
-              placeholder="Description"
-              resize={"none"}
-              name="description"
-              value={project.description}
-              onChange={(e) => handleChange(e, index, "project")}
-            />
-            <Button onClick={handleRemoveProject(index)} variant="ghost">
-              Remove
-            </Button>
-          </Stack>
+          <div key={index} className="grid grid-cols-2 gap-5">
+            <div className="flex flex-col gap-y-2">
+              <label>Name</label>
+              <input
+                name="name"
+                value={project.name}
+                onChange={(e) => handleChange(e, index, "project")}
+                className="DialogInput p-2"
+              />
+            </div>
+            <div className="flex flex-col gap-y-2">
+              <label>Skills</label>
+              <input
+                name="skills"
+                value={project.skills}
+                onChange={(e) => handleChange(e, index, "project")}
+                className="DialogInput p-2"
+              />
+            </div>
+
+            <div className="flex flex-col gap-y-2">
+              <label>Start Date</label>
+              <input
+                name="start_date"
+                value={project.start_date}
+                onChange={(e) => handleChange(e, index, "project")}
+                className="DialogInput p-2"
+                type="month"
+              />
+            </div>
+            <div className="flex flex-col gap-y-2">
+              <label>End Date</label>
+              <input
+                name="end_date"
+                value={project.end_date}
+                onChange={(e) => handleChange(e, index, "project")}
+                className="DialogInput p-2"
+                type="month"
+              />
+            </div>
+            <div className="flex flex-col gap-y-2 col-span-2">
+              <label>Description</label>
+              <textarea
+                name="description"
+                value={project.description}
+                onChange={(e) => handleChange(e, index, "project")}
+                className="DialogInput p-2"
+              />
+            </div>
+            <button onClick={handleRemoveProject(index)}>Remove</button>
+          </div>
         ))}
-        <Button onClick={handleAddProject}>Add Project</Button>
+        <button onClick={handleAddProject}>Add Project</button>
       </Stack>
 
-      <>
+      {/* <>
         <Text className="text-3xl mt-4">Technical Skills</Text>
         <Input
           placeholder="Skills"
@@ -203,11 +251,15 @@ const ProfessionalInformation = ({
           value={professionalData.skill}
           onChange={(e) => handleChange(e, 0, "skill")}
         />
-      </>
+      </> */}
 
-      <Button type="submit" onClick={handleSubmit}>
+      <button
+        className="PrimaryButton mt-10 disabled:bg-slate-500"
+        type="submit"
+        disabled={loading}
+        onClick={handleSubmit}>
         Submit
-      </Button>
+      </button>
     </>
   )
 }

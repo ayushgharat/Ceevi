@@ -69,30 +69,8 @@
     "typescript": "5.3.3"
   },
   "manifest": {
-    "host_permissions": [
-      "https://*/*",
-      "http://localhost/*"
-    ],
-    "web_accessible_resources": [
-      {
-        "resources": [
-          "options.html"
-        ],
-        "matches": [
-          "<all_urls>"
-        ],
-        "extension_ids": [
-          "$CRX_ID"
-        ]
-      }
-    ],
-    "background": {
-      "service_worker": "background.js"
-    },
-    "key": "$CRX_KEY",
     "permissions": [
       "tabs",
-      "cookies",
       "activeTab"
     ]
   }
