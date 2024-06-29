@@ -130,7 +130,9 @@ const EditProfilePage = () => {
       </span>
       <Stepper index={activeStep} colorScheme="purple" className="mt-10">
         {steps.map((step, index) => (
-          <Step key={index} onClick={() => setActiveStep(index)}>
+          <Step key={index} 
+          // onClick={() => setActiveStep(index)}
+          >
             <StepIndicator>
               <StepStatus
                 complete={<StepIcon />}
