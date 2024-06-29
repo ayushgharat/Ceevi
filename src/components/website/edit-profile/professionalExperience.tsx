@@ -1,25 +1,21 @@
-import { Button, Input, Select, Stack, Text, Textarea } from "@chakra-ui/react"
-import { useState, type ChangeEvent, type FormEvent } from "react"
+import { Button, Input, Select, Stack, Text, Textarea } from "@chakra-ui/react";
+import { useState, type ChangeEvent, type FormEvent } from "react";
 
-import type { ExperienceItem, ProfessionalData, ProjectItem } from "~types"
+import type { ExperienceItem, ProfessionalData, ProjectItem } from "~types";
 
-import DateInput from "../ui/dateinput"
+import DateInput from "../ui/dateinput";
 
 const ProfessionalInformation = ({
+  profileInfo,
   handleFormSubmit,
   handleProfessionalInfo,
   existingInfo
 }: any) => {
-  const [professionalData, setProfessionalData] = useState<ProfessionalData>({
-    experience: [],
-    project: [],
-    skill: ""
-  })
-
-  const [loading, setLoading] = useState(false)
+  const [professionalData, setProfessionalData] = useState<ProfessionalData>(profileInfo.professional);
+  const [loading, setLoading] = useState(false);
 
   if (existingInfo) {
-    setProfessionalData(existingInfo)
+    setProfessionalData(existingInfo);
   }
 
   const handleChange = (
@@ -27,29 +23,27 @@ const ProfessionalInformation = ({
     index: number,
     type: keyof ProfessionalData
   ) => {
-    const { name, value } = event.target
+    const { name, value } = event.target;
 
     if (type === "experience" || type === "project") {
-      // Ensure type is narrowed to ExperienceItem[] or ProjectItem[]
       const updatedData = [
         ...(professionalData[type] as ExperienceItem[] | ProjectItem[])
-      ]
+      ];
       updatedData[index] = {
-        ...(updatedData[index] as ExperienceItem | ProjectItem), // Type assertion
+        ...(updatedData[index] as ExperienceItem | ProjectItem),
         [name]: value
-      }
+      };
       setProfessionalData({
         ...professionalData,
         [type]: updatedData
-      })
+      });
     } else {
-      // Ensure type is narrowed to string
       setProfessionalData({
         ...professionalData,
         [name]: value
-      })
+      });
     }
-  }
+  };
 
   const handleDateChange = (
     formattedDate: string,
@@ -60,56 +54,73 @@ const ProfessionalInformation = ({
     if (type === "experience" || type === "project") {
       const updatedData = [
         ...(professionalData[type] as ExperienceItem[] | ProjectItem[])
-      ]
+      ];
       updatedData[index] = {
         ...(updatedData[index] as ExperienceItem | ProjectItem),
         [name]: formattedDate
-      }
+      };
       setProfessionalData({
         ...professionalData,
         [type]: updatedData
-      })
+      });
     }
-  }
+  };
+
+  const handleCheckboxChange = (
+    event: ChangeEvent<HTMLInputElement>,
+    index: number,
+    type: keyof ProfessionalData
+  ) => {
+    const updatedData = [
+      ...(professionalData[type] as ExperienceItem[] | ProjectItem[])
+    ];
+    if (event.target.checked) {
+      updatedData[index].end_date = "Present";
+    } else {
+      updatedData[index].end_date = "";
+    }
+    setProfessionalData({
+      ...professionalData,
+      [type]: updatedData
+    });
+  };
 
   const handleAddExperience = () => {
     setProfessionalData({
       ...professionalData,
-      experience: [...professionalData.experience, {}]
-    })
-  }
+      experience: [...professionalData.experience, {} as ExperienceItem]
+    });
+  };
 
   const handleRemoveExperience = (index: number) => () => {
-    const updatedExperience = [...professionalData.experience]
-    updatedExperience.splice(index, 1)
+    const updatedExperience = [...professionalData.experience];
+    updatedExperience.splice(index, 1);
     setProfessionalData({
       ...professionalData,
       experience: updatedExperience
-    })
-  }
+    });
+  };
 
   const handleAddProject = () => {
     setProfessionalData({
       ...professionalData,
-      project: [...professionalData.project, {}]
-    })
-  }
+      project: [...professionalData.project, {} as ProjectItem]
+    });
+  };
 
   const handleRemoveProject = (index: number) => () => {
-    const updatedProjects = [...professionalData.project]
-    updatedProjects.splice(index, 1)
+    const updatedProjects = [...professionalData.project];
+    updatedProjects.splice(index, 1);
     setProfessionalData({
       ...professionalData,
       project: updatedProjects
-    })
-  }
+    });
+  };
 
   const handleSubmit = () => {
-    setLoading(true)
-    // Handle form submission logic here
-    //console.log(professionalData);
-    handleFormSubmit(professionalData)
-  }
+    setLoading(true);
+    handleFormSubmit(professionalData);
+  };
 
   return (
     <>
@@ -120,7 +131,7 @@ const ProfessionalInformation = ({
       <Text className="text-3xl mt-5">Experiences</Text>
       <Stack className="mt-4" spacing={4}>
         {professionalData?.experience.map((experience, index) => (
-          <div key={index} className="grid grid-cols-2 gap-5">
+          <div key={index} className="grid grid-cols-2 gap-5 shadow-lg p-3 rounded-xl">
             <div className="flex flex-col gap-y-2">
               <label>Company</label>
               <input
@@ -163,11 +174,21 @@ const ProfessionalInformation = ({
               <label>End Date</label>
               <input
                 name="end_date"
-                value={experience.end_date}
+                value={experience.end_date !== "Present" ? experience.end_date : ""}
                 onChange={(e) => handleChange(e, index, "experience")}
                 className="DialogInput p-2"
                 type="month"
+                disabled={experience.end_date === "Present"}
               />
+              <label>
+                <input
+                  type="checkbox"
+                  className="DialogInput p-2"
+                  checked={experience.end_date === "Present"}
+                  onChange={(e) => handleCheckboxChange(e, index, "experience")}
+                />
+                Present
+              </label>
             </div>
             <div className="flex flex-col gap-y-2 col-span-2">
               <label>Description</label>
@@ -178,9 +199,7 @@ const ProfessionalInformation = ({
                 className="DialogInput p-2"
               />
             </div>
-            <button onClick={handleRemoveExperience(index)}>
-              Remove
-            </button>
+            <button onClick={handleRemoveExperience(index)}>Remove</button>
           </div>
         ))}
         <button onClick={handleAddExperience}>Add Experience</button>
@@ -188,7 +207,7 @@ const ProfessionalInformation = ({
       <Text className="text-3xl mt-4">Projects</Text>
       <Stack className="mt-4" spacing={4}>
         {professionalData?.project.map((project, index) => (
-          <div key={index} className="grid grid-cols-2 gap-5">
+          <div key={index} className="grid grid-cols-2 gap-5 shadow-lg p-3 rounded-xl">
             <div className="flex flex-col gap-y-2">
               <label>Name</label>
               <input
@@ -227,6 +246,15 @@ const ProfessionalInformation = ({
                 className="DialogInput p-2"
                 type="month"
               />
+              <label>
+                <input
+                  type="checkbox"
+                  className="DialogInput p-2"
+                  checked={project.end_date === "Present"}
+                  onChange={(e) => handleCheckboxChange(e, index, "project")}
+                />
+                Present
+              </label>
             </div>
             <div className="flex flex-col gap-y-2 col-span-2">
               <label>Description</label>
@@ -243,16 +271,6 @@ const ProfessionalInformation = ({
         <button onClick={handleAddProject}>Add Project</button>
       </Stack>
 
-      {/* <>
-        <Text className="text-3xl mt-4">Technical Skills</Text>
-        <Input
-          placeholder="Skills"
-          name="skill"
-          value={professionalData.skill}
-          onChange={(e) => handleChange(e, 0, "skill")}
-        />
-      </> */}
-
       <button
         className="PrimaryButton mt-10 disabled:bg-slate-500"
         type="submit"
@@ -261,7 +279,7 @@ const ProfessionalInformation = ({
         Submit
       </button>
     </>
-  )
-}
+  );
+};
 
-export default ProfessionalInformation
+export default ProfessionalInformation;

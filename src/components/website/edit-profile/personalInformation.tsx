@@ -3,8 +3,8 @@ import { useState, type ChangeEvent } from "react"
 
 import type { PersonalData } from "~types"
 
-const PersonalInformation = ({ setActiveStep, handlePersonalInfo }) => {
-  const [personalData, setPersonalData] = useState<PersonalData>({
+const PersonalInformation = ({ profileInfo, setActiveStep, handlePersonalInfo }) => {
+  const [personalData, setPersonalData] = useState<PersonalData>(profileInfo.personal ?? {
     first_name: "",
     last_name: "",
     email: "",
@@ -22,7 +22,7 @@ const PersonalInformation = ({ setActiveStep, handlePersonalInfo }) => {
     // Handle form submission logic here
     handlePersonalInfo(personalData)
     console.log("Submitted data:", personalData)
-    setActiveStep(1)
+    setActiveStep(2)
   }
 
   return (

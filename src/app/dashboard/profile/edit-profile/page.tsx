@@ -19,6 +19,7 @@ import { Suspense, useEffect, useState } from "react"
 import EducationInformation from "~components/website/edit-profile/educationInformation"
 import PersonalInformation from "~components/website/edit-profile/personalInformation"
 import ProfessionalInformation from "~components/website/edit-profile/professionalExperience"
+import { SubmitResume } from "~components/website/edit-profile/submitResume"
 import type {
   EducationItem,
   FormUserInfo,
@@ -28,9 +29,10 @@ import type {
 
 const EditProfilePage = () => {
   const steps = [
-    { title: "First", description: "Personal Information" },
-    { title: "Second", description: "Education Information" },
-    { title: "Third", description: "Professional Experience" }
+    { title: "First", description: "Resume" },
+    { title: "Second", description: "Personal Information" },
+    { title: "Third", description: "Education Information" },
+    { title: "Fourth", description: "Professional Experience" }
   ]
 
   const router = useRouter()
@@ -43,7 +45,6 @@ const EditProfilePage = () => {
   const [id, setId] = useState("")
 
   const searchParams = useSearchParams()
-      
 
   useEffect(() => {
     function getID() {
@@ -111,7 +112,7 @@ const EditProfilePage = () => {
           // Handle response data if needed
           console.log("Response from POST request:", data)
           if (data.message) {
-            router.replace('/profile')
+            router.replace("/profile")
           }
         })
         .catch((error) => {
@@ -124,7 +125,9 @@ const EditProfilePage = () => {
 
   return (
     <div className="m-10 p-5 font-dmsans">
-      <span className="font-poppins text-3xl">Welcome to Ceevi. Let's start by setting up your profile</span>
+      <span className="font-poppins text-3xl">
+        Welcome to Ceevi. Let's start by setting up your profile
+      </span>
       <Stepper index={activeStep} colorScheme="purple" className="mt-10">
         {steps.map((step, index) => (
           <Step key={index} onClick={() => setActiveStep(index)}>
@@ -148,19 +151,29 @@ const EditProfilePage = () => {
 
       <div className="mt-5">
         {activeStep === 0 && (
+          <SubmitResume
+            setActiveStep={setActiveStep}
+            setResume={setProfileInfo}
+            //handlePersonalInfo={handlePersonalInfo}
+          />
+        )}
+        {activeStep === 1 && (
           <PersonalInformation
+            profileInfo={profileInfo}
             setActiveStep={setActiveStep}
             handlePersonalInfo={handlePersonalInfo}
           />
         )}
-        {activeStep === 1 && (
+        {activeStep === 2 && (
           <EducationInformation
+            profileInfo={profileInfo}
             setActiveStep={setActiveStep}
             handleEducationalInfo={handleEducationalInfo}
           />
         )}
-        {activeStep === 2 && (
+        {activeStep === 3 && (
           <ProfessionalInformation
+            profileInfo={profileInfo}
             handleFormSubmit={handleFormSubmit}
             handleProfessionalInfo={handleProfessionalInfo}
             existingInfo={null}
