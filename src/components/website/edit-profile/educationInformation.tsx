@@ -4,10 +4,12 @@ import { useState, type ChangeEvent, type FormEvent } from "react"
 import type { EducationItem } from "~types"
 
 const EducationInformation = ({
+  profileInfo,
   setActiveStep,
   handleEducationalInfo
 }: any) => {
-  const [educationData, setEducationData] = useState<EducationItem[]>([])
+  const [educationData, setEducationData] = useState<EducationItem[]>(profileInfo.education)
+  
 
   const handleChange =
     (index: number) =>
@@ -35,7 +37,7 @@ const EducationInformation = ({
     // Handle form submission logic here
     handleEducationalInfo(educationData)
     console.log("Submitted data:", educationData)
-    setActiveStep(2)
+    setActiveStep(3)
   }
 
   return (

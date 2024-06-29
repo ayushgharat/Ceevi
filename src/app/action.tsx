@@ -1,9 +1,12 @@
 "use server"
 
+import { readFileSync, writeFileSync } from "fs"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 
 import { createClient } from "~utils/supabase/server"
+import ResumeParser from 'resume-parser';
+
 
 export async function login(formData: FormData) {
   const supabase = createClient()
@@ -102,3 +105,4 @@ export async function getUserProfile(id) {
 
   return {profile: data}
 }
+
