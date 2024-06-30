@@ -23,9 +23,12 @@ import { useFormState } from "react-dom"
 export default async function LoginPage() {
   //const supabase = await createClient()
 
-  const { user, error } = await checkIfUserIsLoggedIn()
-  //console.log(isUserLoggedIn)
-  if (user) redirect("/dashboard")
+  const supabase = createClient()
+
+  const { data, error } = await supabase.auth.getUser()
+  if (data?.user) {
+    redirect('/dashboard')
+  }
 
   return (
     <main className="h-screen flex flex-col justify-center items-center">

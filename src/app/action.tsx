@@ -12,10 +12,6 @@ export async function login(email: string, password: string) {
 
   // type-casting here for convenience
   // in practice, you should validate your inputs
-  // const data = {
-  //   email: formData.get("email") as string,
-  //   password: formData.get("password") as string
-  // }
 
   const { error } = await supabase.auth.signInWithPassword({ email, password })
 
@@ -44,7 +40,8 @@ export async function signup(email, password, firstName, lastName) {
     password: password,
     options: {
       data: {
-        name: `${firstName} ${lastName}`
+        name: `${firstName} ${lastName}`,
+        profile_created: false,
       }
     }
   })

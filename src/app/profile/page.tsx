@@ -1,4 +1,5 @@
 'use server'
+import { redirect } from "next/navigation"
 import { getUserProfile } from "~app/action"
 import ProfileComponent from "~components/website/profile-page"
 import { createClient } from "~utils/supabase/server"
@@ -6,8 +7,17 @@ import { createClient } from "~utils/supabase/server"
 //const router = useRouter()
 
 async function loadProfile() {
+
+  const supabase = createClient()
+
+  const { data, error } = await supabase.auth.getUser()
+  if (error || !data?.user) {
+    redirect('/authenticate/login')
+  }
+
+  
   try {
-    const supabase = await createClient()
+  
     const {
       data: { user }
     } = await supabase.auth.getUser()

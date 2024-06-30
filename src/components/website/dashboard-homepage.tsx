@@ -14,33 +14,22 @@ import { redirect, useRouter } from "next/navigation"
 import { useState } from "react"
 import { Menu, MenuItem, Sidebar, SubMenu } from "react-pro-sidebar"
 
+import { checkIfUserIsLoggedIn } from "~app/action"
+import { testingResume } from "~types"
 import { createClient } from "~utils/supabase/component"
 
-import CustomSidebar from "./sidebar"
-import Main from "./dashboard/main"
 import BuildResume from "./dashboard/buildResume"
-import VerifyInformation from "./dashboard/verifyInformation"
-import { testingResume } from "~types"
+import Main from "./dashboard/main"
 import SubmitPDF from "./dashboard/submitpdf"
+import VerifyInformation from "./dashboard/verifyInformation"
+import CustomSidebar from "./sidebar"
 
-export function DashboardHomePage({ user }) {
+export function DashboardHomePage({ currentUser }) {
   const router = useRouter()
   const supabase = createClient()
-  const currentUser = user
   const [componentToRender, setComponentToRender] = useState("home")
   const [resume, setResume] = useState(testingResume)
   const [fileBlob, setFileBlob] = useState<Blob | null>(null)
-
-  console.log(currentUser)
-
-  const signOut = () => {
-    supabase.auth.signOut()
-    // if (error) {
-    //   console.error(error)
-    // }
-    console.log("User has signed out")
-    router.push("/authenticate/login")
-  }
 
   //const [data, setData] = useState("")
   //const router = useRouter();
@@ -51,7 +40,6 @@ export function DashboardHomePage({ user }) {
   }
 
   const buildResume = () => {
-    
     setComponentToRender("buildResume")
   }
 
@@ -94,43 +82,44 @@ export function DashboardHomePage({ user }) {
         console.error("Error fetching data:", error)
         // Handle fetch error here
       })
-
-    
-
   }
 
   const generateResume = async (jobInfo, userPref) => {
     setComponentToRender("generatingResume")
     try {
-      const response = await fetch(process.env.NEXT_PUBLIC_DOMAIN + "api/db/get-user", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ user })
-      })
+      const response = await fetch(
+        process.env.NEXT_PUBLIC_DOMAIN + "api/db/get-user",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ id: currentUser.id })
+        }
+      )
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
       const current_profile = await response.json()
 
-      const resume_response = await fetch(process.env.NEXT_PUBLIC_DOMAIN + "api/generate/resume", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          job_info: jobInfo,
-          profile: current_profile,
-          userPref: userPref
-        })
-      })
+      const resume_response = await fetch(
+        process.env.NEXT_PUBLIC_DOMAIN + "api/generate/resume",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            job_info: jobInfo,
+            profile: current_profile,
+            userPref: userPref
+          })
+        }
+      )
       if (!resume_response.ok) {
         throw new Error("Failed to fetch data from resume endpoints")
       }
-
-    
 
       const generated_resume = await resume_response.json()
 
@@ -153,7 +142,6 @@ export function DashboardHomePage({ user }) {
     } catch (error) {
       console.error("Error fetching user data:", error)
     }
-    
   }
 
   const navigateToVerifyInformation = () => {
@@ -163,36 +151,38 @@ export function DashboardHomePage({ user }) {
   const renderComponent = () => {
     switch (componentToRender) {
       case "home":
-        return (
-          <Main buildResume={buildResume} currentUser={currentUser}/>
-        )
+        return <Main buildResume={buildResume} currentUser={currentUser} />
       case "buildResume":
         return (
-          <BuildResume onBack={navigateToHome} generateResume={generateResume} />
+          <BuildResume
+            onBack={navigateToHome}
+            generateResume={generateResume}
+          />
         )
       case "generatingResume":
-        return (
-          <span>Generating Resume...</span>
-        )
+        return <span>Generating Resume...</span>
       case "verifyInformation":
         return (
-          <VerifyInformation resume={resume} setResume={setResume} navigateToJobInfo={buildResume} generatePDF={generatePDF}/>
+          <VerifyInformation
+            resume={resume}
+            setResume={setResume}
+            navigateToJobInfo={buildResume}
+            generatePDF={generatePDF}
+          />
         )
       case "generatingPDF":
-        return (
-          <span>Generating PDF...</span>
-        )
+        return <span>Generating PDF...</span>
       case "SubmitPDF":
         return (
-          <SubmitPDF navigateToVerifyInformation={navigateToVerifyInformation} fileBlob={fileBlob}/>
+          <SubmitPDF
+            navigateToVerifyInformation={navigateToVerifyInformation}
+            fileBlob={fileBlob}
+          />
         )
-      
-      default:
-        return (
-          <Main buildResume={buildResume} currentUser={currentUser}/>
-        )
-    }
 
+      default:
+        return <Main buildResume={buildResume} currentUser={currentUser} />
+    }
   }
 
   return (
@@ -204,7 +194,7 @@ export function DashboardHomePage({ user }) {
         <span className="ms-10 my-5 w-fit font-poppins font-semibold text-2xl text-white">
           Dashboard
         </span>
-       {renderComponent()}
+        {renderComponent()}
       </div>
     </div>
   )
