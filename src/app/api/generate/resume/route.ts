@@ -4,11 +4,11 @@ const openai = new OpenAI({ apiKey: process.env.GPT_API_KEY })
 
 async function generateText(message) {
   const response = await openai.chat.completions.create({
-    model: "gpt-3.5-turbo-0125",
+    model: "gpt-3.5-turbo-1106",
     response_format: { type: "json_object" },
     messages: message
   })
-
+  console.log(response.usage?.total_tokens)
   return response.choices[0]
 }
 
@@ -61,6 +61,7 @@ Style: Focus on highlighting impact, ensuring that every description has at leas
     }
   ]
   const response = await generateText(message)
+  console.log(response)
   console.log(response.message.content!)
   return Response.json(JSON.parse(response.message.content!))
 }

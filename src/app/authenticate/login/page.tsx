@@ -17,40 +17,24 @@ import {
   signInWithGoogle,
   signup
 } from "../../action"
-import { LoginButton } from "~components/website/ui/loginbutton"
+import { LoginForm } from "~components/website/ui/loginform"
+import { useFormState } from "react-dom"
 
 export default async function LoginPage() {
   //const supabase = await createClient()
 
-  const { user, error } = await checkIfUserIsLoggedIn()
-  //console.log(isUserLoggedIn)
-  if (user) redirect("/dashboard")
+  const supabase = createClient()
+
+  const { data, error } = await supabase.auth.getUser()
+  if (data?.user) {
+    redirect('/dashboard')
+  }
 
   return (
     <main className="h-screen flex flex-col justify-center items-center">
       {/* <LoginComponent /> */}
-      <form className="flex flex-col items-start justify-center w-1/2 font-dmsans">
-        <span className="text-4xl mb-16 font-poppins">Welcome to Ceevi</span>
-        <label htmlFor="email">Email</label>
-        <input
-          id="email"
-          name="email"
-          type="email"
-          required
-          className="peer w-full py-2 px-3 rounded-[30px] border-[1px] border-electric_indigo focus:border-vivid_violet"
-        />
-        <label htmlFor="password" className="mt-4">
-          Password
-        </label>
-        <input
-          id="password"
-          name="password"
-          type="password"
-          required
-          className="peer w-full py-2 px-3 rounded-[30px] border-[1px] border-electric_indigo focus:border-vivid_violet"
-        />
-        <LoginButton/>
-      </form>
+      
+      <LoginForm/>
       <div className="w-1/2 flex justify-center flex-col">
         <span className="mt-10 text-center">
           Don't have an account yet?{" "}
