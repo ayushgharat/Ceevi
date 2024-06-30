@@ -89,6 +89,9 @@ importers:
       react-dom:
         specifier: 18.2.0
         version: 18.2.0(react@18.2.0)
+      react-error-boundary:
+        specifier: ^4.0.13
+        version: 4.0.13(react@18.2.0)
       react-pro-sidebar:
         specifier: ^1.1.0
         version: 1.1.0(@types/react@18.2.48)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -4904,6 +4907,11 @@ packages:
     peerDependencies:
       react: ^18.2.0
 
+  react-error-boundary@4.0.13:
+    resolution: {integrity: sha512-b6PwbdSv8XeOSYvjt8LpgpKrZ0yGdtZokYwkwV2wlcZbxgopHX/hgPl5VgpnoVOWd868n1hktM8Qm4b+02MiLQ==}
+    peerDependencies:
+      react: '>=16.13.1'
+
   react-error-overlay@6.0.9:
     resolution: {integrity: sha512-nQTTcUu+ATDbrSD1BZHr5kgSD4oF8OFjxun8uAaL8RwPBacGBNPf/yAuVVdx17N8XNzRDMrZ9XcKZHCjPW+9ew==}
 
@@ -5547,8 +5555,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  uglify-js@3.17.4:
-    resolution: {integrity: sha512-T9q82TJI9e/C1TAxYvfb16xO120tMVFZrGA3f9/P4424DNu6ypK103y0GPFVa17yotwSyZW5iYXgjYHkGrJW/g==}
+  uglify-js@3.18.0:
+    resolution: {integrity: sha512-SyVVbcNBCk0dzr9XL/R/ySrmYf0s372K6/hFklzgcp2lBFyXtw4I7BOdDjlLhE1aVqaI/SHWXWmYdlZxuyF38A==}
     engines: {node: '>=0.8.0'}
     hasBin: true
 
@@ -10079,7 +10087,7 @@ snapshots:
       source-map: 0.6.1
       wordwrap: 1.0.0
     optionalDependencies:
-      uglify-js: 3.17.4
+      uglify-js: 3.18.0
     optional: true
 
   har-schema@2.0.0: {}
@@ -11221,6 +11229,11 @@ snapshots:
       react: 18.2.0
       scheduler: 0.23.2
 
+  react-error-boundary@4.0.13(react@18.2.0):
+    dependencies:
+      '@babel/runtime': 7.24.6
+      react: 18.2.0
+
   react-error-overlay@6.0.9: {}
 
   react-fast-compare@3.2.2: {}
@@ -11975,7 +11988,7 @@ snapshots:
 
   typescript@5.3.3: {}
 
-  uglify-js@3.17.4:
+  uglify-js@3.18.0:
     optional: true
 
   underscore@1.13.6: {}
