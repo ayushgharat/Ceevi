@@ -2,6 +2,8 @@ import OpenAI from "openai"
 
 const openai = new OpenAI({ apiKey: process.env.GPT_API_KEY })
 
+export const maxDuration = 40
+
 async function generateText(message) {
   const response = await openai.chat.completions.create({
     model: "gpt-3.5-turbo-0125",
