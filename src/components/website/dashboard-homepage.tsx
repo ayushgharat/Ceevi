@@ -23,6 +23,8 @@ import Main from "./dashboard/main"
 import SubmitPDF from "./dashboard/submitpdf"
 import VerifyInformation from "./dashboard/verifyInformation"
 import CustomSidebar from "./sidebar"
+import GeneratingResume from "./dashboard/generatingResume"
+import GeneratingPDF from "./dashboard/generatingpdf"
 
 export function DashboardHomePage({ currentUser }) {
   const router = useRouter()
@@ -160,7 +162,7 @@ export function DashboardHomePage({ currentUser }) {
           />
         )
       case "generatingResume":
-        return <span>Generating Resume...</span>
+        return (<GeneratingResume/>)
       case "verifyInformation":
         return (
           <VerifyInformation
@@ -171,7 +173,7 @@ export function DashboardHomePage({ currentUser }) {
           />
         )
       case "generatingPDF":
-        return <span>Generating PDF...</span>
+        return (<GeneratingPDF/>)
       case "SubmitPDF":
         return (
           <SubmitPDF
