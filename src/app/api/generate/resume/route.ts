@@ -2,9 +2,7 @@ import OpenAI from "openai"
 
 const openai = new OpenAI({ apiKey: process.env.GPT_API_KEY })
 
-export const config = {
-  maxDuration: 20,
-};
+export const maxDuration = 20
 
 async function generateText(message) {
   const response = await openai.chat.completions.create({
