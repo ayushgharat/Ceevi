@@ -3,7 +3,6 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogOverlay,
@@ -15,37 +14,49 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import {
-  Cross2Icon,
-  DotsVerticalIcon,
-  Pencil1Icon
-} from "@radix-ui/react-icons"
-import { useState } from "react"
+import { Cross2Icon, DotsVerticalIcon } from "@radix-ui/react-icons"
+import { useState, type ChangeEvent } from "react"
 
-export function ProfileDialogProject({
-  project,
-  index,
-  updateProject,
-  deleteProject
-}) {
-  const [newProject, setNewProject] = useState(project)
-  const [isPresent, setIsPresent] = useState(newProject.end_date === "Present")
+interface ProfileDialogProjectProps {
+  project: {
+    name: string
+    skills: string
+    start_date: string
+    end_date: string
+    description: string
+  }
+  index: number
+  updateProject: (project: ProfileDialogProjectProps["project"], index: number) => void
+  deleteProject: (index: number) => void
+}
 
-  const handleSaveChanges = () => {
-    updateProject(
-      { ...newProject, end_date: isPresent ? "Present" : newProject.end_date },
-      index
-    )
+export function ProfileDialogProject({ project, index, updateProject, deleteProject }: ProfileDialogProjectProps) {
+  if (!project || typeof index === 'undefined' || !updateProject || !deleteProject) {
+    console.error("ProfileDialogProject: Missing required props.")
+    return null
   }
 
-  const handleInputChange = (event) => {
+  const [newProject, setNewProject] = useState(project)
+  const [errors, setErrors] = useState<{ [key: string]: string }>({})
+  const [isPresent, setIsPresent] = useState(newProject.end_date === "Present")
+  const [open, setOpen] = useState(false)
+
+  const handleSaveChanges = () => {
+    if (validateInputs()) {
+      updateProject(
+        { ...newProject, end_date: isPresent ? "Present" : newProject.end_date },
+        index
+      )
+      setOpen(false)
+    } 
+  }
+
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { id, value } = event.target
     setNewProject((prevState) => ({
       ...prevState,
@@ -61,17 +72,36 @@ export function ProfileDialogProject({
     }))
   }
 
+  const validateInputs = () => {
+    const newErrors: { [key: string]: string } = {}
+    const requiredFields = [
+      "name",
+      "skills",
+      "start_date",
+      "end_date",
+      "description"
+    ]
+
+    requiredFields.forEach((field) => {
+      if (!newProject[field]) {
+        newErrors[field] = `${field.replace("_", " ")} is required`
+      }
+    })
+
+    setErrors(newErrors)
+
+    return Object.keys(newErrors).length === 0
+  }
+
   return (
-    <Dialog>
+    <Dialog open={open}>
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger>
           <DotsVerticalIcon />
         </DropdownMenuTrigger>
         <DropdownMenuContent className="bg-white rounded-xl font-dmsans flex flex-col p-3 gap-y-3 shadow-lg">
           <DropdownMenuItem>
-            <DialogTrigger asChild>
-              <button>Edit</button>
-            </DialogTrigger>
+            <button onClick={() => setOpen(true)}>Edit</button>
           </DropdownMenuItem>
           <DropdownMenuItem>
             <button onClick={() => deleteProject(index)}>Delete</button>
@@ -91,10 +121,11 @@ export function ProfileDialogProject({
               </Label>
               <Input
                 id="name"
-                value={newProject.name}
+                value={newProject.name || ""}
                 className="DialogInput"
                 onChange={handleInputChange}
               />
+              {errors.name && <span className="text-red-500">{errors.name}</span>}
             </div>
 
             <div className="DialogLayout">
@@ -103,10 +134,11 @@ export function ProfileDialogProject({
               </Label>
               <Input
                 id="skills"
-                value={newProject.skills}
+                value={newProject.skills || ""}
                 className="DialogInput"
                 onChange={handleInputChange}
               />
+              {errors.skills && <span className="text-red-500">{errors.skills}</span>}
             </div>
 
             <div className="DialogLayout">
@@ -115,11 +147,12 @@ export function ProfileDialogProject({
               </Label>
               <Input
                 id="start_date"
-                value={newProject.start_date}
+                value={newProject.start_date || ""}
                 className="DialogInput flex-col justify-between"
                 onChange={handleInputChange}
                 type="month"
               />
+              {errors.start_date && <span className="text-red-500">{errors.start_date}</span>}
             </div>
             <div className="DialogLayout">
               <Label htmlFor="end_date" className="text-right">
@@ -128,7 +161,7 @@ export function ProfileDialogProject({
               {!isPresent ? (
                 <Input
                   id="end_date"
-                  value={newProject.end_date}
+                  value={newProject.end_date || ""}
                   className="DialogInput flex-col justify-between"
                   onChange={handleInputChange}
                   type="month"
@@ -144,6 +177,7 @@ export function ProfileDialogProject({
                 />
                 <label>Present</label>
               </div>
+              {errors.end_date && <span className="text-red-500">{errors.end_date}</span>}
             </div>
 
             <div className="DialogLayout col-span-2">
@@ -152,28 +186,30 @@ export function ProfileDialogProject({
               </Label>
               <Textarea
                 id="description"
-                value={newProject.description}
+                value={newProject.description || ""}
                 className="DialogInput"
                 onChange={handleInputChange}
               />
+              {errors.description && <span className="text-red-500">{errors.description}</span>}
             </div>
           </div>
           <DialogClose asChild>
-            <Button
-              className="text-violet11 hover:bg-violet-400 focus:shadow-violet7 absolute top-[10px] right-[10px] inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-full focus:shadow-[0_0_0_2px] focus:outline-none"
-              aria-label="Close">
-              <Cross2Icon />
-            </Button>
+            <button
+              className="text-violet11 focus:shadow-violet7 absolute top-[20px] right-[20px] inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-full focus:shadow-[0_0_0_2px] focus:outline-none"
+              aria-label="Close"
+              onClick={() => setOpen(false)}
+            >
+              <Cross2Icon color="#000" />
+            </button>
           </DialogClose>
           <DialogFooter>
-            <DialogClose asChild>
-              <Button
-                className="PrimaryButton"
-                type="submit"
-                onClick={handleSaveChanges}>
-                Save changes
-              </Button>
-            </DialogClose>
+            <Button
+              className="PrimaryButton"
+              type="submit"
+              onClick={handleSaveChanges}
+            >
+              Save changes
+            </Button>
           </DialogFooter>
         </DialogContent>
       </DialogPortal>

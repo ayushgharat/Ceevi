@@ -15,8 +15,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
@@ -27,33 +25,61 @@ import {
   DotsVerticalIcon,
   Pencil1Icon
 } from "@radix-ui/react-icons"
-import { useState } from "react"
+import { useState, type ChangeEvent } from "react"
+
+interface Experience {
+  company: string
+  role: string
+  location: string
+  start_date: string
+  end_date: string
+  description: string
+}
+
+interface ProfileDialogExperienceProps {
+  experience: Experience
+  index: number
+  updateExperience: (experience: Experience, index: number) => void
+  deleteExperience: (index: number) => void
+}
 
 export function ProfileDialogExperience({
   experience,
   index,
   updateExperience,
   deleteExperience
-}) {
-  const [newExperience, setNewExperience] = useState(experience)
-  const [isPresent, setIsPresent] = useState(experience.end_date === "Present")
-
-  const handleSaveChanges = () => {
-    updateExperience(
-      {
-        ...newExperience,
-        end_date: isPresent ? "Present" : newExperience.end_date
-      },
-      index
-    )
+}: ProfileDialogExperienceProps) {
+  if (!experience || typeof index === 'undefined' || !updateExperience || !deleteExperience) {
+    console.error("ProfileDialogExperience: Missing required props.")
+    return null
   }
 
-  const handleInputChange = (event) => {
-    const { id, value, type, checked } = event.target
-    setNewExperience((prevState) => ({
-      ...prevState,
-      [id]: type === "checkbox" ? checked : value
-    }))
+  const [newExperience, setNewExperience] = useState<Experience>(experience)
+  const [errors, setErrors] = useState<{ [key: string]: string }>({})
+  const [isPresent, setIsPresent] = useState(experience.end_date === "Present")
+  const [open, setOpen] = useState(false)
+
+  const handleSaveChanges = () => {
+    if (validateInputs() && typeof updateExperience === 'function') {
+      updateExperience(
+        {
+          ...newExperience,
+          end_date: isPresent ? "Present" : newExperience.end_date
+        },
+        index
+      )
+      setOpen(false)
+    }
+  }
+
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    if (event && event.target) {
+      const { id, value, type } = event.target
+      setNewExperience((prevState) => ({
+        ...prevState,
+        [id]: value
+      }))
+    }
   }
 
   const handlePresentChange = () => {
@@ -64,20 +90,40 @@ export function ProfileDialogExperience({
     }))
   }
 
+  const validateInputs = () => {
+    const newErrors: { [key: string]: string } = {}
+    const requiredFields: (keyof Experience)[] = [
+      "company",
+      "role",
+      "location",
+      "start_date",
+      "end_date",
+      "description"
+    ]
+
+    requiredFields.forEach((field) => {
+      if (!newExperience[field]) {
+        newErrors[field] = `${field.replace("_", " ")} is required`
+      }
+    })
+
+    setErrors(newErrors)
+
+    return Object.keys(newErrors).length === 0
+  }
+
   return (
-    <Dialog>
+    <Dialog open={open}>
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger>
           <DotsVerticalIcon />
         </DropdownMenuTrigger>
         <DropdownMenuContent className="bg-white rounded-xl font-dmsans flex flex-col p-3 gap-y-3 shadow-lg">
           <DropdownMenuItem>
-            <DialogTrigger asChild>
-              <button>Edit</button>
-            </DialogTrigger>
+            <button onClick={() => setOpen(true)}>Edit</button>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <button onClick={() => deleteExperience(index)}>Delete</button>
+            <button onClick={() => deleteExperience && deleteExperience(index)}>Delete</button>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -95,10 +141,11 @@ export function ProfileDialogExperience({
               </Label>
               <Input
                 id="company"
-                value={newExperience.company}
+                value={newExperience.company || ""}
                 className="DialogInput"
                 onChange={handleInputChange}
               />
+              {errors.company && <span className="text-red-500">{errors.company}</span>}
             </div>
             <div className="DialogLayout">
               <Label htmlFor="role" className="text-right">
@@ -106,10 +153,11 @@ export function ProfileDialogExperience({
               </Label>
               <Input
                 id="role"
-                value={newExperience.role}
+                value={newExperience.role || ""}
                 className="DialogInput"
                 onChange={handleInputChange}
               />
+              {errors.role && <span className="text-red-500">{errors.role}</span>}
             </div>
             <div className="DialogLayout">
               <Label htmlFor="location" className="text-right">
@@ -117,10 +165,11 @@ export function ProfileDialogExperience({
               </Label>
               <Input
                 id="location"
-                value={newExperience.location}
+                value={newExperience.location || ""}
                 className="DialogInput"
                 onChange={handleInputChange}
               />
+              {errors.location && <span className="text-red-500">{errors.location}</span>}
             </div>
             <div className="DialogLayout">
               <Label htmlFor="start_date" className="text-right">
@@ -128,11 +177,12 @@ export function ProfileDialogExperience({
               </Label>
               <Input
                 id="start_date"
-                value={newExperience.start_date}
+                value={newExperience.start_date || ""}
                 className="DialogInput flex-col justify-between"
                 onChange={handleInputChange}
                 type="month"
               />
+              {errors.start_date && <span className="text-red-500">{errors.start_date}</span>}
             </div>
             <div className="DialogLayout">
               <Label htmlFor="end_date" className="text-right">
@@ -141,7 +191,7 @@ export function ProfileDialogExperience({
               {!isPresent ? (
                 <Input
                   id="end_date"
-                  value={newExperience.end_date}
+                  value={newExperience.end_date || ""}
                   className="DialogInput flex-col justify-between"
                   onChange={handleInputChange}
                   type="month"
@@ -157,6 +207,7 @@ export function ProfileDialogExperience({
                 />
                 <label>Present</label>
               </div>
+              {errors.end_date && <span className="text-red-500">{errors.end_date}</span>}
             </div>
             <div className="DialogLayout col-span-2">
               <Label htmlFor="description" className="text-right">
@@ -164,28 +215,30 @@ export function ProfileDialogExperience({
               </Label>
               <Textarea
                 id="description"
-                value={newExperience.description}
+                value={newExperience.description || ""}
                 className="DialogInput"
                 onChange={handleInputChange}
               />
+              {errors.description && <span className="text-red-500">{errors.description}</span>}
             </div>
           </div>
           <DialogClose asChild>
-            <Button
-              className="text-violet11 hover:bg-violet-400 focus:shadow-violet7 absolute top-[10px] right-[10px] inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-full focus:shadow-[0_0_0_2px] focus:outline-none"
-              aria-label="Close">
-              <Cross2Icon />
-            </Button>
+            <button
+              className="text-violet11 focus:shadow-violet7 absolute top-[20px] right-[20px] inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-full focus:shadow-[0_0_0_2px] focus:outline-none"
+              aria-label="Close"
+              onClick={() => setOpen(false)}
+            >
+              <Cross2Icon color="#000" />
+            </button>
           </DialogClose>
           <DialogFooter>
-            <DialogClose asChild>
-              <Button
-                className="PrimaryButton"
-                type="submit"
-                onClick={handleSaveChanges}>
-                Save changes
-              </Button>
-            </DialogClose>
+            <Button
+              className="PrimaryButton"
+              type="submit"
+              onClick={handleSaveChanges}
+            >
+              Save changes
+            </Button>
           </DialogFooter>
         </DialogContent>
       </DialogPortal>

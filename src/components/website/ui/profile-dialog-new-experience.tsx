@@ -3,7 +3,6 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogOverlay,
@@ -15,11 +14,20 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Cross2Icon, Pencil1Icon, PlusIcon } from "@radix-ui/react-icons"
-import { useState } from "react"
+import { useState, type ChangeEvent } from "react"
 
 import type { ExperienceItem } from "~types"
 
-export function ProfileDialogNewExperience({ addNewExperience }) {
+interface ProfileDialogNewExperienceProps {
+  addNewExperience: (experience: ExperienceItem) => void
+}
+
+export function ProfileDialogNewExperience({ addNewExperience }: ProfileDialogNewExperienceProps) {
+  if (!addNewExperience) {
+    console.error("ProfileDialogNewExperience: Missing required prop addNewExperience.")
+    return null
+  }
+
   const [newExperience, setNewExperience] = useState<ExperienceItem>({
     company: "",
     role: "",
@@ -28,24 +36,28 @@ export function ProfileDialogNewExperience({ addNewExperience }) {
     end_date: "",
     description: ""
   })
-
-  const [isPresent, setIsPresent] = useState(
-    newExperience.end_date === "Present"
-  )
+  const [errors, setErrors] = useState<{ [key: string]: string }>({})
+  const [isPresent, setIsPresent] = useState(newExperience.end_date === "Present")
+  const [open, setOpen] = useState(false)
 
   const handleSaveChanges = () => {
-    addNewExperience({
-      ...newExperience,
-      end_date: isPresent ? "Present" : newExperience.end_date
-    })
+    if (validateInputs()) {
+      addNewExperience({
+        ...newExperience,
+        end_date: isPresent ? "Present" : newExperience.end_date
+      })
+      setOpen(false)
+    }
   }
 
-  const handleInputChange = (event) => {
-    const { id, value } = event.target
-    setNewExperience((prevState) => ({
-      ...prevState,
-      [id]: value
-    }))
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    if (event && event.target) {
+      const { id, value, type } = event.target
+      setNewExperience((prevState) => ({
+        ...prevState,
+        [id]: value
+      }))
+    }
   }
 
   const handlePresentChange = () => {
@@ -56,10 +68,32 @@ export function ProfileDialogNewExperience({ addNewExperience }) {
     }))
   }
 
+  const validateInputs = () => {
+    const newErrors: { [key: string]: string } = {}
+    const requiredFields: (keyof ExperienceItem)[] = [
+      "company",
+      "role",
+      "location",
+      "start_date",
+      "end_date",
+      "description"
+    ]
+
+    requiredFields.forEach((field) => {
+      if (!newExperience[field]) {
+        newErrors[field] = `${field.replace("_", " ")} is required`
+      }
+    })
+
+    setErrors(newErrors)
+
+    return Object.keys(newErrors).length === 0
+  }
+
   return (
-    <Dialog>
+    <Dialog open={open}>
       <DialogTrigger asChild>
-        <button className="PrimaryButton">Add New Experience</button>
+        <button className="PrimaryButton" onClick={() => setOpen(true)}>Add New Experience</button>
       </DialogTrigger>
       <DialogPortal>
         <DialogOverlay className="DialogOverlay" />
@@ -76,10 +110,11 @@ export function ProfileDialogNewExperience({ addNewExperience }) {
               </Label>
               <Input
                 id="company"
-                value={newExperience.company}
+                value={newExperience.company || ""}
                 className="DialogInput"
                 onChange={handleInputChange}
               />
+              {errors.company && <span className="text-red-500">{errors.company}</span>}
             </div>
             <div className="DialogLayout">
               <Label htmlFor="role" className="text-right">
@@ -87,10 +122,11 @@ export function ProfileDialogNewExperience({ addNewExperience }) {
               </Label>
               <Input
                 id="role"
-                value={newExperience.role}
+                value={newExperience.role || ""}
                 className="DialogInput"
                 onChange={handleInputChange}
               />
+              {errors.role && <span className="text-red-500">{errors.role}</span>}
             </div>
             <div className="DialogLayout">
               <Label htmlFor="location" className="text-right">
@@ -98,23 +134,24 @@ export function ProfileDialogNewExperience({ addNewExperience }) {
               </Label>
               <Input
                 id="location"
-                value={newExperience.location}
+                value={newExperience.location || ""}
                 className="DialogInput"
                 onChange={handleInputChange}
               />
+              {errors.location && <span className="text-red-500">{errors.location}</span>}
             </div>
-
             <div className="DialogLayout">
               <Label htmlFor="start_date" className="text-right">
                 Start Date
               </Label>
               <Input
                 id="start_date"
-                value={newExperience.start_date}
+                value={newExperience.start_date || ""}
                 className="DialogInput flex-col justify-between"
                 onChange={handleInputChange}
                 type="month"
               />
+              {errors.start_date && <span className="text-red-500">{errors.start_date}</span>}
             </div>
             <div className="DialogLayout">
               <Label htmlFor="end_date" className="text-right">
@@ -123,7 +160,7 @@ export function ProfileDialogNewExperience({ addNewExperience }) {
               {!isPresent ? (
                 <Input
                   id="end_date"
-                  value={newExperience.end_date}
+                  value={newExperience.end_date || ""}
                   className="DialogInput flex-col justify-between"
                   onChange={handleInputChange}
                   type="month"
@@ -139,36 +176,38 @@ export function ProfileDialogNewExperience({ addNewExperience }) {
                 />
                 <label>Present</label>
               </div>
+              {errors.end_date && <span className="text-red-500">{errors.end_date}</span>}
             </div>
-
             <div className="DialogLayout col-span-2">
               <Label htmlFor="description" className="text-right">
                 Description
               </Label>
               <Textarea
                 id="description"
-                value={newExperience.description}
+                value={newExperience.description || ""}
                 className="DialogInput"
                 onChange={handleInputChange}
               />
+              {errors.description && <span className="text-red-500">{errors.description}</span>}
             </div>
           </div>
           <DialogClose asChild>
-            <Button
-              className="text-violet11 hover:bg-violet-400 focus:shadow-violet7 absolute top-[10px] right-[10px] inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-full focus:shadow-[0_0_0_2px] focus:outline-none"
-              aria-label="Close">
-              <Cross2Icon />
-            </Button>
+            <button
+              className="text-violet11 focus:shadow-violet7 absolute top-[20px] right-[20px] inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-full focus:shadow-[0_0_0_2px] focus:outline-none"
+              aria-label="Close"
+              onClick={() => setOpen(false)}
+            >
+              <Cross2Icon color="#000" />
+            </button>
           </DialogClose>
           <DialogFooter>
-            <DialogClose asChild>
-              <Button
-                className="PrimaryButton"
-                type="submit"
-                onClick={handleSaveChanges}>
-                Save changes
-              </Button>
-            </DialogClose>
+            <Button
+              className="PrimaryButton"
+              type="submit"
+              onClick={handleSaveChanges}
+            >
+              Save changes
+            </Button>
           </DialogFooter>
         </DialogContent>
       </DialogPortal>
