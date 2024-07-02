@@ -14,8 +14,8 @@ import { redirect, useRouter } from "next/navigation"
 import { useState } from "react"
 import { Menu, MenuItem, Sidebar, SubMenu } from "react-pro-sidebar"
 
-import { checkIfUserIsLoggedIn, generateNewResume, getUserProfile } from "~app/action"
-import { openai_generated_resume_structure, testingResume, type UserProfile } from "~types"
+import { checkIfUserIsLoggedIn } from "~app/action"
+import { testingResume } from "~types"
 import { createClient } from "~utils/supabase/component"
 
 import BuildResume from "./dashboard/buildResume"
@@ -25,9 +25,6 @@ import VerifyInformation from "./dashboard/verifyInformation"
 import CustomSidebar from "./sidebar"
 import GeneratingResume from "./dashboard/generatingResume"
 import GeneratingPDF from "./dashboard/generatingpdf"
-import { experimental_useObject as useObject } from 'ai/react';
-import { readStreamableValue } from "ai/rsc"
-
 
 export function DashboardHomePage({ currentUser }) {
   const router = useRouter()
@@ -35,7 +32,6 @@ export function DashboardHomePage({ currentUser }) {
   const [componentToRender, setComponentToRender] = useState("home")
   const [resume, setResume] = useState(testingResume)
   const [fileBlob, setFileBlob] = useState<Blob | null>(null)
-  const [generation, setGeneration] = useState<string>('');
 
   //const [data, setData] = useState("")
   //const router = useRouter();
@@ -93,77 +89,54 @@ export function DashboardHomePage({ currentUser }) {
   const generateResume = async (jobInfo, userPref) => {
     setComponentToRender("generatingResume")
     try {
-      // const response = await fetch(
-      //   process.env.NEXT_PUBLIC_DOMAIN + "api/db/get-user",
-      //   {
-      //     method: "POST",
-      //     headers: {
-      //       "Content-Type": "application/json"
-      //     },
-      //     body: JSON.stringify({ id: currentUser.id })
-      //   }
-      // )
-
-      // if (!response.ok) {
-      //   throw new Error(`HTTP error! status: ${response.status}`)
-      // }
-      // const current_profile = await response.json()
-
-      // const resume_response = await fetch(
-      //   process.env.NEXT_PUBLIC_DOMAIN + "api/generate/resume",
-      //   {
-      //     method: "POST",
-      //     headers: {
-      //       "Content-Type": "application/json"
-      //     },
-      //     body: JSON.stringify({
-      //       job_info: jobInfo,
-      //       profile: current_profile,
-      //       userPref: userPref
-      //     }),
-          
-      //   }
-      // )
-      // //const resume_response = await generateNewResume(jobInfo, current_profile, userPref)
-      // if (!resume_response.ok) {
-      //   throw new Error("Failed to fetch data from resume endpoints")
-      // }
-
-      // const generated_resume = await resume_response.json()
-
-      const current_profile : any = await getUserProfile(currentUser.id)
-      const professional_data = current_profile.profile.professional
-      //console.log(current_profile.profile.professional)
-
-      const { object } = await generateNewResume(jobInfo, professional_data, userPref)
-
-      for await (const partialObject of readStreamableValue(object)) {
-        if (partialObject) {
-          //console.log(partialObject)
-          setGeneration(
-            JSON.stringify(partialObject.notifications, null, 2),
-          );
+      const response = await fetch(
+        process.env.NEXT_PUBLIC_DOMAIN + "api/db/get-user",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ id: currentUser.id })
         }
+      )
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      const current_profile = await response.json()
+
+      const resume_response = await fetch(
+        process.env.NEXT_PUBLIC_DOMAIN + "api/generate/resume",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            job_info: jobInfo,
+            profile: current_profile,
+            userPref: userPref
+          })
+        }
+      )
+      if (!resume_response.ok) {
+        throw new Error("Failed to fetch data from resume endpoints")
       }
 
-      
+      const generated_resume = await resume_response.json()
 
-      const generated_resume = JSON.parse(generation)
-      console.log(generated_resume)
-
-      // const combined = await {
-      //   personal: current_profile.data[0].profile.personal,
-      //   education: current_profile.data[0].profile.education,
-      //   professional: {
-      //     experience: generated_resume.experience,
-      //     project: generated_resume.project,
-      //     skill: {
-      //       ...generated_resume.skill
-      //     }
-      //   }
-      // }
-      //setResume(combined)
-
+      const combined = await {
+        personal: current_profile.data[0].profile.personal,
+        education: current_profile.data[0].profile.education,
+        professional: {
+          experience: generated_resume.experience,
+          project: generated_resume.project,
+          skill: {
+            ...generated_resume.skill
+          }
+        }
+      }
+      setResume(combined)
       //setResume(testingResume)
 
       setComponentToRender("verifyInformation")

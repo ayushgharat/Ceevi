@@ -1,5 +1,3 @@
-import { z } from "zod";
-
 export interface PersonalData {
     first_name: string;
     last_name: string
@@ -197,37 +195,4 @@ export interface PersonalData {
       ]
     }
   }
-
-  export type UserProfile = {
-    profile: {
-      professional: any; // Adjust the type as per your actual data structure
-    }[];
-  };
-
-  export const openai_generated_resume_structure =  z.object(
-    {
-      experience: z.array(
-        z.object({
-          company: z.string(),
-          role: z.string(),
-          start_date: z.string(),
-          end_date: z.string(),
-          location: z.string(),
-          description: z.array(z.object({ value: z.string() }))
-        })
-      ),
-      project: z.array(
-       z.object( {
-          name: z.string(),
-          skills: z.array(z.object({ value: z.string() })),
-          start_date: z.string(),
-          end_date: z.string(),
-          description: z.array(z.object({ value: z.string() }))
-        })
-      ),
-      skill: z.object({
-        languages: z.array(z.string()),
-        technologies: z.array(z.string())
-      })
-    })
   
