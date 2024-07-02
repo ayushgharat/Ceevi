@@ -44,7 +44,12 @@ export async function POST(req, res) {
   const data = await req.json()
   //const { user } = req.body
 
-  const { job_info, profile, userPref } = data
+  console.log(data)
+  const { job_info, profile } = data
+  let userPref = "";
+  if("userPref" in data) {
+    userPref = data.userPref
+  }
 
   //console.log(profile.data[0].profile.professional.experience)
 
