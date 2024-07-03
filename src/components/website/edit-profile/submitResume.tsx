@@ -55,6 +55,10 @@ export const SubmitResume = ({ setActiveStep, setResume }) => {
       <button className="PrimaryButton mt-10" onClick={handleSubmit}>
         Submit File
       </button>
+
+      <button className="PrimaryButton mt-10" onClick={e => setActiveStep(1)}>
+        Skip
+      </button>
       {loading && <span>Processing your info...</span>}
     </div>
   )

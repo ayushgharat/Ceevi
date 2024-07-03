@@ -3,21 +3,14 @@ import { useState, type ChangeEvent } from "react"
 
 import type { PersonalData } from "~types"
 
-interface PersonalInformationProps {
-  profileInfo: {
-    personal?: PersonalData
-  }
-  setActiveStep: (step: number) => void
-  handlePersonalInfo: (data: PersonalData) => void
-}
 
-const PersonalInformation = ({ profileInfo, setActiveStep, handlePersonalInfo }: PersonalInformationProps) => {
-  if (!profileInfo || !setActiveStep || !handlePersonalInfo) {
+const PersonalInformation = ({ profileInfo, setActiveStep, handlePersonalInfo }) => {
+  if (!setActiveStep || !handlePersonalInfo) {
     console.error("PersonalInformation: Missing required props.")
     return null
   }
 
-  const [personalData, setPersonalData] = useState<PersonalData>(profileInfo.personal ?? {
+  const [personalData, setPersonalData] = useState<PersonalData>((profileInfo && profileInfo.personal) ?? {
     first_name: "",
     last_name: "",
     email: "",
