@@ -3,8 +3,14 @@ import { useState, type ChangeEvent } from "react"
 
 import type { PersonalData } from "~types"
 
+
 const PersonalInformation = ({ profileInfo, setActiveStep, handlePersonalInfo }) => {
-  const [personalData, setPersonalData] = useState<PersonalData>(profileInfo.personal ?? {
+  if (!setActiveStep || !handlePersonalInfo) {
+    console.error("PersonalInformation: Missing required props.")
+    return null
+  }
+
+  const [personalData, setPersonalData] = useState<PersonalData>((profileInfo && profileInfo.personal) ?? {
     first_name: "",
     last_name: "",
     email: "",
@@ -13,16 +19,41 @@ const PersonalInformation = ({ profileInfo, setActiveStep, handlePersonalInfo })
     github: ""
   })
 
+  const [errors, setErrors] = useState<{ [key: string]: string }>({})
+
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target
     setPersonalData({ ...personalData, [name]: value })
   }
 
+  const validateInputs = () => {
+    const newErrors: { [key: string]: string } = {}
+    const requiredFields = [
+      "first_name",
+      "last_name",
+      "email",
+      "phone_number",
+      "linkedin",
+      "github"
+    ]
+
+    requiredFields.forEach((field) => {
+      if (!personalData[field as keyof PersonalData]) {
+        newErrors[field] = `${field.replace("_", " ")} is required`
+      }
+    })
+
+    setErrors(newErrors)
+
+    return Object.keys(newErrors).length === 0
+  }
+
   const handleSubmit = () => {
-    // Handle form submission logic here
-    handlePersonalInfo(personalData)
-    console.log("Submitted data:", personalData)
-    setActiveStep(2)
+    if (validateInputs()) {
+      handlePersonalInfo(personalData)
+      console.log("Submitted data:", personalData)
+      setActiveStep(2)
+    }
   }
 
   return (
@@ -35,6 +66,7 @@ const PersonalInformation = ({ profileInfo, setActiveStep, handlePersonalInfo })
           onChange={handleChange}
           className="DialogInput p-2"
         />
+        {errors.first_name && <span className="text-red-500">{errors.first_name}</span>}
       </div>
 
       <div className="flex flex-col gap-y-2">
@@ -45,6 +77,7 @@ const PersonalInformation = ({ profileInfo, setActiveStep, handlePersonalInfo })
           onChange={handleChange}
           className="DialogInput p-2"
         />
+        {errors.last_name && <span className="text-red-500">{errors.last_name}</span>}
       </div>
       <div className="flex flex-col gap-y-2">
         <label>Email</label>
@@ -54,6 +87,7 @@ const PersonalInformation = ({ profileInfo, setActiveStep, handlePersonalInfo })
           onChange={handleChange}
           className="DialogInput p-2"
         />
+        {errors.email && <span className="text-red-500">{errors.email}</span>}
       </div>
 
       <div className="flex flex-col gap-y-2">
@@ -64,6 +98,7 @@ const PersonalInformation = ({ profileInfo, setActiveStep, handlePersonalInfo })
           onChange={handleChange}
           className="DialogInput p-2"
         />
+        {errors.phone_number && <span className="text-red-500">{errors.phone_number}</span>}
       </div>
       <div className="flex flex-col gap-y-2">
         <label>LinkedIn URL</label>
@@ -73,6 +108,7 @@ const PersonalInformation = ({ profileInfo, setActiveStep, handlePersonalInfo })
           onChange={handleChange}
           className="DialogInput p-2"
         />
+        {errors.linkedin && <span className="text-red-500">{errors.linkedin}</span>}
       </div>
       <div className="flex flex-col gap-y-2">
         <label>Github URL</label>
@@ -82,9 +118,10 @@ const PersonalInformation = ({ profileInfo, setActiveStep, handlePersonalInfo })
           onChange={handleChange}
           className="DialogInput p-2"
         />
+        {errors.github && <span className="text-red-500">{errors.github}</span>}
       </div>
       <button
-        type="submit"
+        type="button"
         className="col-span-2 PrimaryButton mt-10"
         onClick={handleSubmit}>
         Next

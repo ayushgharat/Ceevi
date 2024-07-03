@@ -3,7 +3,6 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogOverlay,
@@ -14,12 +13,21 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Cross2Icon, Pencil1Icon, PlusIcon } from "@radix-ui/react-icons"
-import { useState } from "react"
+import { Cross2Icon } from "@radix-ui/react-icons"
+import { useState, type ChangeEvent } from "react"
 
 import type { ProjectItem } from "~types"
 
-export function ProfileDialogNewProject({ addNewProject }) {
+interface ProfileDialogNewProjectProps {
+  addNewProject: (project: ProjectItem) => void
+}
+
+export function ProfileDialogNewProject({ addNewProject }: ProfileDialogNewProjectProps) {
+  if (!addNewProject) {
+    console.error("ProfileDialogNewProject: Missing required prop addNewProject.")
+    return null
+  }
+
   const [newProject, setNewProject] = useState<ProjectItem>({
     name: "",
     skills: "",
@@ -27,21 +35,28 @@ export function ProfileDialogNewProject({ addNewProject }) {
     end_date: "",
     description: ""
   })
+  const [errors, setErrors] = useState<{ [key: string]: string }>({})
   const [isPresent, setIsPresent] = useState(false)
+  const [open, setOpen] = useState(false)
 
   const handleSaveChanges = () => {
-    addNewProject({
-      ...newProject,
-      end_date: isPresent ? "Present" : newProject.end_date
-    })
+    if (validateInputs()) {
+      addNewProject({
+        ...newProject,
+        end_date: isPresent ? "Present" : newProject.end_date
+      })
+      setOpen(false)
+    }
   }
 
-  const handleInputChange = (event) => {
-    const { id, value } = event.target
-    setNewProject((prevState) => ({
-      ...prevState,
-      [id]: value
-    }))
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    if (event && event.target) {
+      const { id, value } = event.target
+      setNewProject((prevState) => ({
+        ...prevState,
+        [id]: value
+      }))
+    }
   }
 
   const handlePresentChange = () => {
@@ -52,10 +67,31 @@ export function ProfileDialogNewProject({ addNewProject }) {
     }))
   }
 
+  const validateInputs = () => {
+    const newErrors: { [key: string]: string } = {}
+    const requiredFields: (keyof ProjectItem)[] = [
+      "name",
+      "skills",
+      "start_date",
+      "end_date",
+      "description"
+    ]
+
+    requiredFields.forEach((field) => {
+      if (!newProject[field]) {
+        newErrors[field] = `${field.replace("_", " ")} is required`
+      }
+    })
+
+    setErrors(newErrors)
+
+    return Object.keys(newErrors).length === 0
+  }
+
   return (
-    <Dialog>
+    <Dialog open={open}>
       <DialogTrigger asChild>
-        <button className="PrimaryButton">Add New Project</button>
+        <button className="PrimaryButton" onClick={() => setOpen(true)}>Add New Project</button>
       </DialogTrigger>
       <DialogPortal>
         <DialogOverlay className="DialogOverlay" />
@@ -70,10 +106,11 @@ export function ProfileDialogNewProject({ addNewProject }) {
               </Label>
               <Input
                 id="name"
-                value={newProject.name}
+                value={newProject.name || ""}
                 className="DialogInput"
                 onChange={handleInputChange}
               />
+              {errors.name && <span className="text-red-500">{errors.name}</span>}
             </div>
 
             <div className="DialogLayout">
@@ -82,10 +119,11 @@ export function ProfileDialogNewProject({ addNewProject }) {
               </Label>
               <Input
                 id="skills"
-                value={newProject.skills}
+                value={newProject.skills || ""}
                 className="DialogInput"
                 onChange={handleInputChange}
               />
+              {errors.skills && <span className="text-red-500">{errors.skills}</span>}
             </div>
 
             <div className="DialogLayout">
@@ -94,11 +132,12 @@ export function ProfileDialogNewProject({ addNewProject }) {
               </Label>
               <Input
                 id="start_date"
-                value={newProject.start_date}
+                value={newProject.start_date || ""}
                 className="DialogInput flex-col justify-between"
                 onChange={handleInputChange}
                 type="month"
               />
+              {errors.start_date && <span className="text-red-500">{errors.start_date}</span>}
             </div>
             <div className="DialogLayout">
               <Label htmlFor="end_date" className="text-right">
@@ -107,7 +146,7 @@ export function ProfileDialogNewProject({ addNewProject }) {
               {!isPresent ? (
                 <Input
                   id="end_date"
-                  value={newProject.end_date}
+                  value={newProject.end_date || ""}
                   className="DialogInput flex-col justify-between"
                   onChange={handleInputChange}
                   type="month"
@@ -123,6 +162,7 @@ export function ProfileDialogNewProject({ addNewProject }) {
                 />
                 <label>Present</label>
               </div>
+              {errors.end_date && <span className="text-red-500">{errors.end_date}</span>}
             </div>
 
             <div className="DialogLayout col-span-2">
@@ -131,28 +171,30 @@ export function ProfileDialogNewProject({ addNewProject }) {
               </Label>
               <Textarea
                 id="description"
-                value={newProject.description}
+                value={newProject.description || ""}
                 className="DialogInput"
                 onChange={handleInputChange}
               />
+              {errors.description && <span className="text-red-500">{errors.description}</span>}
             </div>
           </div>
           <DialogClose asChild>
-            <Button
-              className="text-violet11 hover:bg-violet-400 focus:shadow-violet7 absolute top-[10px] right-[10px] inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-full focus:shadow-[0_0_0_2px] focus:outline-none"
-              aria-label="Close">
-              <Cross2Icon />
-            </Button>
+            <button
+              className="text-violet11 focus:shadow-violet7 absolute top-[20px] right-[20px] inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-full focus:shadow-[0_0_0_2px] focus:outline-none"
+              aria-label="Close"
+              onClick={() => setOpen(false)}
+            >
+              <Cross2Icon color="#000" />
+            </button>
           </DialogClose>
           <DialogFooter>
-            <DialogClose asChild>
-              <Button
-                className="PrimaryButton"
-                type="submit"
-                onClick={handleSaveChanges}>
-                Save changes
-              </Button>
-            </DialogClose>
+            <Button
+              className="PrimaryButton"
+              type="submit"
+              onClick={handleSaveChanges}
+            >
+              Save changes
+            </Button>
           </DialogFooter>
         </DialogContent>
       </DialogPortal>

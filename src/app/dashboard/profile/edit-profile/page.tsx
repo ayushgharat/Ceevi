@@ -178,7 +178,6 @@ const EditProfilePage = () => {
             profileInfo={profileInfo}
             handleFormSubmit={handleFormSubmit}
             handleProfessionalInfo={handleProfessionalInfo}
-            existingInfo={null}
           />
         )}
       </div>

@@ -41,6 +41,9 @@ async function loadProfile() {
       
       // }
       const {profile} = await getUserProfile(user.id)
+      if (!profile) {
+        redirect('/dashboard/profile/edit-profile')
+      }
       return {profile: profile, id: user.id}
     }
 

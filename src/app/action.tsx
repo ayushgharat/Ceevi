@@ -66,15 +66,15 @@ export async function signup(email, password, firstName, lastName) {
             message: JSON.stringify(response.json())
           }
         } else {
-          redirect("/dashboard")
+          redirect("/dashboard/profile/edit-profile")
         }
       } catch (error) {
         console.error("Error creating user:", error)
       }
   }
 
-  revalidatePath("/", "layout")
-  redirect("/dashboard")
+  //revalidatePath("/", "layout")
+  //redirect("/dashboard")
 }
 
 
