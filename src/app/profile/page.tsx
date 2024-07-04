@@ -15,6 +15,7 @@ async function loadProfile() {
     redirect('/authenticate/login')
   }
 
+  let redirectPath : string | null = null
   
   try {
   
@@ -41,8 +42,9 @@ async function loadProfile() {
       
       // }
       const {profile} = await getUserProfile(user.id)
-      if (!profile) {
-        redirect('/dashboard/profile/edit-profile')
+      
+      if (!(profile && profile[0] && profile[0].profile)) {
+        redirectPath = '/dashboard/profile/edit-profile'
       }
       return {profile: profile, id: user.id}
     }
@@ -50,6 +52,8 @@ async function loadProfile() {
     
   } catch (error) {
     console.error("Error creating user:", error)
+  } finally {
+    if (redirectPath) redirect(redirectPath)
   }
 }
 

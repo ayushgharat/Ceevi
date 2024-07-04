@@ -41,7 +41,7 @@ export async function signup(email, password, firstName, lastName) {
     options: {
       data: {
         name: `${firstName} ${lastName}`,
-        profile_created: false,
+        profile_created: false
       }
     }
   })
@@ -51,32 +51,40 @@ export async function signup(email, password, firstName, lastName) {
       message: error.message
     }
   } else {
-    if (user) 
+    if (user) {
+      let redirectPath: string | null = null
+
       try {
-        const response = await fetch("/api/db/new-user", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ user })
-        })
-    
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_DOMAIN}/api/db/new-user`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ user })
+          }
+        )
+
         if (!response.ok) {
           return {
             message: JSON.stringify(response.json())
           }
         } else {
-          redirect("/dashboard/profile/edit-profile")
+          redirectPath = `/dashboard/profile/edit-profile`
         }
       } catch (error) {
         console.error("Error creating user:", error)
+      } finally {
+        //Clear resources
+        if (redirectPath)
+          redirect(redirectPath)
       }
+    }
   }
-
   //revalidatePath("/", "layout")
   //redirect("/dashboard")
 }
-
 
 export async function checkIfUserIsLoggedIn() {
   const supabase = createClient()

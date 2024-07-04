@@ -35,7 +35,7 @@ const SignInForm = () => {
     await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${process.env.NEXT_PUBLIC_DOMAIN}api/auth/callback`
+        redirectTo: `${process.env.NEXT_PUBLIC_DOMAIN}api/auth/callback?next=/dashboard/profile/edit-profile`
       }
     })
   }
@@ -88,7 +88,7 @@ const SignInForm = () => {
           {loading ? (
             <PuffLoader size={30} color="#ffffff" className="h-1 w-1" />
           ) : (
-            <span className="text-center">Login</span>
+            <span className="text-center">Create my account</span>
           )}
         </button>
         {errorMessage && (
