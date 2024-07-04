@@ -1,11 +1,11 @@
 const Section2 = () => {
   return (
-    <div className="mx-2 sm:mx-6 lg:mx-20 sm:px-6 bg-electric_indigo rounded-[29px] px-4 pt-10 pb-6 shadow-[4px_4px_4px_0_rgba(0,0,0,0.25)] lg:px-20 lg:pb-16">
+    <div className="mx-2 sm:mx-6 lg:mx-20 sm:px-6 bg-electric_indigo rounded-[29px] px-4 pt-10 pb-6 shadow-[4px_4px_4px_0_rgba(0,0,0,0.25)] lg:px-10 xl:px-20 lg:pb-16">
       <p className="px-6 font-poppins font-semibold mb-5 text-white text-xl text-center drop-shadow-xl sm:text-2xl lg:text-4xl">
         Unlock your full potential with Ceevi
       </p>
 
-      <div className="flex flex-col gap-y-6 lg:flex-row lg:gap-x-16 lg:mt-12">
+      <div className="flex flex-col gap-y-6 lg:flex-row lg:gap-x-8 xl:gap-x-16 lg:mt-12">
         <div className="bg-lavendar rounded-2xl py-8 w-full flex flex-col px-10 shadow-[9px_9px_4px_0_rgba(0,0,0,0.25)]">
           <span className="font-poppins text-xl font-semibold lg:text-3xl">
             🚀 Boost your chances
