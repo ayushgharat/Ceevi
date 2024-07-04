@@ -1,3 +1,5 @@
+import Link from "next/link"
+
 import SecondaryButton from "../ui/secondary-button"
 
 const Section4 = () => {
@@ -10,7 +12,11 @@ const Section4 = () => {
         Don’t miss out on your dream job. Sign up now and start creating
         tailored resumes that get results.
       </span>
-      <SecondaryButton text="Join the Waitlist" />
+      <Link
+        href="/authenticate/signup"
+        className="bg-white text-sm font-poppins font-semibold text-vivid_violet w-fit px-10 rounded-[29px] py-2 shadow-[0_4px_4px_0_rgba(0,0,0,0.25)] sm:py-3 lg:w-fit lg:px-10 lg:text-xl lg:shadow-[0px_9px_9px_rgba(0,0,0,0.25)]">
+        Try it now
+      </Link>
     </div>
   )
 }

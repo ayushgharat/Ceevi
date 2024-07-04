@@ -1,3 +1,4 @@
+import Link from "next/link"
 import PrimaryButton from "../ui/primary-button"
 
 const LPTitle = () => {
@@ -13,7 +14,7 @@ const LPTitle = () => {
         Ceevi empowers you to create tailored resumes that align perfectly with
         any job posting, ensuring you make a lasting impression.
       </span>
-      <PrimaryButton text="Join the Waitlist"/>
+      <Link href="/authenticate/signup" className="bg-gradient-to-r from-vivid_violet to-electric_indigo text-regular font-poppins font-semibold text-white w-fit px-10 rounded-[29px] py-2 shadow-[0_4px_4px_0_rgba(0,0,0,0.25)] sm:py-3 lg:w-fit lg:text-xl lg:px-16 3xl:text-4xl 3xl:px-32 3xl:py-10 3xl:rounded-[60px] 3xl:mt-20" >Try the Beta</Link>
     </div>
   )
 }
