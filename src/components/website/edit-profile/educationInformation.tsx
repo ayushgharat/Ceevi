@@ -11,7 +11,9 @@ const EducationInformation = ({ profileInfo, setActiveStep, handleEducationalInf
     return null
   }
 
-  const [educationData, setEducationData] = useState<EducationItem[]>((profileInfo && profileInfo.education) ?? [])
+  const [educationData, setEducationData] = useState<EducationItem[]>((profileInfo && profileInfo.education) ?? [{
+    degree_level: "Bachelors"
+  }])
   const [errors, setErrors] = useState<{ [key: string]: string }[]>([])
 
   const handleChange =
