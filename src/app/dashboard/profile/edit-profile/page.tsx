@@ -16,6 +16,7 @@ import {
 import { useRouter, useSearchParams } from "next/navigation"
 import { Suspense, useEffect, useState } from "react"
 
+import { checkIfUserIsLoggedIn } from "~app/action"
 import EducationInformation from "~components/website/edit-profile/educationInformation"
 import PersonalInformation from "~components/website/edit-profile/personalInformation"
 import ProfessionalInformation from "~components/website/edit-profile/professionalExperience"
@@ -47,14 +48,11 @@ const EditProfilePage = () => {
   const searchParams = useSearchParams()
 
   useEffect(() => {
-    function getID() {
-      if (searchParams) {
-        const userID = searchParams.get("id")
-        if (userID) {
-          setId(userID)
-        }
-      } else {
-        console.log("No ID detected")
+    async function getID() {
+      const { user } = await checkIfUserIsLoggedIn()
+      if (user) {
+        //console.log(user)
+        setId(user.id)
       }
     }
 
@@ -130,8 +128,9 @@ const EditProfilePage = () => {
       </span>
       <Stepper index={activeStep} colorScheme="purple" className="mt-10">
         {steps.map((step, index) => (
-          <Step key={index} 
-          // onClick={() => setActiveStep(index)}
+          <Step
+            key={index}
+            // onClick={() => setActiveStep(index)}
           >
             <StepIndicator>
               <StepStatus

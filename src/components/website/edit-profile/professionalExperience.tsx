@@ -4,6 +4,7 @@ import { useState, type ChangeEvent, type FormEvent } from "react";
 import type { ExperienceItem, ProfessionalData, ProjectItem } from "~types";
 
 import DateInput from "../ui/dateinput";
+import { PuffLoader } from "react-spinners";
 
 
 const ProfessionalInformation = ({
@@ -17,7 +18,10 @@ const ProfessionalInformation = ({
   }
 
   const [professionalData, setProfessionalData] = useState<ProfessionalData>(
-    profileInfo.professional ?? {}
+    profileInfo.professional ?? {
+      experience: [],
+      project: []
+    }
   );
   const [errors, setErrors] = useState<{ [key: string]: string }[]>([]);
   const [loading, setLoading] = useState(false);
@@ -346,7 +350,7 @@ const ProfessionalInformation = ({
         type="submit"
         disabled={loading}
         onClick={handleSubmit}>
-        Submit
+        {loading ? <PuffLoader size={20} color="#FFF"/> : <span>Submit</span>}
       </button>
     </form>
   );

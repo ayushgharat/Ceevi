@@ -11,7 +11,9 @@ const EducationInformation = ({ profileInfo, setActiveStep, handleEducationalInf
     return null
   }
 
-  const [educationData, setEducationData] = useState<EducationItem[]>((profileInfo && profileInfo.education) ?? [])
+  const [educationData, setEducationData] = useState<EducationItem[]>((profileInfo && profileInfo.education) ?? [{
+    degree_level: "Bachelors"
+  }])
   const [errors, setErrors] = useState<{ [key: string]: string }[]>([])
 
   const handleChange =
@@ -97,7 +99,7 @@ const EducationInformation = ({ profileInfo, setActiveStep, handleEducationalInf
               <select
                 name="degree_level"
                 className="DialogInput p-2"
-                value={education.degree_level || ""}
+                value={education.degree_level ?? "Bachelors"}
                 onChange={handleChange(index)}>
                 <option value="Bachelors">Bachelors</option>
                 <option value="Masters">Masters</option>
