@@ -97,7 +97,7 @@ const EducationInformation = ({ profileInfo, setActiveStep, handleEducationalInf
               <select
                 name="degree_level"
                 className="DialogInput p-2"
-                value={education.degree_level || ""}
+                value={education.degree_level ?? "Bachelors"}
                 onChange={handleChange(index)}>
                 <option value="Bachelors">Bachelors</option>
                 <option value="Masters">Masters</option>

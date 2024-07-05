@@ -17,7 +17,10 @@ const ProfessionalInformation = ({
   }
 
   const [professionalData, setProfessionalData] = useState<ProfessionalData>(
-    profileInfo.professional ?? {}
+    profileInfo.professional ?? {
+      experience: [],
+      project: []
+    }
   );
   const [errors, setErrors] = useState<{ [key: string]: string }[]>([]);
   const [loading, setLoading] = useState(false);
