@@ -1,3 +1,4 @@
+import { Switch } from "@/components/ui/switch";
 import Link from "next/link";
 
 const Main = ({currentUser, buildResume}) => {

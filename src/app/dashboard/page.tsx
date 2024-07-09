@@ -48,7 +48,7 @@ const Dashboard = async () => {
   // }
 
   return (
-    <div className="flex flex-col items-center h-screen">
+    <div className="flex flex-col items-center h-screen overflow-clip">
       <DashboardHomePage currentUser={data?.user}/>
     </div>
   )

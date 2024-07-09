@@ -1,6 +1,7 @@
 "use client"
 
 import Image from "next/image"
+import React from "react"
 
 import { signInWithGoogle } from "~app/action"
 import { createClient } from "~utils/supabase/component"

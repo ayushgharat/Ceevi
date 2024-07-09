@@ -10,6 +10,7 @@ import ProfileCardEducation from "./ui/profile-card-education"
 import ProfileCardExperience from "./ui/profile-card-experience"
 import ProfileCardPersonal from "./ui/profile-card-personal"
 import ProfileCardProject from "./ui/profile-card-project"
+import React from "react"
 
 const ProfileComponent = (props) => {
   const [componentToRender, setComponentToRender] = useState("Personal")

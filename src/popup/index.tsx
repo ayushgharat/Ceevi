@@ -12,6 +12,7 @@ import NoUserComponent from "~components/extension/nousercomponent"
 import VerifyExperiences from "~components/extension/verifyexperiences"
 import VerifyProjects from "~components/extension/verifyprojects"
 import VerifySkills from "~components/extension/verifyskills"
+import React from "react"
 
 const testingResume = {
   personal: {
