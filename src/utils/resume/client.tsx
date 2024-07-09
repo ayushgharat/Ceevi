@@ -16,7 +16,7 @@ Font.register({
   family: "source-serif",
   fonts: [
     {
-      src: "http://fonts.gstatic.com/s/sourceserifpro/v4/CeUM4np2c42DV49nanp55aqQQDHDiKO-LH8MFmRo0b0.ttf"
+      src: "https://fonts.gstatic.com/s/sourceserifpro/v4/CeUM4np2c42DV49nanp55aqQQDHDiKO-LH8MFmRo0b0.ttf"
     }
   ]
 })
