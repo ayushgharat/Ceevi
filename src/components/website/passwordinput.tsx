@@ -1,4 +1,5 @@
 import { Input, InputGroup, InputRightElement, Button } from "@chakra-ui/react"
+import React from "react"
 import { useState } from "react"
 
 export const PasswordInput = ({id, value, onChange}) => {

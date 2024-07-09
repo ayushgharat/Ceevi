@@ -90,36 +90,25 @@ export interface PersonalData {
       project: [
         {
           name: "CoFiscal",
-          skills: [{ value: "Next.js" }, { value: "Website Development" }],
+          skills: [{ value: "Next.js" }, { value: "React" },  { value: "Flask" },  { value: "PaLM" }],
           start_date: "2023-08",
           end_date: "2023-08",
           description: [
             {
               value:
-                "Developed CoFiscal, a cutting-edge financial platform powered by AI to empower borrowers with data-driven insights for informed loan decisions."
+                "Developed Web App to assist borrowers to make optimized loan decisions based on their predicted default probability"
             },
             {
               value:
-                "Implemented SMOTE to address extreme data skewness and optimized OCR feature for accurate data extraction, achieving 92.03% accuracy on unseen data with LightGBM."
+                "Deployed LightGBM model for default probability with 92% accuracy, trained on 250,000 datapoints pre-SMOTE"
             },
             {
               value:
-                "Designed and developed a fullstack interface with a Next.js web app featuring React, Tailwind CSS, and Flask backend for multiple model calls. Won Capital One best Financial Tool Award at HackGT 10."
-            }
-          ]
-        },
-        {
-          name: "CeeVi: Chrome Extension",
-          skills: [{ value: "Next.js" }],
-          start_date: "2023-05",
-          end_date: "2023-08",
-          description: [
-            {
-              value: "Created a Chrome extension that automates resume building."
+                "Used Google’s PaLM-2 to provide insights into personal default insights and PDF-miner to reduce user input by 75%"
             },
             {
               value:
-                "Developed a chatbot interface within the extension for enhanced user experience."
+                "Led team of 4 in developing project in 36 hours, Won Capital One Best Financial Hack award at Hack GT ’23"
             }
           ]
         },
@@ -131,64 +120,89 @@ export interface PersonalData {
           description: [
             {
               value:
-                "Positively impacted 5,000+ frontline health workers across 80+ cities in India during CoVID-19 lockdown."
+                "Conducted online events to de-stress medical workforce, positively impacting 5,000+ health workers across 80 cities."
             },
             {
               value:
-                "Organized virtual activities like comedy shows and riddle hunts for healthcare workers to de-stress."
+                "Fundraised $10,200 across India, US to supply 2,400 PPE Kits, 8,000+ meals to St. John’s Hospital, Bengaluru"
             },
             {
               value:
-                "Raised $10,200 to supply 2,400 PPE Kits and 8,000+ snacks to St. John’s Hospital, Bengaluru. Presented at the United Nations HQ at the Activate Impact Summit."
+                "Presented @ United Nations HQ in New York in Dec 2022 @ Activate Impact Summit to International delegates"
+            },
+            {
+              value:
+                " Recognized by Diana Award 2022 and International Youth Conference as a Youth Ambassador from India"
             }
           ]
         }
       ],
   
       skill: {
-        languages: ["Python", "Javascript", "Java"],
-        technologies: ["Selenium", "JUnit", "Postman", "Cypress"]
+        languages: ["Java", "Javascript", "Typescript", "JSX", "Python", "XML", "Dart", "SQL"],
+        technologies: ["Next.js", "React", "React Native", "Node.js", "Express.js", "Flutter", "MongoDB", "PostgresQL", "MySQL"]
       },
       experience: [
         {
-          company: "OrangeHealth Labs",
-          role: "SWE Intern",
+          company: "CSX Technology",
+          role: "Technology Intern",
+          start_date: "2024-05",
+          end_date: "Present",
+          location: "Jacksonville, FL",
+          description: [
+            {
+              value:
+                "Finetuning LLM-based IT help desk chatbot integrated with ServiceNow to reduce traffic to technical support by 85%"
+            },
+            {
+              value:
+                "Developing vector search model integrated with generative AI to reduce access time for inhouse data bank by 75%"
+            },
+            {
+              value:
+                "Leading intern team using SCRUM principles to build LLM chatbot for HR & payroll queries for 26,000 employees."
+            }
+          ]
+        },
+        {
+          company: "OrangeHealth Labs (Diagnostic Test Provider - Y Combinator S’20) ",
+          role: "Software Engineer Intern",
           start_date: "2023-05",
           end_date: "2023-08",
           location: "Bengaluru, India",
           description: [
             {
               value:
-                "Developed an admin dashboard website using Next.js, React, and MySQL for marketing team empowerment."
+                "Independently developed CMS website to edit & publish landing pages, serving 200,000 potential customers monthly."
             },
             {
               value:
-                "Implemented REST API for CRUD operations, utilizing tools like Docker, Prisma, Auth.js."
+                "Used Next.js, React, MySQL along with SSG, SSR for performance optimization, 90+ on all Lighthouse Indexes"
             },
             {
               value:
-                "Utilized SSG, SSA, RadixUI, Amazon ECR to build efficient solutions, saving $20,000/year."
+                "Setup REST API for CRUD ops. Conceived idea with PM saving $20,000/year by replacing outsourced software."
             }
           ]
         },
         {
-          company: "Nutrivend",
-          role: "Software Developer",
-          start_date: "2022-07",
-          end_date: "Present",
+          company: "NutriVend (Custom Fitness Supplements) ",
+          role: "Front End Developer Intern",
+          start_date: "2022-08",
+          end_date: "2023-01",
           location: "Atlanta, GA",
           description: [
             {
               value:
-                "Built Tauri App with Rust backend for vending machine interface, focusing on user transactions."
+                "Developed initial Tauri App on Rust backend for vending machine interface to process transactions for onsite payments."
             },
             {
               value:
-                "Developed stylized pages and components using Next.js, React, Tailwind for user workflows."
+                "Conducted A/B testing with 15 consumers, incorporated feedback to iteratively design user purchase workflow."
             },
             {
               value:
-                "Implemented React and Tailwind for enhancing user experience in purchase workflow."
+                "Built stylized pages & associated component using Next.js & React, used agile scrum methods alongside CI/CD pipeline"
             }
           ]
         }

@@ -3,6 +3,9 @@
   "displayName": "Ceevi",
   "version": "0.0.1",
   "description": "Automatic Resume Builder",
+  "resolutions": {
+    "restructure": "3.0.0"
+  },
   "builds": [
     {
       "src": "package.json",
@@ -19,7 +22,11 @@
     "build:plasmo": "plasmo build",
     "build:next": "next build"
   },
+  "overrides": {
+    "@react-pdf/layout": "3.11.5"
+  },
   "dependencies": {
+    "@alexandernanberg/react-pdf-renderer": "4.0.0-canary-2",
     "@chakra-ui/next-js": "^2.2.0",
     "@chakra-ui/react": "^2.8.2",
     "@emotion/react": "^11.11.4",
@@ -33,15 +40,18 @@
     "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-select": "^2.0.0",
     "@radix-ui/react-slot": "^1.0.2",
-    "@react-pdf/renderer": "^3.4.4",
+    "@radix-ui/react-switch": "^1.1.0",
+    "@react-pdf/renderer": "3.4.2",
     "@supabase/ssr": "^0.3.0",
     "@supabase/supabase-js": "^2.43.4",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "core-js": "^3.37.1",
+    "file-loader": "^6.2.0",
     "framer-motion": "^11.2.9",
     "fs": "0.0.1-security",
     "lucide-react": "^0.381.0",
-    "next": "14.2.4",
+    "next": "^14.2.4",
     "openai": "^4.47.2",
     "pdf-parse": "^1.1.1",
     "plasmo": "0.88.0",
@@ -51,6 +61,8 @@
     "react-dom": "18.2.0",
     "react-error-boundary": "^4.0.13",
     "react-hook-form": "^7.52.0",
+    "react-pdf": "^9.1.0",
+    "react-pdf-tailwind": "^2.3.0",
     "react-pro-sidebar": "^1.1.0",
     "react-spinners": "^0.13.8",
     "react-tag-input": "^6.10.2",

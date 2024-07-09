@@ -25,6 +25,7 @@ import VerifyInformation from "./dashboard/verifyInformation"
 import CustomSidebar from "./sidebar"
 import GeneratingResume from "./dashboard/generatingResume"
 import GeneratingPDF from "./dashboard/generatingpdf"
+import React from "react"
 
 export function DashboardHomePage({ currentUser }) {
   const router = useRouter()
@@ -140,7 +141,6 @@ export function DashboardHomePage({ currentUser }) {
       //setResume(testingResume)
 
       setComponentToRender("verifyInformation")
-      //setIsLoading(false)
     } catch (error) {
       console.error("Error fetching user data:", error)
     }
@@ -188,15 +188,21 @@ export function DashboardHomePage({ currentUser }) {
   }
 
   return (
-    <div id="header" className="flex flex-row w-full h-full">
+    <div id="header" className="flex flex-row w-full h-full overflow-clip">
       {/* {menu} */}
       <CustomSidebar />
 
-      <div className="bg-gradient-to-br from-vivid_violet to-electric_indigo w-full flex flex-col p-2 h-full">
+      <div className="bg-gradient-to-br from-vivid_violet to-electric_indigo w-full flex flex-col p-2">
         <span className="ms-10 my-5 w-fit font-poppins font-semibold text-2xl text-white">
           Dashboard
         </span>
         {renderComponent()}
+        {/* <VerifyInformation
+            resume={resume}
+            setResume={setResume}
+            navigateToJobInfo={buildResume}
+            generatePDF={generatePDF}
+          /> */}
       </div>
     </div>
   )

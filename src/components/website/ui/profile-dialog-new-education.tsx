@@ -18,6 +18,7 @@ import { useState, type ChangeEvent } from "react"
 import type { EducationItem } from "~types"
 
 import DegreeLevelSelect from "./degree-level-selector"
+import React from "react"
 
 interface ProfileDialogNewEducationProps {
   addNewEducation: (education: EducationItem) => void

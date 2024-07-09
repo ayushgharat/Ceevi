@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Cross2Icon, Pencil1Icon, PlusIcon } from "@radix-ui/react-icons"
+import React from "react"
 import { useState, type ChangeEvent } from "react"
 
 import type { ExperienceItem } from "~types"

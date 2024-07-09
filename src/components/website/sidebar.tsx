@@ -6,6 +6,7 @@ import {
   GearIcon,
   PersonIcon
 } from "@radix-ui/react-icons"
+import React from "react"
 import { useState } from "react"
 import { Menu, MenuItem, Sidebar, SubMenu } from "react-pro-sidebar"
 

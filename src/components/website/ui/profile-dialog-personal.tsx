@@ -13,6 +13,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Cross2Icon, Pencil1Icon } from "@radix-ui/react-icons"
+import React from "react"
 import { useState, type ChangeEvent } from "react"
 
 interface ProfileDialogPersonalProps {

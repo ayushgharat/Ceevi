@@ -7,6 +7,7 @@ import { PuffLoader } from "react-spinners"
 import { createClient } from "~utils/supabase/component"
 
 import CustomSidebar from "./sidebar"
+import React from "react"
 
 const SettingsComponent = () => {
   const router = useRouter()

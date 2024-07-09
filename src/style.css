@@ -97,14 +97,14 @@
   }
 }
 
-@layer base {
+/* @layer base {
   * {
     @apply border-border;
   }
   body {
     @apply bg-background text-foreground;
   }
-}
+} */
 
 .DialogOverlay {
   @apply bg-black opacity-40 fixed animate-[overlayShow_150ms_cubic-bezier(0.16,1,0.3,1)] inset-0;
@@ -132,6 +132,19 @@
 
 .DialogTitle {
   @apply font-poppins text-3xl text-left
+}
+
+.BuilderContainer {
+  @apply shadow-xl mt-4 bg-white p-3 font-dmsans rounded-xl
+}
+
+.BuilderTitleInput {
+  @apply border-b-[1px] border-black  p-2 font-semibold
+}
+
+.BuilderSubtitleInput {
+  @apply border-b-[1px] border-black p-2 font-normal
+
 }
 
 @keyframes overlayShow {
