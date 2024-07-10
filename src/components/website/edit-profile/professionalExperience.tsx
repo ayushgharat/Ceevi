@@ -82,16 +82,23 @@ const ProfessionalInformation = ({
     const updatedData = [
       ...(professionalData[type] as ExperienceItem[] | ProjectItem[])
     ];
-    if (event.target.checked) {
-      updatedData[index].end_date = "Present";
-    } else {
-      updatedData[index].end_date = "";
+  
+    if (type === 'experience') {
+      const experienceItem = updatedData[index] as ExperienceItem;
+      if (event.target.checked) {
+        experienceItem.end_date = "Present";
+      } else {
+        experienceItem.end_date = "";
+      }
+      updatedData[index] = experienceItem;
     }
+  
     setProfessionalData({
       ...professionalData,
       [type]: updatedData
     });
   };
+  
 
   const handleAddExperience = () => {
     setProfessionalData({
@@ -148,7 +155,6 @@ const ProfessionalInformation = ({
       "name",
       "skills",
       "start_date",
-      "end_date",
       "description"
     ];
 
@@ -299,7 +305,7 @@ const ProfessionalInformation = ({
             </div>
 
             <div className="flex flex-col gap-y-2">
-              <label>Start Date</label>
+              <label>Date</label>
               <input
                 name="start_date"
                 value={project.start_date || ""}
@@ -309,26 +315,7 @@ const ProfessionalInformation = ({
               />
               {errors[professionalData.experience.length + index]?.start_date && <span className="text-red-500">{errors[professionalData.experience.length + index].start_date}</span>}
             </div>
-            <div className="flex flex-col gap-y-2">
-              <label>End Date</label>
-              <input
-                name="end_date"
-                value={project.end_date || ""}
-                onChange={(e) => handleChange(e, index, "project")}
-                className="DialogInput p-2"
-                type="month"
-              />
-              {errors[professionalData.experience.length + index]?.end_date && <span className="text-red-500">{errors[professionalData.experience.length + index].end_date}</span>}
-              <label>
-                <input
-                  type="checkbox"
-                  className="DialogInput p-2"
-                  checked={project.end_date === "Present"}
-                  onChange={(e) => handleCheckboxChange(e, index, "project")}
-                />
-                Present
-              </label>
-            </div>
+            
             <div className="flex flex-col gap-y-2 col-span-2">
               <label>Description</label>
               <textarea

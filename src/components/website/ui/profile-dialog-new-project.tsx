@@ -33,7 +33,6 @@ export function ProfileDialogNewProject({ addNewProject }: ProfileDialogNewProje
     name: "",
     skills: "",
     start_date: "",
-    end_date: "",
     description: ""
   })
   const [errors, setErrors] = useState<{ [key: string]: string }>({})
@@ -44,7 +43,7 @@ export function ProfileDialogNewProject({ addNewProject }: ProfileDialogNewProje
     if (validateInputs()) {
       addNewProject({
         ...newProject,
-        end_date: isPresent ? "Present" : newProject.end_date
+        
       })
       setOpen(false)
     }
@@ -60,13 +59,6 @@ export function ProfileDialogNewProject({ addNewProject }: ProfileDialogNewProje
     }
   }
 
-  const handlePresentChange = () => {
-    setIsPresent(!isPresent)
-    setNewProject((prevState) => ({
-      ...prevState,
-      end_date: isPresent ? "" : "Present"
-    }))
-  }
 
   const validateInputs = () => {
     const newErrors: { [key: string]: string } = {}
@@ -74,7 +66,6 @@ export function ProfileDialogNewProject({ addNewProject }: ProfileDialogNewProje
       "name",
       "skills",
       "start_date",
-      "end_date",
       "description"
     ]
 
@@ -128,8 +119,8 @@ export function ProfileDialogNewProject({ addNewProject }: ProfileDialogNewProje
             </div>
 
             <div className="DialogLayout">
-              <Label htmlFor="start_date" className="text-right">
-                Start Date
+              <Label htmlFor="date" className="text-right">
+                Date
               </Label>
               <Input
                 id="start_date"
@@ -140,31 +131,7 @@ export function ProfileDialogNewProject({ addNewProject }: ProfileDialogNewProje
               />
               {errors.start_date && <span className="text-red-500">{errors.start_date}</span>}
             </div>
-            <div className="DialogLayout">
-              <Label htmlFor="end_date" className="text-right">
-                End Date
-              </Label>
-              {!isPresent ? (
-                <Input
-                  id="end_date"
-                  value={newProject.end_date || ""}
-                  className="DialogInput flex-col justify-between"
-                  onChange={handleInputChange}
-                  type="month"
-                />
-              ) : (
-                <span className="DialogInput w-full p-2">Present</span>
-              )}
-              <div className="flex flex-row gap-x-2 items-center">
-                <input
-                  type="checkbox"
-                  checked={isPresent}
-                  onChange={handlePresentChange}
-                />
-                <label>Present</label>
-              </div>
-              {errors.end_date && <span className="text-red-500">{errors.end_date}</span>}
-            </div>
+            
 
             <div className="DialogLayout col-span-2">
               <Label htmlFor="description" className="text-right">

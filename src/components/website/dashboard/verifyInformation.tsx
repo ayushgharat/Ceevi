@@ -239,10 +239,10 @@ const VerifyInformation = ({
                     .map((x, i) => i + 1)
                     .map((page) => (
                       <Page
-                        pageNumber={1}
+                        pageNumber={page}
                         canvasBackground="bg-red-600"
                         scale={1}
-                        className="flex flex-col justify-center items-center"
+                        className="mt-5 flex flex-col justify-center items-center"
                       />
                     ))}
                 </Document>

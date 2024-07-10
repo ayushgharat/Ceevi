@@ -211,8 +211,7 @@ export const MyDocument = ({
                       </Text>
                     </View>
                     <Text>
-                      {convertDate(item.start_date)} -{" "}
-                      {convertDate(item.end_date)}
+                      {convertDate(item.start_date)}
                     </Text>
                   </View>
                   <View style={styles.description_layout}>

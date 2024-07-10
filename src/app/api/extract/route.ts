@@ -47,7 +47,6 @@ const resume_structure = {
         name: "",
         skills: "",
         start_date: "",
-        end_date: "",
         description: ""
       }
     ],

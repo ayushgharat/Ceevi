@@ -13,9 +13,7 @@ const VerifyProjects = ({
   navigateToVerifyExperiences
 }) => {
   const [userData, setUserData] = useState(finalData.professional.project)
-  const [presentEndDate, setPresentEndDate] = useState(
-    userData.map((project) => project.end_date === "Present")
-  )
+  
 
   const handleInputChange = (index, fieldName, value) => {
     const updatedUserData = [...userData]
@@ -37,18 +35,6 @@ const VerifyProjects = ({
     const updatedUserData = [...userData]
     updatedUserData[projectIndex].description[descriptionIndex].value = value
     setUserData(updatedUserData)
-  }
-
-  const handleCheckboxChange = (index) => {
-    const updatedPresentEndDate = [...presentEndDate]
-    updatedPresentEndDate[index] = !updatedPresentEndDate[index]
-    setPresentEndDate(updatedPresentEndDate)
-
-    if (updatedPresentEndDate[index]) {
-      handleInputChange(index, "end_date", "Present")
-    } else {
-      handleInputChange(index, "end_date", "")
-    }
   }
 
   const handleNext = () => {
@@ -91,34 +77,10 @@ const VerifyProjects = ({
               }
             />
 
-            {presentEndDate[index] ? (
-              <input
-                className="ExtensionFormInput"
-                type="text"
-                value="Present"
-                readOnly
-              />
-            ) : (
-              <input
-                className="ExtensionFormInput"
-                type="month"
-                value={project.end_date}
-                onChange={(e) =>
-                  handleInputChange(index, "end_date", e.target.value)
-                }
-              />
-            )}
+            
           </div>
 
-          <div className="flex col-span-2 justify-end gap-x-3">
-            <input
-              type="checkbox"
-              value="Present"
-              checked={presentEndDate[index]}
-              onChange={() => handleCheckboxChange(index)}
-            />
-            <label>Present</label>
-          </div>
+          
           {project.description.map((item, descIndex) => (
             <textarea
               key={descIndex}
