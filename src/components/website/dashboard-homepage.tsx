@@ -126,21 +126,27 @@ export function DashboardHomePage({ currentUser }) {
 
       const generated_resume = await resume_response.json()
 
-      const combined = await {
-        personal: current_profile.data[0].profile.personal,
-        education: current_profile.data[0].profile.education,
-        professional: {
-          experience: generated_resume.experience,
-          project: generated_resume.project,
-          skill: {
-            ...generated_resume.skill
+      if(generated_resume.error) {
+        console.log(generated_resume.error)
+      } else {
+        const combined = await {
+          personal: current_profile.data[0].profile.personal,
+          education: current_profile.data[0].profile.education,
+          professional: {
+            experience: generated_resume.experience,
+            project: generated_resume.project,
+            skill: {
+              ...generated_resume.skill
+            }
           }
         }
+        setResume(combined)
+        //setResume(testingResume)
+  
+        setComponentToRender("verifyInformation")
       }
-      setResume(combined)
-      //setResume(testingResume)
 
-      setComponentToRender("verifyInformation")
+      
     } catch (error) {
       console.error("Error fetching user data:", error)
     }

@@ -43,7 +43,6 @@ export interface PersonalData {
     name?: string;
     skills?: string;
     start_date?: string;
-    end_date?: string;
     description?: string;
   }
 
