@@ -91,7 +91,7 @@ const ProfileCardProject = ({ profile, updateProfile }) => {
                 />
               </div>
               <span className="font-light text-lg">
-                {convertDate(item.start_date)} - {convertDate(item.end_date)}
+                {convertDate(item.start_date)}
               </span>
 
               <span className="font-light text-sm">{item.description}</span>
