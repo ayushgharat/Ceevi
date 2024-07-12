@@ -143,106 +143,117 @@ export const MyDocument = ({
             </Text>
           </View>
 
-          {professional.education && <View style={styles.container}>
-            <Text style={styles.title}>EDUCATION</Text>
-            <View style={styles.divider} />
-            <View>
-              {education.map((item) => (
-                <View key={item.name} style={styles.item_layout}>
-                  <View style={styles.heading_layout}>
-                    <Text>{item.name}</Text>
-                    <Text>{item.location}</Text>
-                  </View>
-                  <View style={styles.subheading_layout}>
-                    <Text>
-                      {item.degree_level} of {item.major}
-                    </Text>
-                    <Text>
-                      {convertDate(item.start_date)} -{" "}
-                      {convertDate(item.end_date)}
-                    </Text>
-                  </View>
-                </View>
-              ))}
-            </View>
-          </View>}
-
-          {professional.experience && <View style={styles.container}>
-            <Text style={styles.title}>EXPERIENCES</Text>
-            <View style={styles.divider} />
-            <View>
-              {professional.experience.map((item) => (
-                <View key={item.company} style={styles.item_layout}>
-                  <View style={styles.heading_layout}>
-                    <Text>{item.company}</Text>
-                    <Text>
-                      {convertDate(item.start_date)} -{" "}
-                      {convertDate(item.end_date)}
-                    </Text>
-                  </View>
-                  <View style={styles.subheading_layout}>
-                    <Text>{item.role}</Text>
-                    <Text>{item.location}</Text>
-                  </View>
-                  <View style={styles.description_layout}>
-                    {item.description.map((subitem) => (
-                      <Text key={subitem.value}>• {subitem.value}</Text>
-                    ))}
-                  </View>
-                </View>
-              ))}
-            </View>
-          </View>}
-
-          {professional.project && <View style={styles.container}>
-            <Text style={styles.title}>PROJECTS</Text>
-            <View style={styles.divider} />
-            <View>
-              {professional.project.map((item) => (
-                <View key={item.name} style={styles.item_layout}>
-                  <View style={styles.heading_layout}>
-                    <View style={{ display: "flex", flexDirection: "row" }}>
+          {education && (
+            <View style={styles.container}>
+              <Text style={styles.title}>EDUCATION</Text>
+              <View style={styles.divider} />
+              <View>
+                {education.map((item, index) => (
+                  <View key={item.name} style={styles.item_layout}>
+                    <View style={styles.heading_layout}>
+                      <Text>{item.name}</Text>
+                      <Text>{item.location}</Text>
+                    </View>
+                    <View style={styles.subheading_layout}>
                       <Text>
-                        {item.name}
-                        {" | "}
+                        {item.degree_level} of {item.major}
                       </Text>
-                      <Text style={{ fontFamily: "source-serif" }}>
-                        {item.skills.map((skill) => skill.value).join(", ")}
+                      <Text>
+                        {convertDate(item.start_date)} -{" "}
+                        {convertDate(item.end_date)}
                       </Text>
                     </View>
-                    <Text>
-                      {convertDate(item.start_date)}
-                    </Text>
+                    {resumeOptions.showGPA[index].value && (
+                      <View style={styles.description_layout}>
+                        <Text>• GPA - {item.gpa}</Text>
+                      </View>
+                    )}
                   </View>
-                  <View style={styles.description_layout}>
-                    {item.description.map((subitem) => (
-                      <Text key={subitem.value}>• {subitem.value}</Text>
-                    ))}
+                ))}
+              </View>
+            </View>
+          )}
+
+          {professional.experience && (
+            <View style={styles.container}>
+              <Text style={styles.title}>EXPERIENCES</Text>
+              <View style={styles.divider} />
+              <View>
+                {professional.experience.map((item) => (
+                  <View key={item.company} style={styles.item_layout}>
+                    <View style={styles.heading_layout}>
+                      <Text>{item.company}</Text>
+                      <Text>
+                        {convertDate(item.start_date)} -{" "}
+                        {convertDate(item.end_date)}
+                      </Text>
+                    </View>
+                    <View style={styles.subheading_layout}>
+                      <Text>{item.role}</Text>
+                      <Text>{item.location}</Text>
+                    </View>
+                    <View style={styles.description_layout}>
+                      {item.description.map((subitem) => (
+                        <Text key={subitem.value}>• {subitem.value}</Text>
+                      ))}
+                    </View>
                   </View>
-                </View>
-              ))}
+                ))}
+              </View>
             </View>
-          </View>}
+          )}
 
-          {professional.skill && <View style={styles.container}>
-            <Text style={styles.title}>SKILLS</Text>
-            <View style={styles.divider} />
-            <View style={styles.description_layout}>
-              <Text style={styles.skill_heading}>
-                Languages:{" "}
-                <Text style={styles.skill_items}>
-                  {professional.skill.languages.join(", ")}
-                </Text>
-              </Text>
-
-              <Text style={styles.skill_heading}>
-                Technologies:
-                <Text style={styles.skill_items}>
-                  {professional.skill.technologies.join(", ")}
-                </Text>
-              </Text>
+          {professional.project && (
+            <View style={styles.container}>
+              <Text style={styles.title}>PROJECTS</Text>
+              <View style={styles.divider} />
+              <View>
+                {professional.project.map((item) => (
+                  <View key={item.name} style={styles.item_layout}>
+                    <View style={styles.heading_layout}>
+                      <View style={{ display: "flex", flexDirection: "row" }}>
+                        <Text>
+                          {item.name}
+                          {" | "}
+                        </Text>
+                        <Text style={{ fontFamily: "source-serif" }}>
+                          {item.skills.map((skill) => skill.value).join(", ")}
+                        </Text>
+                      </View>
+                      <Text>{convertDate(item.start_date)}</Text>
+                    </View>
+                    <View style={styles.description_layout}>
+                      {item.description.map((subitem) => (
+                        <Text key={subitem.value}>• {subitem.value}</Text>
+                      ))}
+                    </View>
+                  </View>
+                ))}
+              </View>
             </View>
-          </View>}
+          )}
+
+          {professional.skill && (
+            <View style={styles.container}>
+              <Text style={styles.title}>SKILLS</Text>
+              <View style={styles.divider} />
+              <View style={styles.description_layout}>
+                <Text style={styles.skill_heading}>
+                  Languages:{" "}
+                  <Text style={styles.skill_items}>
+                    {professional.skill.languages.join(", ")}
+                  </Text>
+                </Text>
+
+                <Text style={styles.skill_heading}>
+                  Technologies:
+                  <Text style={styles.skill_items}>
+                    {professional.skill.technologies.join(", ")}
+                  </Text>
+                </Text>
+              </View>
+            </View>
+          )}
         </View>
       </Page>
     </Document>

@@ -49,7 +49,10 @@ const VerifyInformation = ({
   const [resumeOptions, setResumeOptions] = useState({
     name: `${resume.personal.first_name}_${resume.personal.last_name}_Resume`,
     showGithub: true,
-    showLinkedin: true
+    showLinkedin: true,
+    showGPA: resume.education.map(() => {
+      return { value: true }
+    })
   })
 
   const handleChange = (e, type, index, descIndex = null) => {

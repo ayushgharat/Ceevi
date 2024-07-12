@@ -89,67 +89,67 @@ export function DashboardHomePage({ currentUser }) {
 
   const generateResume = async (jobInfo, userPref) => {
     setComponentToRender("generatingResume")
-    try {
-      const response = await fetch(
-        process.env.NEXT_PUBLIC_DOMAIN + "api/db/get-user",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ id: currentUser.id })
-        }
-      )
+    // try {
+    //   const response = await fetch(
+    //     process.env.NEXT_PUBLIC_DOMAIN + "api/db/get-user",
+    //     {
+    //       method: "POST",
+    //       headers: {
+    //         "Content-Type": "application/json"
+    //       },
+    //       body: JSON.stringify({ id: currentUser.id })
+    //     }
+    //   )
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
-      }
-      const current_profile = await response.json()
+    //   if (!response.ok) {
+    //     throw new Error(`HTTP error! status: ${response.status}`)
+    //   }
+    //   const current_profile = await response.json()
 
-      const resume_response = await fetch(
-        process.env.NEXT_PUBLIC_DOMAIN + "api/generate/resume",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            job_info: jobInfo,
-            profile: current_profile,
-            userPref: userPref
-          })
-        }
-      )
-      if (!resume_response.ok) {
-        throw new Error("Failed to fetch data from resume endpoints")
-      }
+    //   const resume_response = await fetch(
+    //     process.env.NEXT_PUBLIC_DOMAIN + "api/generate/resume",
+    //     {
+    //       method: "POST",
+    //       headers: {
+    //         "Content-Type": "application/json"
+    //       },
+    //       body: JSON.stringify({
+    //         job_info: jobInfo,
+    //         profile: current_profile,
+    //         userPref: userPref
+    //       })
+    //     }
+    //   )
+    //   if (!resume_response.ok) {
+    //     throw new Error("Failed to fetch data from resume endpoints")
+    //   }
 
-      const generated_resume = await resume_response.json()
+    //   const generated_resume = await resume_response.json()
 
-      if(generated_resume.error) {
-        console.log(generated_resume.error)
-      } else {
-        const combined = await {
-          personal: current_profile.data[0].profile.personal,
-          education: current_profile.data[0].profile.education,
-          professional: {
-            experience: generated_resume.experience,
-            project: generated_resume.project,
-            skill: {
-              ...generated_resume.skill
-            }
-          }
-        }
-        setResume(combined)
-        //setResume(testingResume)
+    //   if(generated_resume.error) {
+    //     console.log(generated_resume.error)
+    //   } else {
+    //     const combined = await {
+    //       personal: current_profile.data[0].profile.personal,
+    //       education: current_profile.data[0].profile.education,
+    //       professional: {
+    //         experience: generated_resume.experience,
+    //         project: generated_resume.project,
+    //         skill: {
+    //           ...generated_resume.skill
+    //         }
+    //       }
+    //     }
+    //     setResume(combined)
+        setResume(testingResume)
   
         setComponentToRender("verifyInformation")
-      }
+    //   }
 
       
-    } catch (error) {
-      console.error("Error fetching user data:", error)
-    }
+    // } catch (error) {
+    //   console.error("Error fetching user data:", error)
+    // }
   }
 
   const navigateToVerifyInformation = () => {
