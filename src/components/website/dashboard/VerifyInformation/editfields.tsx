@@ -53,13 +53,26 @@ const EditFields = ({
             <input
               type="checkbox"
               checked={resumeOptions.showLinkedin}
-              onChange={(e) =>
+              onChange={() =>
                 setResumeOptions({
                   ...resumeOptions,
                   showLinkedin: !resumeOptions.showLinkedin
                 })
               }></input>
             <Label>Show Linkedin URL</Label>
+          </div>
+
+          <div className="flex flex-row items-center space-x-2">
+            <input
+              type="checkbox"
+              checked={resumeOptions.showPortfolio}
+              onChange={() =>
+                setResumeOptions({
+                  ...resumeOptions,
+                  showPortfolio: !resumeOptions.showPortfolio
+                })
+              }></input>
+            <Label>Show Portfolio URL</Label>
           </div>
         </div>
       </div>
@@ -85,18 +98,44 @@ const EditFields = ({
               <div className="flex flex-row items-center space-x-2">
                 <input
                   type="checkbox"
-                  checked={resumeOptions.showGPA[index].value}
+                  checked={resumeOptions.education.showGPA[index].value}
                   onChange={() =>
-                    setResumeOptions({
-                      ...resumeOptions,
-                      showGPA: [
-                        ...resumeOptions.showGPA.with(index, {
-                          value: !resumeOptions.showGPA[index].value
-                        })
-                      ]
+                    setResumeOptions((prev) => {
+                      const updatedShowGPA = [...prev.education.showGPA];
+                      updatedShowGPA[index].value = !updatedShowGPA[index].value;
+              
+                      return {
+                        ...prev,
+                        education: {
+                          ...prev.education,
+                          showStartDate: updatedShowGPA,
+                        },
+                      };
                     })
                   }></input>
                 <Label>Show GPA</Label>
+              </div>
+
+              <div className="flex flex-row items-center space-x-2">
+                <input
+                  type="checkbox"
+                  checked={resumeOptions.education.showStartDate[index].value}
+                  onChange={() =>
+                    setResumeOptions((prev) => {
+                      const updatedShowStartDate = [...prev.education.showStartDate];
+                      updatedShowStartDate[index].value = !updatedShowStartDate[index].value;
+              
+                      return {
+                        ...prev,
+                        education: {
+                          ...prev.education,
+                          showStartDate: updatedShowStartDate,
+                        },
+                      };
+                    })
+                  }
+                  ></input>
+                <Label>Show Start Date</Label>
               </div>
             </div>
           )

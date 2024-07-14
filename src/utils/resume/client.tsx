@@ -116,7 +116,6 @@ export const MyDocument = ({
     return link.replace(/^https:\/\//, "")
   }
 
-  console.log(resumeOptions)
 
   return (
     <Document style={{ backgroundColor: "#000000" }}>
@@ -140,6 +139,12 @@ export const MyDocument = ({
                   {removeHttps(personal.github)}
                 </Text>
               )}
+              {resumeOptions.showPortfolio && (
+                <Text>
+                  {" | "}
+                  {removeHttps(personal.portfolio)}
+                </Text>
+              )}
             </Text>
           </View>
 
@@ -158,12 +163,18 @@ export const MyDocument = ({
                       <Text>
                         {item.degree_level} of {item.major}
                       </Text>
-                      <Text>
-                        {convertDate(item.start_date)} -{" "}
-                        {convertDate(item.end_date)}
-                      </Text>
+                      {resumeOptions.education.showStartDate[index].value ? (
+                        <Text>
+                          {convertDate(item.start_date)} -{" "}
+                          {convertDate(item.end_date)}
+                        </Text>
+                      ) : (
+                        <Text>
+                          Expected Grad - {convertDate(item.end_date)}
+                        </Text>
+                      )}
                     </View>
-                    {resumeOptions.showGPA[index].value && (
+                    {resumeOptions.education.showGPA[index].value && (
                       <View style={styles.description_layout}>
                         <Text>• GPA - {item.gpa}</Text>
                       </View>

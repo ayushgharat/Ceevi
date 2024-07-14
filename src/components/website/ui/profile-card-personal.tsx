@@ -56,6 +56,11 @@ const ProfileCardPersonal = ({ profile, updateProfile }) => {
             <span className="opacity-50">Github</span>
             <span>{personal.github}</span>
           </div>
+
+          <div className="flex flex-col col-span-2">
+            <span className="opacity-50">Portfolio</span>
+            <span>{personal.portfolio}</span>
+          </div>
         </div>
         <ProfileDialogPersonal
           personal={personal}

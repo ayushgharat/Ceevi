@@ -16,7 +16,8 @@ const PersonalInformation = ({ profileInfo, setActiveStep, handlePersonalInfo })
     email: "",
     phone_number: "",
     linkedin: "",
-    github: ""
+    github: "",
+    portfolio: ""
   })
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({})
@@ -33,8 +34,7 @@ const PersonalInformation = ({ profileInfo, setActiveStep, handlePersonalInfo })
       "last_name",
       "email",
       "phone_number",
-      "linkedin",
-      "github"
+      "linkedin"
     ]
 
     requiredFields.forEach((field) => {
@@ -119,6 +119,17 @@ const PersonalInformation = ({ profileInfo, setActiveStep, handlePersonalInfo })
           className="DialogInput p-2"
         />
         {errors.github && <span className="text-red-500">{errors.github}</span>}
+      </div>
+
+      <div className="flex flex-col gap-y-2">
+        <label>Portfolio URL</label>
+        <input
+          name="github"
+          value={personalData.portfolio}
+          onChange={handleChange}
+          className="DialogInput p-2"
+        />
+        {errors.portfolio && <span className="text-red-500">{errors.github}</span>}
       </div>
       <button
         type="button"

@@ -5,6 +5,7 @@ export interface PersonalData {
     phone_number: string;
     linkedin: string;
     github: string;
+    portfolio: string;
   }
 
   export interface UserData {
@@ -63,7 +64,8 @@ export interface PersonalData {
       email: "gharatayush27@gmail.com",
       phone_number: "4709396771",
       linkedin: "https://linkedin.com/in/ayush-gharat",
-      github: "https://github.com/ayushgharat"
+      github: "https://github.com/ayushgharat",
+      portfolio: "https://ayush.vercel.app"
     },
     education: [
       {

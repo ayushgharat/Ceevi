@@ -24,6 +24,7 @@ interface ProfileDialogPersonalProps {
     phone_number: string
     linkedin: string
     github: string
+    portfolio: string
   }
   updatePersonal: (personal: {
     first_name: string
@@ -32,6 +33,7 @@ interface ProfileDialogPersonalProps {
     phone_number: string
     linkedin: string
     github: string
+    portfolio: string
   }) => void
 }
 
@@ -167,6 +169,19 @@ export function ProfileDialogPersonal({ personal, updatePersonal }: ProfileDialo
                 onChange={handleInputChange}
               />
               {errors.github && <span className="text-red-500">{errors.github}</span>}
+            </div>
+
+            <div className="DialogLayout">
+              <Label htmlFor="portfolio" className="text-right">
+                Portfolio URL
+              </Label>
+              <Input
+                id="portfolio"
+                value={newPersonal.portfolio || ""}
+                className="DialogInput"
+                onChange={handleInputChange}
+              />
+              {errors.portfolio && <span className="text-red-500">{errors.github}</span>}
             </div>
           </div>
           <DialogClose asChild>
